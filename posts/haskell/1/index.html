@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>How I Start.</title>
+
+    <link href="../../../posts.rss" rel="alternate" type="application/rss+xml" title="How I Start." />
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/readable.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS for the 'Thumbnail Gallery' Template -->
+    <link href="../../../css/1-col-portfolio.css" rel="stylesheet" />
+    <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+      margin: 0; padding: 0; vertical-align: baseline; border: none; }
+      table.sourceCode { width: 100%; line-height: 100%; }
+      td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+      td.sourceCode { padding-left: 5px; }
+      code > span.kw { color: #007020; font-weight: bold; }
+      code > span.dt { color: #902000; }
+      code > span.dv { color: #40a070; }
+      code > span.bn { color: #40a070; }
+      code > span.fl { color: #40a070; }
+      code > span.ch { color: #4070a0; }
+      code > span.st { color: #4070a0; }
+      code > span.co { color: #60a0b0; font-style: italic; }
+      code > span.ot { color: #007020; }
+      code > span.al { color: #ff0000; font-weight: bold; }
+      code > span.fu { color: #06287e; }
+      code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-top navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" href="../../../">How I Start.</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="category"><a href="../../../posts/clojure">clojure</a></li><li class="category"><a href="../../../posts/cpp">cpp</a></li><li class="category"><a href="../../../posts/elixir">elixir</a></li><li class="category"><a href="../../../posts/erlang">erlang</a></li><li class="category"><a href="../../../posts/go">go</a></li><li class="category"><a href="../../../posts/haskell">haskell</a></li><li class="category"><a href="../../../posts/nim">nim</a></li><li class="category"><a href="../../../posts/ruby">ruby</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="../../../about.html">About</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
+
+    <div class="container">
+      <div id="content">
+        <div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Haskell <small>with Chris Allen</small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <p>My name is Chris. I teach Haskell to people that are new to programming and as well as long-time coders. Haskell is a general purpose programming language that is most useful to mere mortals.</p>
+<p>I’m going to show you how to write a package in Haskell and interact with the code inside of it.</p>
+<h2 id="installing-tools-for-writing-haskell-code">Installing tools for writing Haskell code</h2>
+<p>We’re going to use Stack to manage our project dependencies, compiler, building our code, and running our tests. Start by <a href="http://docs.haskellstack.org/en/stable/install_and_upgrade/">getting Stack installed</a>.</p>
+<p>After you’ve finished the install instructions, <code>stack</code> should all be in your path. <code>ghci</code> is the REPL (read-eval-print loop) for Haskell, though as often as not, you’ll use <code>stack ghci</code> to invoke a REPL that is aware of your project and its dependencies.</p>
+<h2 id="what-were-going-to-make">What we’re going to make</h2>
+<p>We’re going to write a little csv parser for some baseball data. I don’t care a whit about baseball, but it was the best example of free data I could find.</p>
+<h2 id="project-layout">Project layout</h2>
+<p>There’s not a prescribed project layout, but there are a few guidelines I would advise following.</p>
+<p>One is that <a href="https://github.com/ekmett/lens">Edward Kmett’s lens library</a> is not only a fantastic library in its own right, but is also a great resource for people wanting to see how to structure a Haskell project, write and generate <code>Haddock</code> documentation, and organize your namespaces. Kmett’s library follows <a href="http://hackage.haskell.org/packages/">Hackage guidelines</a> on what namespaces and categories to use for his libraries.</p>
+<p>There is an alternative namespacing pattern demonstrated by <a href="http://hackage.haskell.org/package/pipes">Pipes, a streaming library</a>. It uses a top-level eponymous namespace. For an example of another popular project you could also look at <a href="https://github.com/jgm/pandoc/">Pandoc</a> for examples of how to organize non-trivial Haskell projects.</p>
+<p>Once we’ve finished laying out our project, it’s going to look like this:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">tree</span>
+<span class="kw">.</span>
+├── <span class="kw">LICENSE</span>
+├── <span class="kw">Setup.hs</span>
+├── <span class="kw">bassbull.cabal</span>
+├── <span class="kw">src</span>
+│   ├── <span class="kw">Main.hs</span>
+├── <span class="kw">stack.yaml</span>
+<span class="kw">4</span> directories, 7 files</code></pre></div>
+<p>Ordinarily I’d structure things a little more, but there isn’t a lot to this project. Onward!</p>
+<h2 id="getting-your-project-started">Getting your project started</h2>
+<p>We’ll use <code>Stack</code>, our GHC Haskell dependency manager and build tool, to create some initial files for us.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> new bassbull simple</code></pre></div>
+<p>Here <code>bassbull</code> is the name of our project and <code>simple</code> is the project template we’re using. Now we’re going to download our test data while inside the directory of our <code>bassbull</code> project.</p>
+<p>You can download the data from <a href="https://raw.githubusercontent.com/bitemyapp/csvtest/master/batting.csv">here</a>. If you want to download it via the terminal on a Unix-alike (Mac, Linux, BSD, etc) you can do so via:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">curl</span> -0 https://raw.githubusercontent.com/bitemyapp/csvtest/master/batting.csv <span class="kw">&gt;</span> batting.csv</code></pre></div>
+<p>It should be about 2.3 MB when it’s all said and done.</p>
+<p>Before we start making changes, I’m going to init my version control (git, for me) so I can track my changes and not lose any work.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> bassbull
+$ <span class="kw">git</span> init
+$ <span class="kw">git</span> add .
+$ <span class="kw">git</span> commit -am <span class="st">&quot;Initial commit&quot;</span></code></pre></div>
+<p>I’m also going to add the gitignore from Github’s gitignore repository plus some additions for Haskell so we don’t accidentally check in unnecessary build artifacts or other things inessential to the project.</p>
+<p>This should go into a file named <code>.gitignore</code> at the top level of your bassbull project.</p>
+<pre><code>dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/</code></pre>
+<h2 id="editing-the-cabal-file">Editing the Cabal file</h2>
+<p>First we need to fix up our <code>cabal</code> file a bit. Mine is named <code>bassbull.cabal</code> and is in the top level directory of the project.</p>
+<p>Here’s what I changed my <code>cabal</code> file to:</p>
+<pre><code>name:                bassbull
+version:             0.1.0.0
+synopsis:            Processing some csv data
+description:         Baseball data analysis
+homepage:            bitemyapp.com
+license:             BSD3
+license-file:        LICENSE
+author:              Chris Allen
+maintainer:          cma@bitemyapp.com
+copyright:           2016, Chris Allen
+category:            Data
+build-type:          Simple
+cabal-version:       &gt;=1.10
+
+executable bassbull
+  ghc-options:         -Wall
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  build-depends:       base &gt;= 4.7 &amp;&amp; &lt;5,
+                       bytestring,
+                       vector,
+                       cassava
+  default-language:    Haskell2010</code></pre>
+<p>A few things to note:</p>
+<ul>
+<li>The description tells people what the package is about.</li>
+<li>The <code>hs-source-dirs</code> includes <code>src</code> so Cabal knows where my modules are.</li>
+<li>An executable stanza with the name bassbull is in the Cabal file so we can build a binary by that name and run it.</li>
+<li><code>main-is</code> is set to <code>Main.hs</code> in the executable stanza so the compiler knows which file contains the Main module and main function.</li>
+<li>We have <code>ghc-options</code> with <code>-Wall</code> so we get the <em>rather</em> handy warnings GHC offers on top of the usual type checking.</li>
+<li>We included the libraries our project will use in <code>build-depends</code>.</li>
+</ul>
+<h2 id="building-and-interacting-with-your-program">Building and interacting with your program</h2>
+<p>The contents of <code>src/Main.hs</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+main <span class="fu">=</span> putStrLn <span class="st">&quot;hello&quot;</span></code></pre></div>
+<p>One thing to note is that for a module to work as a <code>main-is</code> target for GHC, it must have a function named <code>main</code> and itself be named <code>Main</code>. Most people make little wrapper <code>Main</code> modules to satisfy this, sometimes with argument parsing and handling done via libraries like <a href="https://github.com/pcapriotti/optparse-applicative">optparse-applicative</a>.</p>
+<p>For now, we’ve left Main very simple, making it just a <code>putStrLn</code> of the string <code>&quot;Hello&quot;</code>. To validate that everything is working, let’s build and run this program.</p>
+<p>Then we install our dependencies by building our project. This can take some time on the first run, but Stack will cache and share dependencies across your projects automatically.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> setup
+$ <span class="kw">stack</span> build</code></pre></div>
+<p>We did the <code>stack setup</code> just in case you didn’t already have GHC installed. Note that you’ll only have to do this once for a particular version of GHC. If this succeeds, we should get a binary named <code>bassbull</code>. To run this, do the following.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> exec bassbull
+<span class="kw">hello</span></code></pre></div>
+<p>If everything is in place, let’s move onto writing a little csv processor.</p>
+<h2 id="writing-a-program-to-process-csv-data">Writing a program to process csv data</h2>
+<p>One thing to note before we begin is that you can fire up a project-aware Haskell REPL using Stack’s GHCi command. The benefit of doing so is that you can write and type-check code interactively as you explore new and unfamiliar libraries or just to refresh your memory about existing code.</p>
+<p>You can do so by running it in your shell like so:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> ghci</code></pre></div>
+<p>If you do, you should see a bunch of stuff about loading packages installed for the project and then a <code>Prelude Main&gt;</code> prompt.</p>
+<pre><code>[1 of 1] Compiling Main             ( Main.hs, interpreted )
+Ok, modules loaded: Main.
+Prelude Main&gt;</code></pre>
+<p>Now we can load our <code>src/Main.hs</code> in the REPL.</p>
+<pre><code>$ stack ghci
+Preprocessing executable 'bassbull' for bassbull-0.1.0.0...
+GHCi, version 7.8.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Loading package array-0.5.0.0 ... linking ... done.
+Loading package deepseq-1.3.0.2 ... linking ... done.
+Loading package bytestring-0.10.4.0 ... linking ... done.
+Loading package containers-0.5.5.1 ... linking ... done.
+Loading package text-1.2.0.0 ... linking ... done.
+Loading package hashable-1.2.2.0 ... linking ... done.
+Loading package scientific-0.3.3.2 ... linking ... done.
+Loading package attoparsec-0.12.1.2 ... linking ... done.
+Loading package blaze-builder-0.3.3.4 ... linking ... done.
+Loading package unordered-containers-0.2.5.1 ... linking ... done.
+Loading package primitive-0.5.4.0 ... linking ... done.
+Loading package vector-0.10.12.1 ... linking ... done.
+Loading package cassava-0.4.2.0 ... linking ... done.
+[1 of 1] Compiling Main             ( src/Main.hs, interpreted )
+
+src/Main.hs:3:1: Warning:
+    Top-level binding with no type signature: main :: IO ()
+Ok, modules loaded: Main.
+*Main&gt; :load src/Main.hs
+[1 of 1] Compiling Main             ( src/Main.hs, interpreted )
+
+src/Main.hs:3:1: Warning:
+    Top-level binding with no type signature: main :: IO ()
+Ok, modules loaded: Main.
+*Main&gt;</code></pre>
+<p>Becoming comfortable with the REPL can be a serious boon to productivity. There is editor integration for those that want it as well.</p>
+<p>Now we’re going to update our <code>src/Main.hs</code>. Our goal is to read a CSV file into a <code>ByteString</code> (basically a byte vector), parse the <code>ByteString</code> into a <code>Vector</code> of tuples, and sum up the “at bats” column.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span>
+<span class="co">-- from cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv</span>
+
+<span class="co">-- a simple type alias for data</span>
+<span class="kw">type</span> <span class="dt">BaseballStats</span> <span class="fu">=</span> (<span class="dt">BL.ByteString</span>, <span class="dt">Int</span>, <span class="dt">BL.ByteString</span>, <span class="dt">Int</span>)
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+  csvData <span class="ot">&lt;-</span> BL.readFile <span class="st">&quot;batting.csv&quot;</span>
+  <span class="kw">let</span> v <span class="fu">=</span> decode <span class="dt">NoHeader</span><span class="ot"> csvData ::</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">V.Vector</span> <span class="dt">BaseballStats</span>)
+  <span class="kw">let</span> summed <span class="fu">=</span> fmap (V.foldr summer <span class="dv">0</span>) v
+  putStrLn <span class="fu">$</span> <span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed)
+  <span class="kw">where</span> summer (name, year, team, atBats) n <span class="fu">=</span> n <span class="fu">+</span> atBats</code></pre></div>
+<p>Let’s break down this code.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span>
+<span class="co">-- from cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv</span></code></pre></div>
+<p>First, we’re importing our dependencies. Qualified imports let us give names to the namespaces we’re importing and use those names as a prefix, such as <code>BL.ByteString</code>. This is used to refer to values and type constructors alike. In the case of <code>import Data.Csv</code> where we didn’t qualify the import (with <code>qualified</code>), we’re bringing everything from that module into scope. This should be done only with modules that have names of things that won’t conflict with anything else. Other modules like <code>Data.ByteString</code> and <code>Data.Vector</code> have a bunch of functions that are named identically to functions in the <code>Prelude</code> and should be qualified.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- a simple type alias for data</span>
+<span class="kw">type</span> <span class="dt">BaseballStats</span> <span class="fu">=</span> (<span class="dt">BL.ByteString</span>, <span class="dt">Int</span>, <span class="dt">BL.ByteString</span>, <span class="dt">Int</span>)</code></pre></div>
+<p>Here we’re creating a type alias for <code>BaseballStats</code>. I made it a type alias for a few reasons. One is so I could put off talking about algebraic data types! I made it a type alias of the 4-tuple specifically because the Cassava library already understands how to translate CSV rows into tuples and our type here will “just work” as long as the columns that we say are <code>Int</code> actually are parseable as integral numbers. Haskell tuples are allowed to have heterogenous types and are defined primarily by their length. The parentheses and commas are used to signify them. For example, <code>(a, b)</code> would be both a valid value and type constructor for referring to 2-tuples, <code>(a, b, c)</code> for 3-tuples, and so forth.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+  csvData <span class="ot">&lt;-</span> BL.readFile <span class="st">&quot;batting.csv&quot;</span></code></pre></div>
+<p>We need to read in a file so we can parse our CSV data. We called the lazy <code>ByteString</code> namespace <code>BL</code> using the <code>qualified</code> keyword in the import. From that namespace we used <code>BL.readFile</code> which has type <code>FilePath -&gt; IO ByteString</code>. You can read this in English as <code>I take a FilePath as an argument and I return a ByteString after performing some side effects</code>.</p>
+<p>You can see <a href="http://hackage.haskell.org/package/bytestring-0.10.4.0/docs/Data-ByteString-Lazy.html#v:readFile">the type of <code>BL.readFile</code> here</a>.</p>
+<p>We’re binding over the <code>IO ByteString</code> that <code>BL.readFile &quot;batting.csv&quot;</code> returns. <code>csvData</code> has type <code>ByteString</code> due to binding over <code>IO</code>. Remember our tuples that we signified with parentheses earlier? Well, <code>()</code> is a sort of tuple too, but it’s the 0-tuple! In Haskell we usually call it unit. It can’t contain anything; it’s a type that has a single value - <code>()</code>, that’s it. It’s often used to signify we don’t return anything. Since there’s usually no point in executing functions that don’t return anything, <code>()</code> is often wrapped in <code>IO</code>. Printing strings are a good example of the result type <code>IO ()</code> as they do their work and return nothing. In Haskell you can’t actually “return nothing;” the concept doesn’t even make sense. Thus we use <code>()</code> as the idiomatic “I got nothin’ for ya” type and value. Usually if something returns <code>()</code> you won’t even bother to bind to a name, you’ll just ignore it.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  <span class="kw">let</span> v <span class="fu">=</span> decode <span class="dt">NoHeader</span><span class="ot"> csvData ::</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">V.Vector</span> <span class="dt">BaseballStats</span>)</code></pre></div>
+<p><code>v</code> has the type you see at the right with the type assignment operator <code>::</code> I’m assigning the type to dispatch the typeclass that <code>decode</code> uses to parse csv data. See more about <a href="http://hackage.haskell.org/package/cassava-0.4.2.0/docs/Data-Csv.html#t:FromRecord">the typeclass cassava uses for parsing csv data here</a>.</p>
+<p>In this case, because I defined a <code>type</code> alias of a tuple for my record, I get my parsing code for free (already defined for tuples, <code>bytestring</code>, and <code>Int</code>).</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  <span class="kw">let</span> summed <span class="fu">=</span> fmap (V.foldr summer <span class="dv">0</span>) v</code></pre></div>
+<p>Here we’re using a <code>let</code> expression to bind the expression <code>fmap (V.foldr summer 0) v</code> to the name <code>summed</code> so that the expressions that follow it can refer to <code>summed</code> without repeating all the same code.</p>
+<p>First we fmap over the <code>Either String (V.Vector BaseballStats)</code>. This lets us apply <code>(V.foldr summer 0)</code> to <code>V.Vector BaseballStats</code>. We partially applied the <code>Vector</code> folding function <code>foldr</code> to the summing function and the number <code>0</code>. The number <code>0</code> here is our “start” value for the fold. Generally in Haskell we don’t use recursion directly. Instead in Haskell we use higher order functions and abstractions, giving names to common things programmers do in a way that lets us be more productive. One of those very common things is folding data. You’re going to see examples of folding and the use <code>fmap</code> from <code>Functor</code> in a bit.</p>
+<p>We say <code>V.foldr</code> is partially applied because we haven’t applied all of the arguments yet. Haskell has something called currying built into all functions by default which lets us avoid some tedious work that would require a “Builder” pattern in languages like Java. Unlike previous code samples, these examples are using my interactive <code>ghci</code> REPL.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- Person is a product/record, if that</span>
+<span class="co">-- is confusing think &quot;struct&quot; but better.</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">data</span> <span class="dt">Person</span> <span class="fu">=</span> <span class="dt">Person</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="kw">deriving</span> <span class="dt">Show</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span><span class="kw">type</span> <span class="dt">Person</span>
+<span class="dt">Person</span><span class="ot"> ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Person</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span>
+<span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span><span class="ot"> ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Person</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span>
+<span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span><span class="ot"> ::</span> <span class="dt">Person</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> namedChris <span class="fu">=</span> <span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> namedChris <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span>
+<span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span>
+<span class="dt">Person</span> <span class="st">&quot;Chris&quot;</span> <span class="dv">415</span> <span class="st">&quot;Allen&quot;</span></code></pre></div>
+<p>This lets us apply some, but not all, of the arguments to a function and pass around the result as a function expecting the rest of the arguments.</p>
+<p>Fully explaining the <code>fmap</code> in <code>let summed = fmap (V.foldr summer 0) v</code> would require explaining <code>Functor</code>. I don’t want to belabor specific concepts <em>too</em> much, but I think a quick demonstration of <code>fmap</code> and <code>foldr</code> would help here. This is also a transcript from my interactive <code>ghci</code> REPL. I’ll explain Either, Right, and Left after the REPL sample. The <code>:type</code> or <code>:t</code> command is a command to my <code>ghci</code> REPL, not part of the Haskell language. It’s a way to request the type of an expression.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> v <span class="fu">=</span> <span class="dt">Right</span> <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> x <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;blah&quot;</span><span class="ot"> ::</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t v
+<span class="ot">v ::</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t x
+<span class="ot">x ::</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> addOne x <span class="fu">=</span> x <span class="fu">+</span> <span class="dv">1</span>
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">4</span><span class="fu">:</span><span class="dv">12</span><span class="fu">:</span> <span class="dt">Warning</span><span class="fu">:</span>
+    <span class="dt">This</span> binding for ‘x’ shadows the existing binding
+      defined at <span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">3</span><span class="fu">:</span><span class="dv">5</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> addOne <span class="dv">2</span>
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">5</span><span class="fu">:</span><span class="dv">1</span><span class="fu">:</span> <span class="dt">Warning</span><span class="fu">:</span>
+    <span class="dt">Defaulting</span> the following constraint(s) to <span class="kw">type</span> ‘<span class="dt">Integer</span>’
+      (<span class="dt">Show</span> a0) arising from a use <span class="kw">of</span> ‘print’ at <span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">5</span><span class="fu">:</span><span class="dv">1</span><span class="fu">-</span><span class="dv">8</span>
+      (<span class="dt">Num</span> a0) arising from a use <span class="kw">of</span> ‘it’ at <span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">5</span><span class="fu">:</span><span class="dv">1</span><span class="fu">-</span><span class="dv">8</span>
+    <span class="dt">In</span> a stmt <span class="kw">of</span> an interactive <span class="dt">GHCi</span> command<span class="fu">:</span> print it
+<span class="dv">3</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> fmap addOne v
+<span class="dt">Right</span> <span class="dv">2</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> fmap addOne x
+<span class="dt">Left</span> <span class="st">&quot;blah&quot;</span></code></pre></div>
+<p><code>Either</code> in Haskell is used to signify cases where we might get values of one of two possible types. <code>Either String Int</code> is a way of saying, “you’ll get either a <code>String</code> or an <code>Int</code>”. This is an example of sum types. You can think of them as a way to say <code>or</code> in your type, where a <code>struct</code> or <code>class</code> would let you say <code>and</code>. <code>Either</code> has two constructors, <code>Right</code> and <code>Left</code>. Culturally in Haskell <code>Left</code> signifies an “error” case. This is partly why the <code>Functor</code> instance for <code>Either</code> maps over the <code>Right</code> constructor but not the <code>Left</code>. If you have an error value, you can’t keep applying your happy path functions. In the case of <code>Either String Int</code>, <code>String</code> would be our error value in a <code>Left</code> constructor and <code>Int</code> would be the happy-path “yep, we’re good” value in the <code>Right</code> constructor. Also, Haskell has type inference. You don’t have to declare types explicitly like I did in the example from my REPL transcript - I did so for the sake of explicitness.</p>
+<p><code>Either</code> isn’t the only type we can map over.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> myList <span class="fu">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]<span class="ot"> ::</span> [<span class="dt">Int</span>]
+<span class="dt">Prelude</span><span class="fu">&gt;</span> fmap addOne myList
+[<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> multTwo x <span class="fu">=</span> x <span class="fu">*</span> <span class="dv">2</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> fmap multTwo myList
+[<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>]</code></pre></div>
+<p>Here we have the list type, signified using the <code>[]</code> brackets and whatever type is inside in our list, in this case <code>Int</code>. With <code>Either</code> we have two possible types and <code>Functor</code> only lets us map over one of them, so the <code>Functor</code> instance for <code>Either</code> only applies our function over the happy path values. With the type <code>[a]</code> there’s only one type inside of it, so it’ll get applied regardless…or will it? What if I have an empty list?</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> fmap multTwo []
+[]
+<span class="dt">Prelude</span><span class="fu">&gt;</span> fmap addOne []
+[]</code></pre></div>
+<p>Conveniently not only does <code>fmap</code> let us avoid manually pattern matching the <code>Left</code> and <code>Right</code> cases of <code>Either</code>, but it lets us not bother to manually recurse our list or pattern-match the empty list case. This helps us prevent mistakes as well as clean up and abstract our code. In a less happy alternate universe, we would’ve had to write the following code, written in typical code file style rather than for the REPL this time:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">addOne ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+addOne x <span class="fu">=</span> x <span class="fu">+</span> <span class="dv">1</span> <span class="co">-- at least we can abstract this out</span>
+
+<span class="ot">incrementEither ::</span> <span class="dt">Either</span> e <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Either</span> e <span class="dt">Int</span>
+incrementEither (<span class="dt">Right</span> numberWeWanted) <span class="fu">=</span> <span class="dt">Right</span> (addOne numberWeWanted)
+incrementEither (<span class="dt">Left</span> errorString) <span class="fu">=</span> <span class="dt">Left</span> errorString</code></pre></div>
+<p>We use parens on the left-hand side here to pattern match at the function declaration level on whether our <code>Either e Int</code> is <code>Right</code> or <code>Left</code>. Parentheses wrap <code>(addOne numberWeWanted)</code> so we don’t try to erroneously pass two arguments to <code>Right</code> when we mean to pass the result of applying <code>addOne</code> to <code>numberWeWanted</code>, to <code>Right</code>. If our value is <code>Right 1</code> this is returning <code>Right (addOne 1)</code> which reduces to <code>Right 2</code>.</p>
+<p>As we process the CSV data we’re going to be doing so by <em>folding</em> the data. This is a general model for understanding how you process data that extends beyond specific programming languages. You might have seen <code>fold</code> called <code>reduce</code>. Here are some examples of folds and list/string concatenation in Haskell. We’re switching back to REPL demonstration again.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t foldr
+foldr<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> foldr (<span class="fu">+</span>) <span class="dv">0</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+<span class="dv">6</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> foldr (<span class="fu">+</span>) <span class="dv">1</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+<span class="dv">7</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> foldr (<span class="fu">+</span>) <span class="dv">2</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+<span class="dv">8</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> foldr (<span class="fu">+</span>) <span class="dv">2</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]
+<span class="dv">12</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">++</span>)
+<span class="ot">(++) ::</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>] <span class="fu">++</span> [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]
+[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>]
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="st">&quot;hello, &quot;</span> <span class="fu">++</span> <span class="st">&quot;world!&quot;</span>
+<span class="st">&quot;hello, world!&quot;</span></code></pre></div>
+<p>Okay, enough of the REPL jazz session.</p>
+<hr>
+<p>Now back to the CSV processing code!</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  putStrLn <span class="fu">$</span> <span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed)</code></pre></div>
+<p>Last, we stringify the summed up count using <code>show</code>, then concatenate that with a string to describe what we’re printing, then print the whole shebang using <code>putStrLn</code>. The <code>$</code> is just so everything to the right of the <code>$</code> gets evaluated before whatever is to the left. To see why I did that remove the <code>$</code> and build the code. Alternatively, I could’ve used parentheses in the usual fashion. That would look like the following.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  putStrLn (<span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed))</code></pre></div>
+<p><code>show</code> is a function from the typeclass <code>Show</code>. Here’s how you can find out about it in your REPL:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span><span class="kw">type</span> show
+show<span class="ot"> ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">String</span>
+
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>info <span class="dt">Show</span>
+<span class="kw">class</span> <span class="dt">Show</span> a <span class="kw">where</span>
+<span class="ot">  showsPrec ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">ShowS</span>
+<span class="ot">  show ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span>
+<span class="ot">  showList ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">ShowS</span>
+<span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> (<span class="dt">Show</span> a, <span class="dt">Show</span> b) <span class="ot">=&gt;</span> <span class="dt">Show</span> (<span class="dt">Either</span> a b)
+<span class="co">-- Defined in ‘Data.Either’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">Show</span> [a] <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Ordering</span> <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">Show</span> (<span class="dt">Maybe</span> a) <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Integer</span> <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Int</span> <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Char</span> <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bool</span> <span class="co">-- Defined in ‘GHC.Show’</span>
+<span class="fu">...</span></code></pre></div>
+<p>What <code>instance Show Integer</code> is telling us is that <code>Integer</code> has implemented <code>Show</code>. This means we should be able to use <code>show</code> on something with that type. We can specialize the type of <code>show</code> to <code>Integer</code> in a few passes.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">show<span class="ot"> ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">String</span>
+show<span class="ot"> ::</span> <span class="dt">Show</span> <span class="dt">Integer</span> <span class="ot">=&gt;</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
+<span class="co">-- you can just drop Show Integer =&gt;, the typeclass</span>
+<span class="co">-- instances associated with a specific type are</span>
+<span class="co">-- a given.</span>
+show<span class="ot"> ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span></code></pre></div>
+<p>In fact, we can even make a pointless version of show pre-specialized to <code>Integer</code>. Here’s an example from my REPL:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t show
+show<span class="ot"> ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">String</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t show myInteger
+show<span class="ot"> myInteger ::</span> <span class="dt">String</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> integerShow <span class="fu">=</span><span class="ot"> show ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> integerShow <span class="dv">1</span>
+<span class="st">&quot;1&quot;</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> integerShow (<span class="st">&quot;blah&quot;</span>, ())
+
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">11</span><span class="fu">:</span><span class="dv">13</span><span class="fu">:</span>
+    <span class="dt">Couldn't</span> match expected <span class="kw">type</span> ‘<span class="dt">Integer</span>’
+                with actual <span class="kw">type</span> ‘([<span class="dt">Char</span>], ())’
+    <span class="dt">In</span> the first argument <span class="kw">of</span> ‘integerShow’, namely ‘(<span class="st">&quot;blah&quot;</span>, ())’
+    <span class="dt">In</span> the expression<span class="fu">:</span> integerShow (<span class="st">&quot;blah&quot;</span>, ())
+    <span class="dt">In</span> an equation for ‘it’<span class="fu">:</span> it <span class="fu">=</span> integerShow (<span class="st">&quot;blah&quot;</span>, ())
+<span class="dt">Prelude</span><span class="fu">&gt;</span> show (<span class="st">&quot;blah&quot;</span>, ())
+<span class="st">&quot;(\&quot;blah\&quot;,())&quot;</span></code></pre></div>
+<p>Next we’ll look at <code>summer</code>. <code>summer</code> is the function we are folding our <code>Vector</code> with. You can hang <code>where</code> clauses off of functions which are a bit like <code>let</code> but they come last. <code>where</code> clauses are more common in Haskell than <code>let</code> clauses, but there’s nothing wrong with using both.</p>
+<p>Our folding function here takes two arguments: the tuple record (we’ll have many of those in the vector of records), and the sum of our data so far.</p>
+<p>Here <code>n</code> is the sum we’re carrying along as fold the <code>Vector</code> of <code>BaseballStats</code>.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  <span class="kw">where</span> summer (name, year, team, atBats) n <span class="fu">=</span> n <span class="fu">+</span> atBats</code></pre></div>
+<h2 id="building-and-running-our-csv-parsing-program">Building and running our csv parsing program</h2>
+<p>First we’re going to rebuild the project.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> build</code></pre></div>
+<p>Then, assuming we have the <code>batting.csv</code> I mentioned earlier in our current directory, we can run our program and get the results.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> exec bassbull
+<span class="kw">Total</span> atBats was: Right 4858210
+$</code></pre></div>
+<h2 id="refactoring-our-code-a-bit">Refactoring our code a bit</h2>
+<p>Splitting out logic into independent functions is a common method for making Haskell code more composable and easy to read.</p>
+<p>To that end, we’ll clean up our example a bit.</p>
+<p>First, we don’t care about <code>name</code>, <code>year</code>, and <code>team</code> for our folding code.</p>
+<p>So we’re going to use the Haskell idiom of bindings things we don’t care about to <code>_</code>.</p>
+<p>This changes our fold from this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer (name, year, team, atBats) sum <span class="fu">=</span> sum <span class="fu">+</span> atBats</code></pre></div>
+<p>To this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer (_, _, _, atBats) sum <span class="fu">=</span> sum <span class="fu">+</span> atBats</code></pre></div>
+<p>Next we’ll make our extraction of the ‘at bats’ from the tuple more compositional. If you’d like to play with this further, consider rewriting our example program at the end of this article into using a Haskell record instead of a tuple. I used a tuple here because Cassava already understands how to parse them, sparing me having to write that code.</p>
+<p>First we’ll add <code>fourth</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fourth ::</span> (a, b, c, d) <span class="ot">-&gt;</span> d
+fourth (_, _, _, d) <span class="fu">=</span> d</code></pre></div>
+<p>Then we’ll rewrite our folding function again from:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer (_, _, _, atBats) n <span class="fu">=</span> n <span class="fu">+</span> atBats</code></pre></div>
+<p>Into:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer r n <span class="fu">=</span> n <span class="fu">+</span> fourth r</code></pre></div>
+<p>Here we can use something called <em>eta reduction</em> to remove the explicit record and sum values to make it point-free. Since our function is really just about composing the extraction of the fourth value from the tuple and summing that value with the summed up <code>atBat</code> values so far, this makes the code quite concise.</p>
+<p>You can read more about this in <a href="https://www.haskell.org/haskellwiki/Pointfree">the article on pointfree programming in Haskell</a>.</p>
+<p>To that end, we go from:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer r n <span class="fu">=</span> n <span class="fu">+</span> fourth r</code></pre></div>
+<p>to:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">where</span> summer <span class="fu">=</span> (<span class="fu">+</span>) <span class="fu">.</span> fourth</code></pre></div>
+<p><code>.</code> is how we compose functions in Haskell. The entire definition of <code>.</code> is:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">(f <span class="fu">.</span> g) x <span class="fu">=</span> f (g x)</code></pre></div>
+<p>So, for example, if we <code>multiplyByTwo . addOne</code> we’re adding one, then passing that result to the <code>multiplyByTwo</code> function. In the csv parser code, first <code>fourth</code> gets applied to the <code>r</code> argument, then <code>(+)</code> is composed so that it is applied to the result of <code>fourth r</code> and the value <code>n</code>.</p>
+<p>We should also split out our decoding of <code>BaseballStats</code> from CSV data.</p>
+<p>We’re going to move this code:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span> v <span class="fu">=</span> decode <span class="dt">NoHeader</span><span class="ot"> csvData ::</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">V.Vector</span> <span class="dt">BaseballStats</span>)</code></pre></div>
+<p>Into an independent function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">baseballStats ::</span> <span class="dt">BL.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">V.Vector</span> <span class="dt">BaseballStats</span>)
+baseballStats <span class="fu">=</span> decode <span class="dt">NoHeader</span></code></pre></div>
+<p>Then <code>summed</code> becomes:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span> summed <span class="fu">=</span> fmap (V.foldr summer <span class="dv">0</span>) (baseballStats csvData)</code></pre></div>
+<p>With that bit of tidying done, we should have:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span>
+<span class="co">-- cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv</span>
+
+<span class="kw">type</span> <span class="dt">BaseballStats</span> <span class="fu">=</span> (<span class="dt">BL.ByteString</span>, <span class="dt">Int</span>, <span class="dt">BL.ByteString</span>, <span class="dt">Int</span>)
+
+<span class="ot">fourth ::</span> (a, b, c, d) <span class="ot">-&gt;</span> d
+fourth (_, _, _, d) <span class="fu">=</span> d
+
+<span class="ot">baseballStats ::</span> <span class="dt">BL.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">V.Vector</span> <span class="dt">BaseballStats</span>)
+baseballStats <span class="fu">=</span> decode <span class="dt">NoHeader</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+  csvData <span class="ot">&lt;-</span> BL.readFile <span class="st">&quot;batting.csv&quot;</span>
+  <span class="kw">let</span> summed <span class="fu">=</span> fmap (V.foldr summer <span class="dv">0</span>) (baseballStats csvData)
+  putStrLn <span class="fu">$</span> <span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed)
+  <span class="kw">where</span> summer <span class="fu">=</span> (<span class="fu">+</span>) <span class="fu">.</span> fourth</code></pre></div>
+<p>Now we’re going to double-check that our code is working:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> build
+<span class="kw">...</span>(stuff happens)<span class="kw">...</span>
+$ <span class="kw">stack</span> exec bassbull
+<span class="kw">Total</span> atBats was: Right 4858210</code></pre></div>
+<h2 id="streaming">Streaming</h2>
+<p>We can improve upon what we have here. Currently we’re going to use as much memory as it takes to store the entirety of the csv file in memory, but we don’t really have to do that to sum up the records!</p>
+<p>Since we’re just adding the current records’ “at bats” with the sum we’ve accumulated so far, we only really need to read one record into memory at a time. By default Cassava will load the csv into a <code>Vector</code> for convenience, but fortunately it has a streaming module so we can stream the data incrementally and fold our result without loading the entire dataset at once.</p>
+<p>First, we’re going to drop Cassava’s default module for the streaming module.</p>
+<p>Changing from this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv</span></code></pre></div>
+<p>To this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv.Streaming</span></code></pre></div>
+<p>Next, since we won’t have a <code>Vector</code> anymore (we’re streaming, not using in-memory collections), we can drop:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span></code></pre></div>
+<p>In favor using the <code>Foldable</code> typeclass Cassava offers for use with its streaming API:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Foldable</span> <span class="kw">as</span> <span class="dt">F</span></code></pre></div>
+<p>Then in order to use the streaming API we just change the definition of our <code>summed</code> from:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span> summed <span class="fu">=</span> fmap (V.foldr summer <span class="dv">0</span>) (baseballStats csvData)</code></pre></div>
+<p>To:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span> summed <span class="fu">=</span> F.foldr summer <span class="dv">0</span> (baseballStats csvData)</code></pre></div>
+<p>We are incrementally processing the results, not loading the entire dataset into a Vector.</p>
+<p>The final result should look like:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Foldable</span> <span class="kw">as</span> <span class="dt">F</span>
+<span class="co">-- cassava</span>
+<span class="kw">import </span><span class="dt">Data.Csv.Streaming</span>
+
+<span class="kw">type</span> <span class="dt">BaseballStats</span> <span class="fu">=</span> (<span class="dt">BL.ByteString</span>, <span class="dt">Int</span>, <span class="dt">BL.ByteString</span>, <span class="dt">Int</span>)
+
+<span class="ot">fourth ::</span> (a, b, c, d) <span class="ot">-&gt;</span> d
+fourth (_, _, _, d) <span class="fu">=</span> d
+
+<span class="ot">baseballStats ::</span> <span class="dt">BL.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Records</span> <span class="dt">BaseballStats</span>
+baseballStats <span class="fu">=</span> decode <span class="dt">NoHeader</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+  csvData <span class="ot">&lt;-</span> BL.readFile <span class="st">&quot;batting.csv&quot;</span>
+  <span class="kw">let</span> summed <span class="fu">=</span> F.foldr summer <span class="dv">0</span> (baseballStats csvData)
+  putStrLn <span class="fu">$</span> <span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed)
+  <span class="kw">where</span> summer <span class="fu">=</span> (<span class="fu">+</span>) <span class="fu">.</span> fourth</code></pre></div>
+<p>The core here is the <code>Records</code> datatype <code>Cassava</code> gives us via the Streaming module. You can read more about the <code>Records</code> datatype <a href="http://hackage.haskell.org/package/cassava-0.4.2.0/docs/Data-Csv-Streaming.html#t:Records">on hackage</a>. <code>Records</code> is a sum type, you could read out in English like so:</p>
+<ul>
+<li><p><code>data Records a</code> -&gt; Records is a datatype that takes a type variable <code>a</code></p></li>
+<li><p><code>Cons (...) | Nil (...)</code> -&gt; It is a sum type of two possible constructors, <code>Cons</code> or <code>Nil</code> (note the list-like nomenclature). This is way of saying a <code>Record a</code> is always either <code>Cons</code> or <code>Nil</code>.</p></li>
+<li><p><code>Cons (Either String a) (Record a)</code> -&gt; the <code>Cons</code> data constructor is a product of <code>Either String a</code> and <code>Record a</code>. We’re saying <code>Cons</code> is always <code>Either String a</code> <em>and</em> <code>Record a</code>. Also, this <code>Cons</code> resembles the cons-cells in Lisp, Haskell, ML, etc. The library has the following comment about it: “A record or an error message, followed by more records.”</p></li>
+<li><p><code>Nil (Maybe String) BL.ByteString</code> -&gt; the <code>Nil</code> data constructor is a product of <code>Maybe String</code> and <code>BL.ByteString</code>. The library has the following comment: “End of stream, potentially due to a parse error. If a parse error occured, the first field contains the error message. The second field contains any unconsumed input.”</p></li>
+</ul>
+<p>What the Records type is doing for us is letting us process the records like a lazy list, but with a little extra context in the <code>Nil</code> case.</p>
+<p>Because Haskell has abstractions like the <code>Foldable</code> typeclass, we can talk about folding a dataset without caring about the underlying implementation! We could’ve used the <code>foldr</code> from <code>Foldable</code> on our <code>Vector</code>, a <code>List</code>, a <code>Tree</code>, a <code>Map</code> - not just Cassava’s streaming API. <code>foldr</code> from <code>Foldable</code> has the type: <code>Foldable t =&gt; (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b</code>. Note the similarity with the <code>foldr</code> for the list type, <code>(a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b</code>. What we’ve done is abstracted the specific type out and made it into a generic interface.</p>
+<p>In case you’re wondering what the <code>Foldable</code> instance is doing under the hood:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- | Skips records that failed to convert.</span>
+<span class="kw">instance</span> <span class="dt">Foldable</span> <span class="dt">Records</span> <span class="kw">where</span>
+    foldr <span class="fu">=</span> foldrRecords
+
+<span class="ot">foldrRecords ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Records</span> a <span class="ot">-&gt;</span> b
+foldrRecords f <span class="fu">=</span> go
+  <span class="kw">where</span>
+    go z (<span class="dt">Cons</span> (<span class="dt">Right</span> x) rs) <span class="fu">=</span> f x (go z rs)
+    go z _ <span class="fu">=</span> z
+<span class="ot">{-# INLINE foldrRecords #-}</span></code></pre></div>
+<h2 id="adding-tests">Adding tests</h2>
+<p>Now we’re going to add tests to our package. First we are going to add a test suite to our <code>bassbull.cabal</code> file. The name of our test suite will just be <code>tests</code>.</p>
+<pre><code>test-suite tests
+  ghc-options:         -Wall
+  type:                exitcode-stdio-1.0
+  main-is:             Tests.hs
+  hs-source-dirs:      tests
+  build-depends:       base,
+                       bassbull,
+                       hspec
+  default-language:    Haskell2010</code></pre>
+<p>We’re also going to add a library and shift over some code so that our package is exposed as a proper library rather than only working as an executable. We’re exposing a single module named <code>Bassbull</code>. With an <code>hs-source-dirs</code> of <code>src</code> and an exposed module named <code>Bassbull</code>, Cabal will expect a file to exist at <code>src/Bassbull.hs</code>.</p>
+<pre><code>library
+  ghc-options:         -Wall
+  exposed-modules:     Bassbull
+  build-depends:       base &gt;= 4.7 &amp;&amp; &lt;5,
+                       bytestring,
+                       vector,
+                       cassava
+  hs-source-dirs:      src
+  default-language:    Haskell2010</code></pre>
+<p>We need to change our executable in the Cabal file so that it depends on our library. No point duplicating the code!</p>
+<pre><code>executable bassbull
+  main-is:             Main.hs
+  ghc-options:         -rtsopts -O2
+  build-depends:       base,
+                       bassbull,
+                       bytestring,
+                       cassava
+  hs-source-dirs:      src
+  default-language:    Haskell2010</code></pre>
+<p>Next we’re going to create a file named <code>src/Bassbull.hs</code> and shift code from <code>src/Main.hs</code> over to it. Note we’ve also refactored our <code>main</code> function so it takes an argument of what csv file to process.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- src/Bassbull.hs</span>
+
+<span class="kw">module</span> <span class="dt">Bassbull</span> <span class="kw">where</span>
+
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Foldable</span> <span class="kw">as</span> <span class="dt">F</span>
+<span class="kw">import </span><span class="dt">Data.Csv.Streaming</span>
+
+<span class="kw">type</span> <span class="dt">BaseballStats</span> <span class="fu">=</span> (<span class="dt">BL.ByteString</span>, <span class="dt">Int</span>, <span class="dt">BL.ByteString</span>, <span class="dt">Int</span>)
+
+<span class="ot">baseballStats ::</span> <span class="dt">BL.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Records</span> <span class="dt">BaseballStats</span>
+baseballStats <span class="fu">=</span> decode <span class="dt">NoHeader</span>
+
+<span class="ot">fourth ::</span> (a, b, c, d) <span class="ot">-&gt;</span> d
+fourth (_, _, _, d) <span class="fu">=</span> d
+
+<span class="ot">summer ::</span> (a, b, c, <span class="dt">Int</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+summer <span class="fu">=</span> (<span class="fu">+</span>) <span class="fu">.</span> fourth
+
+<span class="co">-- FilePath is just an alias for String</span>
+<span class="ot">getAtBatsSum ::</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Int</span>
+getAtBatsSum battingCsv <span class="fu">=</span> <span class="kw">do</span>
+  csvData <span class="ot">&lt;-</span> BL.readFile battingCsv
+  return <span class="fu">$</span> F.foldr summer <span class="dv">0</span> (baseballStats csvData)</code></pre></div>
+<p>And here’s our defrocked <code>src/Main.hs</code> which is now only responsible for fronting the executable.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Bassbull</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+  summed <span class="ot">&lt;-</span> getAtBatsSum <span class="st">&quot;batting.csv&quot;</span>
+  putStrLn <span class="fu">$</span> <span class="st">&quot;Total atBats was: &quot;</span> <span class="fu">++</span> (show summed)</code></pre></div>
+<p>Next we’ll create a directory named <code>tests</code> and add a file named <code>Tests.hs</code> to it.</p>
+<p>For our tests, we’re going to use <a href="http://hspec.github.io/">HSpec</a> because the library is easy to use, the syntax is clean, and the author <a href="https://github.com/sol">Simon Hengel</a> is one of the most responsive and helpful I’ve run into in open source.</p>
+<p>Here’s our <code>tests/Tests.hs</code> file</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Bassbull</span>
+<span class="kw">import </span><span class="dt">Test.Hspec</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> hspec <span class="fu">$</span> <span class="kw">do</span>
+  describe <span class="st">&quot;Verify that bassbull outputs the correct data&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    it <span class="st">&quot;equals zero&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+      theSum <span class="ot">&lt;-</span> getAtBatsSum <span class="st">&quot;batting.csv&quot;</span>
+      theSum <span class="ot">`shouldBe`</span> <span class="dv">4858210</span></code></pre></div>
+<p>There’s not too much here. We’re importing <code>Bassbull</code>, which is the library module we’ve exposed. This is also a <code>Main</code> module with its own <code>main</code> file because we execute our test suite as a binary just like we do with executables.</p>
+<p>With all that in place, we’ll build and run the actual tests.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> test</code></pre></div>
+<p><code>stack test</code> is just a shortcut for building <code>tests</code> specifically, then running the executable produced to see test output.</p>
+<p>You aren’t limited to building the <code>tests</code> binary and running your tests in that manner. You can also pass <code>stack ghci</code> an argument to make it load your tests. This can be faster as the REPL uses an interpreter and can reload your code very quickly - much more quickly than doing a full build &amp; execution run.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">stack</span> ghci bassbull:tests</code></pre></div>
+<p>The above will then give you a REPL which can see anything the build in your Cabal named <code>tests</code> can see. You can then run the <code>main</code> function or individual test suites - if you bother to split them out.</p>
+<p>Tests are useful and important in Haskell, although I often find I need <em>much</em> fewer of them. Often my process for working on an existing Haskell project will involve working on the code I’m changing with Emacs and a REPL instantiated via <code>stack ghci</code>. As my code starts passing the type-checker, I start running the tests as another layer of assurance that I’m doing the right thing.</p>
+<p>I like having a lot of feedback and help from my computer when writing code!</p>
+<h2 id="making-your-haskell-packages-available-to-the-haskell-community">Making your Haskell packages available to the Haskell community</h2>
+<p><a href="https://hackage.haskell.org/">Hackage</a> is the main community repository of Haskell packages and will usually be where you look to find libraries you need.</p>
+<p>Mostly you’ll find libraries and the occasional executable utility, but utilities should <em>also</em> be exposing library APIs that make their functionality accessible via Haskell code. This is not only more useful to other people but enforces good practices and more modular projects.</p>
+<p>Haskell users are accustomed to documentation that is accessible via the Hackage website directly <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Functor.html">such as you might find for the base library that comes with GHC</a>. The tool that builds this documentation is called <a href="https://www.haskell.org/haddock/">Haddock</a>.</p>
+<p>I strongly recommend you look at well-established libraries like <a href="github.com/ekmett/lens">lens</a> for examples of how to <a href="https://github.com/ekmett/lens/blob/master/scripts/hackage-docs.sh">build your documentation</a> and <a href="https://github.com/ekmett/lens/blob/master/.travis.yml">use continuous integration</a> with your Haskell projects.</p>
+<p>To learn more and for more information on building a package for uploading to Hackage see <a href="https://www.haskell.org/haskellwiki/How_to_write_a_Haskell_program">this tutorial</a>.</p>
+<h2 id="how-i-work">How I work</h2>
+<p>When I’m working with Haskell code, I interact with my code in a few ways. One is that I’m writing the code itself in Emacs. I’ll also have a terminal with a REPL open, usually via <code>stack ghci</code> as I am almost always working on a specific project.</p>
+<p>My Emacs config is pretty sundry, it’s just <code>haskell-mode</code> and <code>flycheck</code>.</p>
+<p>My basic happy-path event-loop for writing Haskell is:</p>
+<ol style="list-style-type: decimal">
+<li><p>Import module I’m working on in the REPL before I’ve changed anything</p></li>
+<li><p>Change/add/delete code</p></li>
+<li><p><code>:reload</code> in the REPL. <code>flycheck</code> will give me type errors, but I sometimes like to see them in the REPL too.</p></li>
+<li><p>Sometimes I’ll use eta-reduction to refactor code. You can see an example of this <a href="http://codereview.stackexchange.com/questions/57843/update-map-in-haskell/57850#57850">in this code review on StackExchange</a>. Making code point-free makes the most sense when it’s primarily about <em>composing</em> functions rather than about applying them.</p></li>
+<li><p>If code still type-checks after some cleaning, I’ll run the tests. If tests pass, I move on unless I’m suspicious about test coverage. If tests break or I want more coverage, I write more tests until I’m satisfied. When that’s done, I return to step #1 in this loop for the next unit of work I want to perform.</p></li>
+</ol>
+<p>My diagnosis process when something <em>isn’t</em> working:</p>
+<ol style="list-style-type: decimal">
+<li><p>If I can’t get something to type-check, I’ll break down sub-expression, query the types of those sub-expressions and make certain they were what I expected.</p></li>
+<li><p>If have expressions I am trying to combine and I trying to make the types thereof make sense, but I haven’t implemented them yet I will use <code>undefined</code> and work with only application, composition, and monadic variations thereof to figure out how I need to get to where I’m going before I’ve implemented anything. You can see a good <a href="https://gist.github.com/ifesdjeen/4be994aea5846aa1c2fe">example of this in this Github gist</a>. I wrote the solution <span class="citation">@ifesdjeen</span> displays in his final comment.</p></li>
+<li><p>If I have a function expecting arguments I can’t figure out how to satisfy, I will sometimes use <a href="https://www.haskell.org/haskellwiki/GHC/Typed_holes">typed holes</a> or a similar trick with implicit parameters to see what type I need to provide.</p></li>
+<li><p>Since Haskell functions are pure and lazy, I can replace references to functions with their contents with a high degree of confidence that it will not change the semantics of my program. To that end, sometimes it’s easier to understand what’s going on by inlining the code by hand and seeing what your code turns into.</p></li>
+<li><p>If something type-checks but doesn’t work, I’ll run the tests. If the coverage isn’t catching it, I add it. This is less common for me in Haskell than you’d think. If I can frame the test as an assertion about some <em>property</em> the code should satisfy like with <a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a> I will do so. You can learn more about using QuickCheck in <a href="http://book.realworldhaskell.org/read/testing-and-quality-assurance.html">Real World Haskell</a>.</p></li>
+</ol>
+<h3 id="emacs">Emacs</h3>
+<ul>
+<li><a href="https://www.haskell.org/haskellwiki/Emacs">Haskell wiki section on Emacs</a></li>
+</ul>
+<h3 id="vim">vim</h3>
+<ul>
+<li><a href="https://github.com/eagletmt/ghcmod-vim">vim plugin Github repository</a></li>
+</ul>
+<h3 id="sublime-text-23">Sublime Text 2/3</h3>
+<ul>
+<li><a href="https://github.com/SublimeHaskell/SublimeHaskell">The SublimeHaskell plugin</a></li>
+</ul>
+<h3 id="my-personal-dotfiles">My personal dotfiles</h3>
+<ul>
+<li><a href="https://github.com/bitemyapp/dotfiles">My dotfiles on Github</a></li>
+</ul>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>This is the end of our little journey in playing around with Haskell to process CSV data. Learning how to use abstractions like <code>Foldable</code>, <code>Functor</code> or use techniques like <em>eta reduction</em> takes practice! I have <a href="https://github.com/bitemyapp/learnhaskell">a guide</a> for learning Haskell which has been compiled based on my experiences learning and teaching Haskell with many people over the last year or so.</p>
+<p>If you are curious and want to learn more, I strongly recommend you do a course of basic exercises first and then explore the way Haskell enables you think about your programs in terms of abstractions. Once you have the basics down, this can be done in a variety of ways. Some people like to attack practical problems, some like to follow along with white papers, some like to hammer out abstractions from scratch in focused exercises &amp; examples.</p>
+<p>Things to do after finishing this article:</p>
+<ul>
+<li><a href="https://haskell.org">Check out the Haskell community website</a></li>
+<li><a href="https://github.com/kazu-yamamoto/unit-test-example/blob/master/markdown/en/tutorial.md">Learn about (unit|spec|property) testing Haskell software with Kazu Yamamoto’s tutorial</a></li>
+<li><a href="http://haskell.org/hoogle">Search for code by <em>type</em> structurally with Hoogle</a></li>
+<li><a href="https://www.haskell.org/haddock/">Learn about Haddock, the Haskell source documentation tool</a> and look at the many <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Functor.html">examples</a> of Haskell package <a href="http://hackage.haskell.org/package/pipes-4.1.3/docs/Pipes-Tutorial.html">documentation</a>.</li>
+</ul>
+<p>More than anything else, my greatest wish would be that you develop a richer and more rewarding relationship with learning. Haskell has been a big part of this in my life.</p>
+<p>Special thanks to <a href="https://twitter.com/danielwithmusic">Daniel Compton</a> and <a href="https://twitter.com/argumatronic">Julie Moronuki</a> for helping me test &amp; edit this article. I couldn’t have gotten it together without their help.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr />
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-6 col-lg-6">
+    <div class="col-lg-5 col-lg-offset-5">
+      <img class="img-responsive" src="../../../posts/haskell/1/images/headshot.png" alt>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-lg-6">
+    <h3>Chris Allen</h3>
+    <h4>Haskell</h4>
+    <h3><small> Coder, Teacher, Author</small></h3>
+    <p><a href="http://bitemyapp.com">Chris</a> is a long time FP and Lisp user who discovered a love of learning and types when he found <a href="http://www.haskell.org">Haskell</a>. Aside from releasing multiple Haskell project, such as <a href="https://github.com/bitemyapp/bloodhound">Bloodhound</a> and <a href="https://github.com/bitemyapp/blacktip">Blacktip</a> he took to teaching Haskell to spread the love and creating the <a href="https://github.com/bitemyapp/learnhaskell">Learn Haskell</a> guide which he is turning into a <a href="http://haskellbook.com/">book</a>.</p>
+    <a class="btn btn-primary" href="../../../posts/haskell/1/index.html">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+</div>
+
+      </div>
+
+      <footer>
+        <hr />
+        <div class="row">
+          <div class="col-md-4 col-md-offset-8">
+            <p class="text-right">
+              <small>Except where otherwise noted.</small>
+              <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" title="Creative Commons License Details">
+                <img src="../../../images/cc.png" alt="Creative Commons Attribution Non-Commercial No Derivative License" />
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../../../js/jquery-1.10.2.js"></script>
+    <script src="../../../js/bootstrap.js"></script>
+
+  </body>
+</html>

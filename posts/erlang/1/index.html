@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>How I Start.</title>
+
+    <link href="../../../posts.rss" rel="alternate" type="application/rss+xml" title="How I Start." />
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/readable.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS for the 'Thumbnail Gallery' Template -->
+    <link href="../../../css/1-col-portfolio.css" rel="stylesheet" />
+    <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+      margin: 0; padding: 0; vertical-align: baseline; border: none; }
+      table.sourceCode { width: 100%; line-height: 100%; }
+      td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+      td.sourceCode { padding-left: 5px; }
+      code > span.kw { color: #007020; font-weight: bold; }
+      code > span.dt { color: #902000; }
+      code > span.dv { color: #40a070; }
+      code > span.bn { color: #40a070; }
+      code > span.fl { color: #40a070; }
+      code > span.ch { color: #4070a0; }
+      code > span.st { color: #4070a0; }
+      code > span.co { color: #60a0b0; font-style: italic; }
+      code > span.ot { color: #007020; }
+      code > span.al { color: #ff0000; font-weight: bold; }
+      code > span.fu { color: #06287e; }
+      code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-top navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" href="../../../">How I Start.</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="category"><a href="../../../posts/clojure">clojure</a></li><li class="category"><a href="../../../posts/cpp">cpp</a></li><li class="category"><a href="../../../posts/elixir">elixir</a></li><li class="category"><a href="../../../posts/erlang">erlang</a></li><li class="category"><a href="../../../posts/go">go</a></li><li class="category"><a href="../../../posts/haskell">haskell</a></li><li class="category"><a href="../../../posts/nim">nim</a></li><li class="category"><a href="../../../posts/ruby">ruby</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="../../../about.html">About</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
+
+    <div class="container">
+      <div id="content">
+        <div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Erlang <small>with Fred Hebert</small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <h2 id="intro">Intro</h2>
+<p>Erlang releases are a bit like magnets. Everyone who thinks about them shares the same thought: f**king releases, how do they work?</p>
+<p>Fortunately, since the years of Emakefiles, reltool and systools, the Erlang community has stood up and improved its tooling continuously.</p>
+<p>Rebar has been improving non-stop and keeps getting better for many functions. The newest generation, Rebar3, tries to provide an end-to-end experience to building Erlang projects.</p>
+<p>Along with <a href="https://www.erlang-solutions.com/downloads">installing Erlang</a> (version R16B03-1 at least), getting a hold of Rebar3 is all you’re gonna need.</p>
+<p>For rebar, just <a href="http://www.rebar3.org/v3.0/docs/getting-started">download it and follow the instructions</a>. Rebar3 will basically generate a self-executable that you can store in your repository, or install globally on your computer. This tutorial expects that you have installed it in your system and made it available in your <code>$PATH</code>.</p>
+<p>Once they’re all installed somewhere in your system, arm yourself with the text editor or IDE of your choice (mine is Vim, because I’m a terrible person) and get ready to write a few things.</p>
+<h2 id="my-environment">My Environment</h2>
+<div class="figure">
+<img src="../../../posts/erlang/1/images/1/env.png" />
+
+</div>
+<p>Despite you being free to develop on whatever you want, I’m gonna go through whatever my setup is.</p>
+<p>I use zsh with <a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a>, using a <a href="https://gist.github.com/ferd/9905862">custom theme</a> (depends on <a href="https://bitbucket.org/sjl/hg-prompt/src">hg-prompt</a> as a script), and stuck in vi-mode, because vim vim vim.</p>
+<p>For vim itself, to work with Erlang, I use these two lines in my .vimrc file:</p>
+<pre class="viml"><code>autocmd BufRead,BufNewFile *.erl,*.es.*.hrl,*.yaws,*.xrl set expandtab
+au BufNewFile,BufRead *.erl,*.es,*.hrl,*.yaws,*.xrl setf erlang</code></pre>
+<p>And I depend on these two plugins:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://github.com/jimenezrick/vimerl">vimerl</a></li>
+<li><a href="https://github.com/edkolev/erlang-motions.vim">erlang-motions</a></li>
+</ol>
+<p>I don’t use a lot of material outside of that, and the OS will tend to be my IDE – for projects that I tend to work on a lot, I will use tmux scripts (see <a href="http://blog.htbaa.com/news/tmux-scripting">this blog post for an example</a>) – to get everything going early.</p>
+<h2 id="the-project">The Project</h2>
+<p>To avoid the usual Hello World stuff, this tutorial will use a somewhat more fun application to get up and running from a basic Erlang app that can be run within a module, to a proper OTP library that can be included by other projects, to a release than can be self-executing and distributed to client’s computer, or on a server.</p>
+<p>Our project will be the replication of one of the most well-known software programs in popular history, used in life-critical situations: Homer Simpson’s console in the episode where he’s so fat he can work at home.</p>
+<div class="figure">
+<img src="../../../posts/erlang/1/images/1/homer-computer.gif" />
+
+</div>
+<p>From this episode we can infer the following about the software:</p>
+<ul>
+<li>When the program boots, it asks you to press any key.</li>
+<li>The program will ask you questions that can be answered by <code>yes/no</code>, but also <code>Y/N</code> or <code>y/n</code></li>
+<li>Most questions can be turned into commands. Each assertion is equivalent to answering a given question positively. For example, <code>Vent radioactive gas? Yes/No</code> can be turned into the <code>Vent gas</code> command.</li>
+<li>Nothing should go wrong if you keep pressing <code>Y</code> all the time</li>
+<li>After a given delay, a new question is asked</li>
+<li>Too many times without venting radioactive gas risks exploding everything</li>
+<li>Some behaviours aren’t defined by the TV show, so we go somewhat anyway we feel like</li>
+</ul>
+<p>Out of this, a finite-state machine can be created. The one that follows explains what I understood as possible, but you’ll notice I’m not really good at having a consistent notation for events, states, and so on:</p>
+<pre><code>                [press any key]
+                       |
+                 (key pressed)
+                       |
+             [check core temperature (first)]
+                 \________,________/
+                          |
+                       (yes/no)
+                          |
+             [venting radioactive gases (first)]
+                |                   |
+              (yes)      ,-&lt;-,     (no)
+                |        |   |      |
+       [gas blows away crop] |  [venting prevents explosions]
+                |            |      |           |
+                |            '--&lt;-(yes)       (no)
+                \                              /
+                 \______________,_____________/
+                                V
+                                |
+                       [wait for command]&lt;--------,
+                            /       \             |
+                      (get data)   (timeout)      |
+                           |         |            |
+                           |     [ask question]   |
+                           |        /      \      |
+                           |    (Yes)     (No)    |
+                           |     /          |     |
+                           +----'           '-----+
+                           |                      |
+                          [show result] --&gt;-------'</code></pre>
+<p>Based on this, we’ll be able to draw up a first prototype with all the required state transitions. I’ve also looked for transcripts of the show and extracted the following questions and consequences:</p>
+<ol style="list-style-type: decimal">
+<li>Check core temperature. yes/no:</li>
+</ol>
+<ul>
+<li><code>yes</code>: Core temperature normal.</li>
+<li><code>no</code>: –</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Vent radioactive gas?</li>
+</ol>
+<ul>
+<li><code>yes</code>: *gas blows away corn crop*</li>
+<li><code>no</code>: venting prevents explosion (allow <code>yes</code>, show only the first time?)</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Sound alertness horn?</li>
+</ol>
+<ul>
+<li><code>yes</code>: *horn sounds in the distance*</li>
+<li><code>no</code>: –</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Decalcify calcium ducts?</li>
+</ol>
+<ul>
+<li><code>yes</code>: –</li>
+<li><code>no</code>: –</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Special case: after denying venting too many times, the valve must be disabled manually.</li>
+</ol>
+<p>The simplest way to write a basic FSM for this one is to use a bunch of function calls. Given Erlang has last call optimization (a call that happens as a return value does not leave a stack trace, and therefore can happen infinitely many times), this is more than adequate.</p>
+<p>The sequence of states <code>a -&gt; b -&gt; c</code> can be programmed as:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">a()</span> <span class="kw">-&gt;</span>
+    <span class="fu">b().</span>
+
+<span class="fu">b()</span> <span class="kw">-&gt;</span>
+    <span class="fu">c().</span>
+
+<span class="fu">c()</span> <span class="kw">-&gt;</span>
+    <span class="ch">done</span><span class="fu">.</span></code></pre></div>
+<p>Of course, there’s going to be more data in our case.</p>
+<h2 id="the-prototype">The Prototype</h2>
+<p>Our glorious application will be called ‘muumuu’. Whenever I don’t exactly know where I’m going, I decide to prototype stuff. And here I stress the importance of <em>prototype</em>. Despite this fact, it will often end up being in production, but yeah – that’s to be avoided.</p>
+<p>I decide to start with the basic stuff to prototype, state transitions. I go for them in a fairly simple manner, top-down:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="kw">-module</span><span class="fu">(</span><span class="ch">muumuu_fsm</span><span class="fu">).</span>
+<span class="kw">-export</span><span class="fu">([</span><span class="ch">start</span><span class="kw">/</span><span class="dv">0</span><span class="fu">]).</span>
+
+<span class="kw">-define</span><span class="fu">(</span><span class="dt">MAX_NO_VENT</span><span class="fu">,</span> <span class="dv">5</span><span class="fu">).</span>
+
+<span class="fu">start()</span> <span class="kw">-&gt;</span>
+    <span class="co">%% Seed PRNG</span>
+    <span class="kw">&lt;&lt;</span><span class="dt">A</span><span class="fu">:</span><span class="dv">32</span><span class="fu">,</span> <span class="dt">B</span><span class="fu">:</span><span class="dv">32</span><span class="fu">,</span> <span class="dt">C</span><span class="fu">:</span><span class="dv">32</span><span class="kw">&gt;&gt;</span> <span class="kw">=</span> <span class="fu">crypto:rand_bytes(</span><span class="dv">12</span><span class="fu">),</span>
+    <span class="fu">random:seed(</span><span class="dt">A</span><span class="fu">,</span><span class="dt">B</span><span class="fu">,</span><span class="dt">C</span><span class="fu">),</span>
+    <span class="fu">wait_any_key().</span>
+
+
+<span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="co">%%% States and Transitions %%%</span>
+<span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="fu">wait_any_key()</span> <span class="kw">-&gt;</span>
+    <span class="fu">io:get_line(</span><span class="st">&quot;To Start, Press Any Key.\n&gt; &quot;</span><span class="fu">),</span>
+    <span class="fu">first_core_check().</span>
+
+<span class="fu">first_core_check()</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">option(</span><span class="st">&quot;Check core temperature?&quot;</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">yes</span> <span class="kw">-&gt;</span> <span class="fu">core_temperature();</span>
+        <span class="ch">no</span> <span class="kw">-&gt;</span> <span class="fu">noop()</span>
+    <span class="kw">end</span><span class="fu">,</span>
+    <span class="fu">first_gas_vent().</span>
+
+<span class="fu">first_gas_vent()</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">option(</span><span class="st">&quot;Vent radioactive gas?&quot;</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">yes</span> <span class="kw">-&gt;</span> <span class="fu">blow_crops_away();</span>
+        <span class="ch">no</span> <span class="kw">-&gt;</span> <span class="fu">venting_prevents_explosions()</span>
+    <span class="kw">end</span><span class="fu">,</span>
+    <span class="fu">wait_for_command().</span>
+
+<span class="fu">wait_for_command()</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">wait_cmd(</span><span class="dv">10000</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">timeout</span> <span class="kw">-&gt;</span>
+            <span class="fu">{</span><span class="dt">Opt</span><span class="fu">,</span> <span class="dt">Yes</span><span class="fu">,</span> <span class="dt">No</span><span class="fu">}</span> <span class="kw">=</span> <span class="fu">random_option(),</span>
+            <span class="kw">case</span> <span class="fu">option(</span><span class="dt">Opt</span><span class="fu">)</span> <span class="kw">of</span>
+                <span class="ch">yes</span> <span class="kw">-&gt;</span> <span class="dt">Yes</span><span class="fu">();</span>
+                <span class="ch">no</span> <span class="kw">-&gt;</span> <span class="dt">No</span><span class="fu">()</span>
+            <span class="kw">end</span><span class="fu">;</span>
+        <span class="dt">Cmd</span> <span class="kw">-&gt;</span>
+            <span class="kw">case</span> <span class="fu">match_option(</span><span class="dt">Cmd</span><span class="fu">)</span> <span class="kw">of</span>
+                <span class="fu">{</span><span class="dt">_</span><span class="fu">,</span> <span class="dt">Yes</span><span class="fu">,</span> <span class="dt">_</span><span class="fu">}</span> <span class="kw">-&gt;</span> <span class="dt">Yes</span><span class="fu">();</span>
+                <span class="dt">_</span> <span class="kw">-&gt;</span> <span class="ch">noop</span>
+            <span class="kw">end</span>
+    <span class="kw">end</span><span class="fu">,</span>
+    <span class="fu">wait_for_command().</span></code></pre></div>
+<p>In this bit of code, we can see our 4 main states:</p>
+<ol style="list-style-type: decimal">
+<li><code>wait_any_key</code></li>
+<li><code>first_core_check</code></li>
+<li><code>first_gas_event</code></li>
+<li><code>wait_for_command</code></li>
+</ol>
+<p>The rest of the code is more or less going to be events and input management to check the transitions:</p>
+<ul>
+<li>printing questions and getting responses (<code>option/1</code>)</li>
+<li>eventually waiting for a command (<code>wait_cmd/1</code> and <code>match_option/1</code>)</li>
+<li>or, if it takes too long, generate an option randomly (<code>random_option/1</code>)</li>
+</ul>
+<p>You can look at the code, find whatever you want about it disgusting. So that’s the general idea I want in the code. Time to add all that option management stuff:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="co">%%% Options and Response Handling %%%</span>
+<span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="fu">option(</span><span class="dt">Prompt</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">show_option(</span><span class="dt">Prompt</span><span class="fu">),</span>
+    <span class="dt">Data</span> <span class="kw">=</span> <span class="fu">io:get_line(</span><span class="st">&quot;&quot;</span><span class="fu">),</span>
+    <span class="kw">case</span> <span class="fu">iolist_to_binary(</span><span class="dt">Data</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="kw">&lt;&lt;</span><span class="st">&quot;Y&quot;</span><span class="fu">,</span> <span class="dt">_</span><span class="kw">/</span><span class="ch">binary</span><span class="kw">&gt;&gt;</span> <span class="kw">-&gt;</span> <span class="ch">yes</span><span class="fu">;</span>
+        <span class="kw">&lt;&lt;</span><span class="st">&quot;y&quot;</span><span class="fu">,</span> <span class="dt">_</span><span class="kw">/</span><span class="ch">binary</span><span class="kw">&gt;&gt;</span> <span class="kw">-&gt;</span> <span class="ch">yes</span><span class="fu">;</span>
+        <span class="kw">&lt;&lt;</span><span class="st">&quot;N&quot;</span><span class="fu">,</span> <span class="dt">_</span><span class="kw">/</span><span class="ch">binary</span><span class="kw">&gt;&gt;</span> <span class="kw">-&gt;</span> <span class="ch">no</span><span class="fu">;</span>
+        <span class="kw">&lt;&lt;</span><span class="st">&quot;n&quot;</span><span class="fu">,</span> <span class="dt">_</span><span class="kw">/</span><span class="ch">binary</span><span class="kw">&gt;&gt;</span> <span class="kw">-&gt;</span> <span class="ch">no</span><span class="fu">;</span>
+        <span class="dt">_</span> <span class="kw">-&gt;</span> <span class="ch">ambiguous</span>
+    <span class="kw">end</span><span class="fu">.</span>
+
+<span class="fu">show_option(</span><span class="dt">Str</span><span class="fu">)</span> <span class="kw">-&gt;</span> <span class="fu">io:format(</span><span class="st">&quot;~s (Y/N)~n&gt; &quot;</span><span class="fu">,</span> <span class="fu">[</span><span class="dt">Str</span><span class="fu">]).</span>
+
+<span class="fu">wait_cmd(</span><span class="dt">Timeout</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="dt">Parent</span> <span class="kw">=</span> <span class="fu">self(),</span>
+    <span class="dt">Pid</span> <span class="kw">=</span> <span class="fu">spawn(</span><span class="kw">fun</span><span class="fu">()</span> <span class="kw">-&gt;</span> <span class="dt">Parent</span> <span class="kw">!</span> <span class="fu">io:get_line(</span><span class="st">&quot;&quot;</span><span class="fu">)</span> <span class="kw">end</span><span class="fu">),</span>
+    <span class="kw">receive</span>
+        <span class="dt">Data</span> <span class="kw">-&gt;</span> <span class="dt">Data</span>
+    <span class="kw">after</span> <span class="dt">Timeout</span> <span class="kw">-&gt;</span>
+        <span class="fu">exit(</span><span class="dt">Pid</span><span class="fu">,</span> <span class="ch">kill</span><span class="fu">),</span>
+        <span class="ch">timeout</span>
+    <span class="kw">end</span><span class="fu">.</span>
+
+<span class="fu">random_option()</span> <span class="kw">-&gt;</span>
+    <span class="dt">Pos</span> <span class="kw">=</span> <span class="fu">random:uniform(tuple_size(opts())),</span>
+    <span class="fu">{</span><span class="dt">_</span><span class="fu">,</span> <span class="dt">Val</span><span class="fu">}</span> <span class="kw">=</span> <span class="fu">element(</span><span class="dt">Pos</span><span class="fu">,</span> <span class="fu">opts()),</span>
+    <span class="dt">Val</span><span class="fu">.</span>
+
+<span class="fu">match_option(</span><span class="dt">Data</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">[</span><span class="dt">Vals</span> <span class="fu">||</span> <span class="fu">{</span><span class="dt">Pattern</span><span class="fu">,</span> <span class="dt">Vals</span><span class="fu">}</span> <span class="kw">&lt;-</span> <span class="fu">tuple_to_list(opts()),</span>
+                  <span class="ch">nomatch</span> <span class="kw">=/=</span> <span class="fu">re:run(</span><span class="dt">Data</span><span class="fu">,</span> <span class="dt">Pattern</span><span class="fu">,</span> <span class="fu">[</span><span class="ch">caseless</span><span class="fu">])]</span> <span class="kw">of</span>
+        <span class="fu">[</span><span class="dt">Opt</span><span class="fu">|</span><span class="dt">_</span><span class="fu">]</span> <span class="kw">-&gt;</span> <span class="dt">Opt</span><span class="fu">;</span>
+        <span class="fu">[]</span> <span class="kw">-&gt;</span> <span class="ch">invalid_opt</span>
+    <span class="kw">end</span><span class="fu">.</span></code></pre></div>
+<p>Cool. Not fantastic looking yet. Basically, an option will only fetch a line of text entered by the user, look at the first response, and return what it is. Showing the options just wraps things up so they look like a prompt.</p>
+<p>Interestingly enough, the command has to be waited for in a different process. The problem with this it that Erlang’s standard library doesn’t support a timeout mode for <code>io</code> operations, which would tell us “wait 10 seconds for input or quit”. Therefore, there is a need to move this to a process.</p>
+<p>The rest relies on an elusive <code>opts()</code> function that apparently returns all questions and options offered to the user:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="co">%%% Defining Options/Events %%%</span>
+<span class="co">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="fu">opts()</span> <span class="kw">-&gt;</span>
+    <span class="fu">{{</span><span class="st">&quot;(check|core|temp)&quot;</span><span class="fu">,</span>
+      <span class="fu">{</span><span class="st">&quot;Check core temperature?&quot;</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">core_temperature</span><span class="kw">/</span><span class="dv">0</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">noop</span><span class="kw">/</span><span class="dv">0</span><span class="fu">}},</span>
+     <span class="fu">{</span><span class="st">&quot;(vent|rad|gas)&quot;</span><span class="fu">,</span>
+      <span class="fu">{</span><span class="st">&quot;Vent radioactive gas?&quot;</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">vent_gas</span><span class="kw">/</span><span class="dv">0</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">no_venting</span><span class="kw">/</span><span class="dv">0</span><span class="fu">}},</span>
+     <span class="fu">{</span><span class="st">&quot;(sound|alert|horn)&quot;</span><span class="fu">,</span>
+      <span class="fu">{</span><span class="st">&quot;Sound alertness horn?&quot;</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">sound_horn</span><span class="kw">/</span><span class="dv">0</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">noop</span><span class="kw">/</span><span class="dv">0</span><span class="fu">}},</span>
+     <span class="fu">{</span><span class="st">&quot;(calc|duct)&quot;</span><span class="fu">,</span>
+      <span class="fu">{</span><span class="st">&quot;Decalcify calcium ducts?&quot;</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">noop</span><span class="kw">/</span><span class="dv">0</span><span class="fu">,</span>
+       <span class="kw">fun</span> <span class="ch">noop</span><span class="kw">/</span><span class="dv">0</span><span class="fu">}}}.</span></code></pre></div>
+<p>This basically is a tuple (I use a tuple because it makes random selection with a fixed position more efficient) of all questions, positive and negative response and consequences, paired up with a regular expression that represents fuzzy matching – for example, someone typing it <code>check temperature</code> should match <code>Check core temperature?</code> as a question, and return both options. The code back in <code>wait_for_command/0</code> will only execute the <code>core_temperature/0</code> function.</p>
+<p>Finally, all actions and consequences can be implemented:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">noop()</span> <span class="kw">-&gt;</span> <span class="ch">ok</span><span class="fu">.</span>
+
+<span class="fu">venting_prevents_explosions()</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">option(</span><span class="st">&quot;Venting prevents explosion.&quot;</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">yes</span> <span class="kw">-&gt;</span> <span class="fu">blow_crops_away();</span>
+        <span class="ch">no</span> <span class="kw">-&gt;</span> <span class="fu">noop()</span>
+    <span class="kw">end</span><span class="fu">.</span>
+
+<span class="fu">core_temperature()</span> <span class="kw">-&gt;</span> <span class="fu">io:format(</span><span class="st">&quot;Core temperature normal.~n&quot;</span><span class="fu">).</span>
+
+<span class="fu">blow_crops_away()</span> <span class="kw">-&gt;</span> <span class="fu">io:format(</span><span class="st">&quot;*Gas blows away corn crop*~n&quot;</span><span class="fu">).</span>
+
+<span class="fu">sound_horn()</span> <span class="kw">-&gt;</span> <span class="fu">io:format(</span><span class="st">&quot;*horn sounds in the distance*~n&quot;</span><span class="fu">).</span>
+
+<span class="fu">pressure_too_high()</span> <span class="kw">-&gt;</span> <span class="fu">io:format(</span><span class="st">&quot;Pressure too high. Tank must be shut down manually.~n&quot;</span><span class="fu">).</span>
+
+<span class="fu">vent_gas()</span> <span class="kw">-&gt;</span>
+    <span class="co">%% After ?MAX_NO_VENT, pressure has to be shut down</span>
+    <span class="co">%% manually -- unsupported in this here program!</span>
+    <span class="kw">case</span> <span class="fu">get(</span><span class="ch">missed</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="fu">?</span><span class="dt">MAX_NO_VENT</span> <span class="kw">-&gt;</span>
+            <span class="fu">pressure_too_high();</span>
+        <span class="dt">_</span> <span class="kw">-&gt;</span>
+            <span class="fu">put(</span><span class="ch">missed</span><span class="fu">,</span> <span class="dv">0</span><span class="fu">),</span>
+            <span class="fu">blow_crops_away()</span>
+    <span class="kw">end</span><span class="fu">.</span>
+
+<span class="fu">no_venting()</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">get(</span><span class="ch">missed</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">undefined</span> <span class="kw">-&gt;</span> <span class="fu">put(</span><span class="ch">missed</span><span class="fu">,</span> <span class="dv">1</span><span class="fu">);</span>
+        <span class="dt">N</span> <span class="kw">-&gt;</span> <span class="fu">put(</span><span class="ch">missed</span><span class="fu">,</span> <span class="dt">N</span><span class="kw">+</span><span class="dv">1</span><span class="fu">)</span>
+    <span class="kw">end</span><span class="fu">.</span></code></pre></div>
+<p>Here the two last functions implement the special last requirement: after denying venting too many times, the valve must be disabled manually.</p>
+<p>Here we use a dirty ugly counter for prototyping’s sake. In fact I had forgotten about that requirement at the time and just bolted it on that way. The prototype helped figure that requirement out, and the final version can now be designed with this in mind.</p>
+<p>You can run the code and try it from a shell:</p>
+<pre><code>λ → erlc src/muumuu_fsm.erl &amp;&amp; erl -s muumuu_fsm -noshell
+To Start, Press Any Key.
+&gt; .
+Check core temperature? (Y/N)
+&gt; N
+Vent radioactive gas? (Y/N)
+&gt; No
+Venting prevents explosion. (Y/N)
+&gt; yes
+*Gas blows away corn crop*
+Sound alertness horn? (Y/N)
+&gt; Y
+*horn sounds in the distance*</code></pre>
+<p>That works. Using <code>-s &lt;module&gt;</code> runs the <code>start/0</code> function from that module, and using <code>-noshell</code> makes it so that the Erlang VM won’t fight with all the <code>io</code> calls I’m doing for user input ownership.</p>
+<p>Sadly, the implementation is kind of ugly and shouldn’t go in production.</p>
+<div class="figure">
+<img src="../../../posts/erlang/1/images/1/muumuu.gif" />
+
+</div>
+<h2 id="making-it-a-library">Making it a library</h2>
+<p>There are two ways to make something reach production: distributing yourself, or distributing it as a library other Erlang developers can use.</p>
+<p>The latter can be a prerequisite for the former, so we’re going to start there. By default, everyone using Erlang in the open source community uses <a href="http://learnyousomeerlang.com/building-otp-applications">OTP applications</a>.</p>
+<p>OTP is kind of often treated as a super advanced topic, so what I’m gonna show here is how to take any non-OTP compliant code and turn it into an OTP application. Fun fun.</p>
+<p>First, the directory structure:</p>
+<pre><code>src/
+  - muumuu_fsm.erl</code></pre>
+<p>That’s all you need in terms of structure if you have rebar3 installed in your system.</p>
+<p>Add a file in <code>src/</code> called <code>muumuu.app.src</code>. This file is basically telling Erlang (and rebar3) what the library is:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">{</span><span class="ch">application</span><span class="fu">,</span> <span class="ch">muumuu</span><span class="fu">,</span> <span class="fu">[</span>
+  <span class="fu">{</span><span class="ch">description</span><span class="fu">,</span> <span class="st">&quot;Too fat to go to the power plant app&quot;</span><span class="fu">},</span>
+  <span class="fu">{</span><span class="ch">vsn</span><span class="fu">,</span> <span class="st">&quot;0.1.0&quot;</span><span class="fu">},</span>
+  <span class="fu">{registered,</span> <span class="fu">[]},</span>
+  <span class="fu">{</span><span class="ch">applications</span><span class="fu">,</span> <span class="fu">[</span><span class="ch">kernel</span><span class="fu">,</span> <span class="ch">stdlib</span><span class="fu">,</span> <span class="ch">crypto</span><span class="fu">]},</span>
+  <span class="fu">{</span><span class="ch">mod</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">muumuu_app</span><span class="fu">,</span> <span class="fu">[]}},</span>
+  <span class="fu">{</span><span class="ch">env</span><span class="fu">,</span> <span class="fu">[]}</span>
+<span class="fu">]}.</span></code></pre></div>
+<p>The <code>registered</code> entry specifies what processes are going to be globally registered on the node. In this case, none. The <code>applications</code> tuple is a list of all applications we depend on. All applications depend on both <code>kernel</code> and <code>stdlib</code>. These entries have to always be in there. On the other hand, <code>crypto</code> is optional to most apps, but we need it because we use it to seed our pseudo-random number generator in <code>start/0</code>.</p>
+<p>The <code>env</code> tuple can contain <a href="http://erlang.org/doc/man/app.html">configuration values</a>, but we need none right now.</p>
+<p>The other option considered here is <code>mod</code>. If your library requires no process to be started and you’re just shipping code around, you’re done. In our case however, we’re starting a process (or we want to), and therefore we specify an application module named <code>muumuu_app</code>. This module is also in <code>src/</code>:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="kw">-module</span><span class="fu">(</span><span class="ch">muumuu_app</span><span class="fu">).</span>
+<span class="kw">-</span><span class="fu">behaviour(</span><span class="ch">application</span><span class="fu">).</span>
+<span class="kw">-export</span><span class="fu">([</span><span class="ch">start</span><span class="kw">/</span><span class="dv">2</span><span class="fu">,</span> <span class="ch">stop</span><span class="kw">/</span><span class="dv">1</span><span class="fu">]).</span>
+
+<span class="fu">start(</span><span class="dt">_Type</span><span class="fu">,</span> <span class="dt">_Args</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">muumuu_sup:start_link().</span>
+
+<span class="fu">stop(</span><span class="dt">_</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="ch">ok</span><span class="fu">.</span></code></pre></div>
+<p>That module is basically giving callbacks to the Erlang VM. See it a bit as the <code>main</code> function in C, except you also have to provide a <code>stop</code> function that will clean up once the process exits. In this case we need nothing.</p>
+<p>What’s the <code>muumuu_sup</code> module? That’s the final step to be glued in OTP. OTP has a concept called <a href="http://learnyousomeerlang.com/supervisors"><code>supervisors</code></a>. Supervisors are in charge of checking OTP-compliant processes, to start them, stop them, and <a href="http://ferd.ca/it-s-about-the-guarantees.html">provide guarantees regarding their state</a>.</p>
+<p>Unfortunately, our process isn’t OTP-compliant. The guys at Ericsson have long ago hit that problem and developed a <a href="http://www.erlang.org/doc/man/supervisor_bridge.html">supervisor bridge</a>, which basically acts as a wrapper. This is what we could use if I were not the kind of person to want my OTP processes done correctly everywhere.</p>
+<p>For the time being, I’ll stick with a regular supervisor and will rewrite the FSM right after:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="kw">-module</span><span class="fu">(</span><span class="ch">muumuu_sup</span><span class="fu">).</span>
+<span class="kw">-</span><span class="fu">behaviour(</span><span class="ch">supervisor</span><span class="fu">).</span>
+
+<span class="kw">-export</span><span class="fu">([</span><span class="ch">start_link</span><span class="kw">/</span><span class="dv">0</span><span class="fu">]).</span>
+<span class="kw">-export</span><span class="fu">([</span><span class="ch">init</span><span class="kw">/</span><span class="dv">1</span><span class="fu">]).</span>
+
+<span class="fu">start_link()</span> <span class="kw">-&gt;</span>
+    <span class="fu">supervisor:start_link(?</span><span class="dt">MODULE</span><span class="fu">,</span> <span class="fu">[]).</span>
+
+<span class="fu">init([])</span> <span class="kw">-&gt;</span>
+    <span class="fu">{</span><span class="ch">ok</span><span class="fu">,</span> <span class="fu">{{</span><span class="ch">one_for_one</span><span class="fu">,</span> <span class="dv">1</span><span class="fu">,</span> <span class="dv">5</span><span class="fu">},</span>
+          <span class="fu">[{</span><span class="ch">console</span><span class="fu">,</span>
+            <span class="fu">{</span><span class="ch">muumuu_fsm</span><span class="fu">,</span> <span class="ch">start_link</span><span class="fu">,</span> <span class="fu">[]},</span>
+            <span class="ch">permanent</span><span class="fu">,</span> <span class="dv">5000</span><span class="fu">,</span> <span class="ch">worker</span><span class="fu">,</span> <span class="fu">[</span><span class="ch">muumuu_fsm</span><span class="fu">]}]}}.</span></code></pre></div>
+<p>This will start <code>muumuu_fsm</code> as a permanent worker that can die once every 5 seconds before the entire system crashes. I don’t have a good way to pick frequencies, but 1 in 5 seconds sounds like something reasonable for someone to mash keys in ways bad enough it causes errors.</p>
+<p>So then comes the rewrite from prototype to <a href="http://learnyousomeerlang.com/finite-state-machines"><code>gen_fsm</code></a>. This is stuff that has been covered in multiple tutorials before, so I’m going to skip most of it. You can instead look at books and docs for <code>gen_fsm</code>, follow along the final module, <a href="https://github.com/ferd/howistart-erlang1-code/blob/master/library/src/muumuu_fsm.erl">muumuu_fsm.erl</a>, and see for yourself.</p>
+<p>The biggest changes there, outside of providing the <code>gen_fsm</code> callbacks required by the OTP behavior, are related to the general information flow. Rather than being really direct sequences of functions doing whatever they want, the OTP version of the module becomes a lot more declarative.</p>
+<p>We no longer enter a state function, ask a question, and wait for the response within the same context. The logic has moved so that an event in a state (say <code>first_gas_vent</code>) causes a question to be asked before transitioning to the state that will handle that response.</p>
+<p>This doesn’t make the code particulalry harder to read, just different:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">init([])</span> <span class="kw">-&gt;</span>
+    <span class="kw">&lt;&lt;</span><span class="dt">A</span><span class="fu">:</span><span class="dv">32</span><span class="fu">,</span> <span class="dt">B</span><span class="fu">:</span><span class="dv">32</span><span class="fu">,</span> <span class="dt">C</span><span class="fu">:</span><span class="dv">32</span><span class="kw">&gt;&gt;</span> <span class="kw">=</span> <span class="fu">crypto:rand_bytes(</span><span class="dv">12</span><span class="fu">),</span>
+    <span class="fu">random:seed(</span><span class="dt">A</span><span class="fu">,</span><span class="dt">B</span><span class="fu">,</span><span class="dt">C</span><span class="fu">),</span>
+    <span class="fu">{</span><span class="ch">ok</span><span class="fu">,</span> <span class="ch">wait_any_key</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="ch">wait_any_key</span><span class="fu">,</span> <span class="fu">#</span><span class="ch">state</span><span class="fu">{})}.</span>
+
+<span class="co">%% [...]</span>
+
+<span class="fu">wait_any_key(</span><span class="dt">_</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">{</span><span class="ch">next_state</span><span class="fu">,</span> <span class="ch">first_core_check</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="ch">first_core_check</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)}.</span>
+
+<span class="fu">first_core_check(</span><span class="ch">no</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">{</span><span class="ch">next_state</span><span class="fu">,</span> <span class="ch">first_gas_vent</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="ch">first_gas_vent</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)};</span>
+<span class="fu">first_core_check(</span><span class="ch">yes</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">show_core_temperature(),</span>
+    <span class="fu">{</span><span class="ch">next_state</span><span class="fu">,</span> <span class="ch">first_gas_vent</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="ch">first_gas_vent</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)}.</span>
+
+<span class="fu">first_gas_vent(</span><span class="ch">no</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="dt">StateName</span> <span class="kw">=</span> <span class="ch">venting_prevents_explosions</span><span class="fu">,</span>
+    <span class="fu">{</span><span class="ch">next_state</span><span class="fu">,</span> <span class="dt">StateName</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="dt">StateName</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)};</span>
+<span class="fu">first_gas_vent(</span><span class="ch">yes</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">show_blow_crops_away(),</span>
+    <span class="fu">{</span><span class="ch">next_state</span><span class="fu">,</span> <span class="ch">wait_for_command</span><span class="fu">,</span> <span class="fu">prompt(</span><span class="ch">wait_for_command</span><span class="fu">,</span> <span class="dt">State</span><span class="fu">),</span> <span class="dv">10000</span><span class="fu">}.</span></code></pre></div>
+<p>This form, along with the experience gained in the prototype, allows for simpler state management via the <code>State</code> variable, which allows us to be more transparent about our usage of venting limits, for example. We also instantly benefit from everything OTP gives us in terms of transparency: tracing, logging, statistics, and so on (see <a href="http://www.erlang.org/doc/man/sys.html">the <code>sys</code> module</a>)</p>
+<p>With that code in place, we can compile and run the entire application:</p>
+<pre><code>λ → rebar3 compile
+===&gt; Verifying dependencies...
+===&gt; Compiling muumuu</code></pre>
+<p>With this compiled we can run it, with a funky command:</p>
+<pre><code>λ →  erl -env ERL_LIBS _build/default/lib -eval 'application:ensure_all_started(muumuu).' -noshell
+To Start, Press Any Key.
+&gt; any
+Check core temperature? (Y/N)
+&gt; y
+Core temperature normal.
+Vent radioactive gas? (Y/N)
+&gt; y
+*Gas blows away corn crop*</code></pre>
+<p>That’s kind of an ugly command to run the app, but the app is now something other people can use to pull it within their own systems.</p>
+<p>In order to run it ourselves and actually ship it to customers, we will need to build a release. In any other case, though, you may want to <a href="http://www.rebar3.org/v3.0/docs/publishing-packages">publish your library as a Hex package</a> with the help of the <a href="http://www.rebar3.org/v3.0/docs/using-available-plugins#hex-package-management">proper rebar3 plugin</a>.</p>
+<div class="figure">
+<img src="../../../posts/erlang/1/images/1/y-y-y.gif" />
+
+</div>
+<h2 id="releases">Releases</h2>
+<p>The directory structure we’ve been using was for an application and turns out looking like:</p>
+<pre><code>src/
+ebin/</code></pre>
+<p>At the simplest level. A release is basically a group of applications put together. For this reason, we’ll change the directory structure a bit:</p>
+<pre><code>apps/
+    - muumuu/
+        - src/
+        - ebin/
+rebar.config</code></pre>
+<p>All applications you need will go into <code>apps/</code>. Here I just moved <code>src/</code> to <code>apps/muumuu/</code>.</p>
+<p>The rebar.config file looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">{</span><span class="ch">relx</span><span class="fu">,</span> <span class="fu">[</span>
+    <span class="fu">{</span><span class="ch">release</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">muumuu</span><span class="fu">,</span> <span class="st">&quot;1.0.0&quot;</span><span class="fu">},</span>
+     <span class="co">%% list of apps to include</span>
+     <span class="fu">[</span><span class="ch">muumuu</span><span class="fu">]},</span>
+
+    <span class="co">%% Don't ship an Erlang VM by default</span>
+    <span class="fu">{</span><span class="ch">include_erts</span><span class="fu">,</span> <span class="ch">false</span><span class="fu">}</span>
+<span class="fu">]}.</span>
+
+<span class="fu">{</span><span class="ch">profiles</span><span class="fu">,</span> <span class="fu">[</span>
+    <span class="co">%% called as `rebar3 as prod &lt;command&gt;`</span>
+    <span class="fu">{</span><span class="ch">prod</span><span class="fu">,</span> <span class="fu">[</span>
+        <span class="fu">{</span><span class="ch">relx</span><span class="fu">,</span> <span class="fu">[</span> <span class="co">% override relx specifically</span>
+          <span class="fu">{</span><span class="ch">include_src</span><span class="fu">,</span> <span class="ch">false</span><span class="fu">},</span> <span class="co">% don't include source code</span>
+          <span class="fu">{</span><span class="ch">include_erts</span><span class="fu">,</span> <span class="ch">true</span><span class="fu">}</span>  <span class="co">% include the VM in the release</span>
+        <span class="fu">]}</span>
+    <span class="fu">]}</span>
+<span class="fu">]}.</span></code></pre></div>
+<p>This basically just tells rebar3 what the release-building tool it includes (relx) should do to give us our release. The release will only include our custom Erlang code, and use the currently installed Erlang VM to run things rather than installing a fully self-contianed program. Then the magic happens:</p>
+<pre><code>λ → rebar3 release
+===&gt; Verifying dependencies...
+===&gt; Compiling muumuu
+===&gt; Starting relx build process ...
+===&gt; Resolving OTP Applications from directories:
+          /Users/ferd/code/self/howistart-erlang1-code/release/_build/default/lib
+          /Users/ferd/code/self/howistart-erlang1-code/release/apps
+          /Users/ferd/.kerl/builds/17.4/release_17.4/lib
+===&gt; Resolved muumuu-1.0.0
+===&gt; release successfully created!</code></pre>
+<p>And a release is born! To run it:</p>
+<pre><code>λ → ./_build/default/rel/muumuu/bin/muumuu -noshell
+To Start, Press Any Key.
+&gt;</code></pre>
+<p>Pretty cool. This can now be shipped and distributed to people.</p>
+<p>I want to make the release a bit fancier though. As you’ve just seen, we still need to put the <code>-noshell</code> by hand, which is totally unacceptable.</p>
+<p>To fix this, add a <code>config/</code> repository, and I open the <code>vm.args</code> file in vim in there:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># only show the programmed prompt</span>
+<span class="kw">-noshell</span>
+
+<span class="co"># for remote access &amp; debugging</span>
+<span class="kw">-name</span> nucular_plant@127.0.0.1
+
+<span class="co"># not needed</span>
+<span class="kw">-smp</span> disable
+<span class="kw">+A</span> 1</code></pre></div>
+<p>Arguments in there I merged into one. A good practice for any Erlang system is to give it a name, which will let you connect to it while it’s running. In this case I could go in and debug the console as the user is maintaining the powerplant.</p>
+<p>The last arguments (<code>-smp disable +A 1</code>) are basically optimizations for this very app: they remove Erlang parallelism (I’m running a single active process for the thing, so why bother?) and removes the number of asynchronous threads for IO to a single one (for the same reason – one active process, why bother?).</p>
+<p>In more serious apps, tweaking your VM options can be worthwhile, but outside of this text’s scope.</p>
+<p>The rebar3 config file needs an update too:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">{</span><span class="ch">relx</span><span class="fu">,</span> <span class="fu">[</span>
+    <span class="fu">{</span><span class="ch">release</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">muumuu</span><span class="fu">,</span> <span class="st">&quot;1.0.0&quot;</span><span class="fu">},</span>
+     <span class="co">%% list of apps to include</span>
+     <span class="fu">[</span><span class="ch">muumuu</span><span class="fu">]},</span>
+
+    <span class="co">%% Don't ship an Erlang VM by default</span>
+    <span class="fu">{</span><span class="ch">include_erts</span><span class="fu">,</span> <span class="ch">false</span><span class="fu">},</span>
+
+    <span class="fu">{</span><span class="ch">vm_args</span><span class="fu">,</span> <span class="st">&quot;./config/vm.args&quot;</span><span class="fu">}</span>
+<span class="fu">]}.</span>
+
+<span class="fu">{</span><span class="ch">profiles</span><span class="fu">,</span> <span class="fu">[</span>
+    <span class="co">%% called as `rebar3 as prod &lt;command&gt;`</span>
+    <span class="fu">{</span><span class="ch">prod</span><span class="fu">,</span> <span class="fu">[</span>
+        <span class="fu">{</span><span class="ch">relx</span><span class="fu">,</span> <span class="fu">[</span> <span class="co">% override relx specifically</span>
+          <span class="fu">{</span><span class="ch">include_src</span><span class="fu">,</span> <span class="ch">false</span><span class="fu">},</span> <span class="co">% don't include source code</span>
+          <span class="fu">{</span><span class="ch">include_erts</span><span class="fu">,</span> <span class="ch">true</span><span class="fu">}</span>  <span class="co">% include the VM in the release</span>
+        <span class="fu">]}</span>
+    <span class="fu">]}</span>
+<span class="fu">]}.</span></code></pre></div>
+<p>The last line above the profiles is the new one. Compile again and the arguments should implicitly be passed to the node:</p>
+<pre><code>λ → rebar3 release
+===&gt; Verifying dependencies...
+===&gt; Compiling muumuu
+===&gt; Starting relx build process ...
+===&gt; Resolving OTP Applications from directories:
+          /Users/ferd/code/self/howistart-erlang1-code/release/_build/default/lib
+          /Users/ferd/code/self/howistart-erlang1-code/release/apps
+          /Users/ferd/.kerl/builds/17.4/release_17.4/lib
+          /Users/ferd/code/self/howistart-erlang1-code/release/_build/default/rel
+===&gt; Resolved muumuu-1.0.0
+===&gt; release successfully created!
+λ → ./_build/default/rel/muumuu/bin/muumuu
+To Start, Press Any Key.
+&gt; &lt;Tab&gt;
+Check core temperature? (Y/N)
+&gt;</code></pre>
+<p>Cool, everything works. I now have a binary executable I can link to from anywhere in the system and will require no magical arguments to work!</p>
+<h2 id="tests">Tests</h2>
+<p>As much as I like to try and get testing done ahead of time – it’s the only time it’s not super terrible and crappy – I often end up adding it after the fact when I know I’ll have to maintain it.</p>
+<p>For this, each app should have its tests, so I’ll have to add a <code>test/</code> directory in <code>apps/muumuu/</code>.</p>
+<p>My tool of choice is <a href="http://learnyousomeerlang.com/common-test-for-uncommon-tests">Common Test</a>, which while it is kind of full of annoying overheads for unit testing and is mostly useless for shell output (you gotta deal with HTML files), it scales fairly well for integration and system tests.</p>
+<p>The test suite in there is going to be <code>muumuu_SUITE.erl</code>:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="kw">-module</span><span class="fu">(</span><span class="ch">muumuu_SUITE</span><span class="fu">).</span>
+<span class="kw">-include</span>_lib<span class="fu">(</span><span class="st">&quot;common_test/include/ct.hrl&quot;</span><span class="fu">).</span>
+<span class="kw">-</span><span class="fu">compile(</span><span class="ch">export_all</span><span class="fu">).</span>
+
+<span class="co">%% Copy/pasting from the suite</span>
+<span class="kw">-</span><span class="fu">record(</span><span class="ch">state</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">no_vent_count</span><span class="kw">=</span><span class="dv">0</span><span class="fu">,</span>
+                <span class="ch">pid</span><span class="fu">,</span>
+                <span class="ch">yes</span><span class="fu">,</span>
+                <span class="ch">no</span><span class="fu">}).</span>
+
+<span class="fu">all()</span> <span class="kw">-&gt;</span>
+    <span class="fu">[</span><span class="ch">demo_session</span><span class="fu">].</span></code></pre></div>
+<p>So at first I’m just gonna make one run-through test. Testing <code>muumuu</code> is going to be hard because it’s purely a side-effectful application.</p>
+<p>Before going further, I’ll say that the trick to getting this working is to use <code>meck</code>, which is pretty much the best code-mocking application around.</p>
+<p>Adding <code>meck</code> can be done by declaring <code>rebar.config</code> dependencies:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">{</span><span class="ch">profiles</span><span class="fu">,</span> <span class="fu">[</span>
+    <span class="fu">{</span><span class="ch">test</span><span class="fu">,</span> <span class="fu">[</span>
+        <span class="fu">{</span><span class="ch">deps</span><span class="fu">,</span> <span class="fu">[</span>
+          <span class="fu">{</span><span class="ch">meck</span><span class="fu">,</span> <span class="st">&quot;0.8.2&quot;</span><span class="fu">}</span>
+        <span class="fu">]}</span>
+    <span class="fu">]},</span>
+    <span class="co">%% called as `rebar3 as prod &lt;command&gt;`</span>
+    <span class="fu">{</span><span class="ch">prod</span><span class="fu">,</span> <span class="fu">[</span>
+        <span class="fu">...</span>
+    <span class="fu">]}</span>
+  <span class="fu">]}</span>
+<span class="fu">]}.</span></code></pre></div>
+<p>Note that rather than having a top-level <code>deps</code> entry as we usually would, we define this one to be into the <code>test</code> profile. This will allow the dependency to only be fetched and used when running tests, and to avoid bundling it when shipping the application.</p>
+<p>Rebar3 pulls stuff from a package repository for this one (<a href="http://www.rebar3.org/v3.0/docs/dependencies">github dependencies</a> are also an option). Rebar3 will add it to a lock file when it fetches and compiles it later.</p>
+<p>Now back to <code>muumuu_SUITE</code>. Time to set up the state:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">init_per_testcase(</span><span class="ch">demo_session</span><span class="fu">,</span> <span class="dt">Config</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">mock_io(),</span>
+    <span class="fu">{</span><span class="ch">ok</span><span class="fu">,</span> <span class="dt">Pid</span><span class="fu">}</span> <span class="kw">=</span> <span class="fu">muumuu_fsm:start_link(),</span>
+    <span class="fu">[{</span><span class="ch">pid</span><span class="fu">,</span> <span class="dt">Pid</span><span class="fu">}</span> <span class="fu">|</span> <span class="dt">Config</span><span class="fu">].</span>
+
+<span class="fu">end_per_testcase(</span><span class="dt">_</span><span class="fu">,</span> <span class="dt">Config</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="fu">meck:unload(</span><span class="ch">io</span><span class="fu">),</span>
+    <span class="dt">Pid</span> <span class="kw">=</span> <span class="fu">?config(</span><span class="ch">pid</span><span class="fu">,</span> <span class="dt">Config</span><span class="fu">),</span>
+    <span class="fu">unlink(</span><span class="dt">Pid</span><span class="fu">),</span>
+    <span class="fu">exit(</span><span class="dt">Pid</span><span class="fu">,</span> <span class="ch">shutdown</span><span class="fu">),</span>
+    <span class="fu">wait_for_death(</span><span class="dt">Pid</span><span class="fu">).</span></code></pre></div>
+<p>Mocking the <code>io</code> system is a fun way to basically take it and make it return messages we can look at. That all takes place in <code>mock_io()</code>, and after that’s in place, we start a <code>muumuu</code> instance directly (no application needed):</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">mock_io()</span> <span class="kw">-&gt;</span>
+    <span class="co">%% For this one we mock the IO system so that instead of</span>
+    <span class="co">%% printing messages and getting input to and from the user,</span>
+    <span class="co">%% we instead have a message-passing interface that will</span>
+    <span class="co">%% be inspectable.</span>
+    <span class="co">%%</span>
+    <span class="co">%% Note that because the `io` module is pre-compiled by the</span>
+    <span class="co">%% VM, we have to 'unstick' it first, and be careful to keep</span>
+    <span class="co">%% it mocked as little as possible.</span>
+    <span class="dt">Parent</span> <span class="kw">=</span> <span class="fu">self(),</span>
+    <span class="fu">code:unstick_dir(filename:dirname(code:where_is_file(</span><span class="st">&quot;io.beam&quot;</span><span class="fu">))),</span>
+    <span class="fu">meck:new(</span><span class="ch">io</span><span class="fu">,</span> <span class="fu">[</span><span class="ch">passthrough</span><span class="fu">,</span> <span class="ch">no_link</span><span class="fu">]),</span>
+    <span class="fu">meck:expect(</span><span class="ch">io</span><span class="fu">,</span> <span class="ch">format</span><span class="fu">,</span> <span class="kw">fun</span><span class="fu">(</span><span class="dt">Str</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+        <span class="dt">Parent</span> <span class="kw">!</span> <span class="fu">{</span><span class="ch">out</span><span class="fu">,</span> <span class="dt">Str</span><span class="fu">},</span>
+        <span class="ch">ok</span>
+    <span class="kw">end</span><span class="fu">),</span>
+    <span class="fu">meck:expect(</span><span class="ch">io</span><span class="fu">,</span> <span class="ch">format</span><span class="fu">,</span> <span class="kw">fun</span><span class="fu">(</span><span class="dt">Str</span><span class="fu">,</span> <span class="dt">Args</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+        <span class="dt">Parent</span> <span class="kw">!</span> <span class="fu">{</span><span class="ch">out</span><span class="fu">,</span> <span class="fu">io_lib:format(</span><span class="dt">Str</span><span class="fu">,</span><span class="dt">Args</span><span class="fu">)},</span>
+        <span class="ch">ok</span>
+    <span class="kw">end</span><span class="fu">),</span>
+    <span class="fu">meck:expect(</span><span class="ch">io</span><span class="fu">,</span> <span class="ch">get_line</span><span class="fu">,</span> <span class="kw">fun</span><span class="fu">(</span><span class="dt">_Prompt</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+        <span class="dt">Parent</span> <span class="kw">!</span> <span class="fu">{</span><span class="ch">in</span><span class="fu">,</span> <span class="fu">self()},</span>
+        <span class="kw">receive</span> <span class="fu">{</span><span class="dt">Parent</span><span class="fu">,</span> <span class="dt">In</span><span class="fu">}</span> <span class="kw">-&gt;</span> <span class="dt">In</span> <span class="kw">end</span>
+    <span class="kw">end</span><span class="fu">).</span></code></pre></div>
+<p>Ugly. The first step is unstickying the directory for Erlang code. Most modules don’t require that, only those in Erlang’s standard library. Unstickying allows to load new versions of code at run time, which <code>meck</code> dynamically does.</p>
+<p>Here what I’m doing is mocking the functions <code>io:format/1</code>, <code>io:format/2</code> and <code>io:get_line/1</code> to send messages of the form <code>{in, Msg}</code> and <code>{out, Msg}</code> from input and output, respectively. <code>meck:unload(io)</code> will undo that.</p>
+<p>We also had the <code>wait_for_death/1</code> call. I’m using these <em>everywhere</em> in tests. Timers are the enemy of good concurrent testing, and if you rely on a <code>timer:sleep(1000)</code> of some sort to make sure everything is clean, you’re doing it wrong.</p>
+<p>Here the function polls to return ASAP, with a tiny sleep to not heat up your room too much via the CPU:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="fu">wait_for_death(</span><span class="dt">Pid</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="kw">case</span> <span class="fu">is_process_alive(</span><span class="dt">Pid</span><span class="fu">)</span> <span class="kw">of</span>
+        <span class="ch">true</span> <span class="kw">-&gt;</span>
+            <span class="fu">timer:sleep(</span><span class="dv">10</span><span class="fu">),</span>
+            <span class="fu">wait_for_death(</span><span class="dt">Pid</span><span class="fu">);</span>
+        <span class="ch">false</span> <span class="kw">-&gt;</span>
+            <span class="ch">ok</span>
+    <span class="kw">end</span><span class="fu">.</span></code></pre></div>
+<p>With this done, I can start planning more for the test. This here is something I always want to write a library for, and maybe some day I will, but right now I re-do that crap by hand every time:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">%%%%%%%%%%%%%%%%%%</span>
+<span class="co">%%% TEST CASES %%%</span>
+<span class="co">%%%%%%%%%%%%%%%%%%</span>
+
+<span class="co">%% Pressing a given key through the message-passing interface</span>
+<span class="co">%% will yield expected output. There should be a prompt waiting</span>
+<span class="co">%% for a key.</span>
+<span class="co">%% All states can be cycled through using only Y/N answers.</span>
+<span class="fu">demo_session(</span><span class="dt">Config</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="dt">Pid</span> <span class="kw">=</span> <span class="fu">?config(</span><span class="ch">pid</span><span class="fu">,</span> <span class="dt">Config</span><span class="fu">),</span>
+    <span class="fu">out(</span><span class="st">&quot;press.*any.*key.*&gt;&quot;</span><span class="fu">),</span>
+    <span class="fu">in(</span><span class="st">&quot;&lt;tab&gt;&quot;</span><span class="fu">),</span> <span class="co">% the characters shouldn't matter</span>
+    <span class="fu">out(</span><span class="st">&quot;check.*core.*temp.*&gt;&quot;</span><span class="fu">),</span>
+    <span class="fu">in(</span><span class="st">&quot;Y&quot;</span><span class="fu">),</span>
+    <span class="fu">out(</span><span class="st">&quot;temperature.*normal&quot;</span><span class="fu">),</span>
+    <span class="fu">out(</span><span class="st">&quot;vent.*radioactive.*gas.*&gt;&quot;</span><span class="fu">),</span>
+    <span class="fu">in(</span><span class="st">&quot;no&quot;</span><span class="fu">),</span>
+    <span class="fu">out(</span><span class="st">&quot;venting.*prevents.*explosion.*&gt;&quot;</span><span class="fu">),</span>
+    <span class="fu">in(</span><span class="st">&quot;yES&quot;</span><span class="fu">),</span>
+    <span class="fu">out(</span><span class="st">&quot;gas.*blows.*crop.*&quot;</span><span class="fu">),</span>
+    <span class="fu">gen_fsm:send_event(</span><span class="dt">Pid</span><span class="fu">,</span> <span class="ch">timeout</span><span class="fu">),</span> <span class="co">% force a timeout faster</span>
+    <span class="fu">out(</span><span class="st">&quot;.*Y/N.*&gt;&quot;</span><span class="fu">),</span> <span class="co">% some question</span>
+    <span class="fu">in(</span><span class="st">&quot;No&quot;</span><span class="fu">),</span> <span class="co">% who cares</span>
+    <span class="fu">in(</span><span class="st">&quot;vent gAs&quot;</span><span class="fu">),</span> <span class="co">% force a command</span>
+    <span class="fu">out(</span><span class="st">&quot;gas.*blows.*crop.*&quot;</span><span class="fu">).</span></code></pre></div>
+<p>I basically just write the test the way I want it to look like. I will start expecting messages that will match the regex <code>&quot;press.*any.*key.*&gt;&quot;</code> being output, after which I’ll insert <code>&lt;tab&gt;</code>. Rinse and repeat.</p>
+<p>Here, my desire is pretty much to turn the interactions I’d write in the shell into a bunch of function calls and matches.</p>
+<p>That’s why I planned having a message-passing interface. I can now write functions to wrap that functionality:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">%%%%%%%%%%%%%%%</span>
+<span class="co">%%% HELPERS %%%</span>
+<span class="co">%%%%%%%%%%%%%%%</span>
+
+<span class="fu">in(</span><span class="dt">Input</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="kw">receive</span>
+        <span class="fu">{</span><span class="ch">in</span><span class="fu">,</span> <span class="dt">Pid</span><span class="fu">}</span> <span class="kw">-&gt;</span> <span class="dt">Pid</span> <span class="kw">!</span> <span class="fu">{self(),</span> <span class="dt">Input</span><span class="fu">}</span>
+    <span class="kw">after</span> <span class="dv">1000</span> <span class="kw">-&gt;</span>
+        <span class="fu">ct:pal(</span><span class="st">&quot;MBOX: ~p&quot;</span><span class="fu">,</span> <span class="fu">[process_info(self(),</span> <span class="ch">messages</span><span class="fu">)]),</span>
+        <span class="fu">error({</span><span class="ch">too_long</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">in</span><span class="fu">,</span> <span class="dt">Input</span><span class="fu">}})</span>
+    <span class="kw">end</span><span class="fu">.</span></code></pre></div>
+<p>If we look back into the mocked function, the mocked function sends us <code>{in, ProcessThatWaitsForInput}</code>. We take the <code>Input</code> argument, and send it back to the mocked function (which runs in its own process).</p>
+<p>If we never receive the <code>in</code> message, we crash, but printing the debugging information. Interestingly here the function I use is <code>ct:pal</code>. It works exactly like <code>io:format</code>, except:</p>
+<ol style="list-style-type: decimal">
+<li>It outputs to both the shell and HTML logs for Common Test</li>
+<li>It’s not gonna be used in production systems and it’s surely never going to be mocked (unlike <code>io</code>).</li>
+</ol>
+<p>The <code>out/1</code> helper is slightly more complex:</p>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">%% fuzzily match the input string, waiting 1s at most</span>
+<span class="fu">out(</span><span class="dt">Expected</span><span class="fu">)</span> <span class="kw">-&gt;</span>
+    <span class="kw">receive</span>
+        <span class="fu">{</span><span class="ch">out</span><span class="fu">,</span> <span class="dt">Prompt</span><span class="fu">}</span> <span class="kw">-&gt;</span>
+            <span class="fu">ct:pal(</span><span class="st">&quot;Expected: ~p~nPrompt: ~p&quot;</span><span class="fu">,</span> <span class="fu">[</span><span class="dt">Expected</span><span class="fu">,</span> <span class="dt">Prompt</span><span class="fu">]),</span>
+            <span class="fu">{</span><span class="ch">match</span><span class="fu">,</span> <span class="dt">_</span><span class="fu">}</span> <span class="kw">=</span> <span class="fu">re:run(</span><span class="dt">Prompt</span><span class="fu">,</span> <span class="dt">Expected</span><span class="fu">,</span> <span class="fu">[</span><span class="ch">dotall</span><span class="fu">,</span> <span class="ch">caseless</span><span class="fu">,</span> <span class="ch">global</span><span class="fu">])</span>
+    <span class="kw">after</span> <span class="dv">1000</span> <span class="kw">-&gt;</span>
+        <span class="fu">ct:pal(</span><span class="st">&quot;MBOX: ~p&quot;</span><span class="fu">,</span> <span class="fu">[process_info(self(),</span> <span class="ch">messages</span><span class="fu">)]),</span>
+        <span class="fu">error({</span><span class="ch">too_long</span><span class="fu">,</span> <span class="fu">{</span><span class="ch">out</span><span class="fu">,</span> <span class="dt">Expected</span><span class="fu">}})</span>
+    <span class="kw">end</span><span class="fu">.</span></code></pre></div>
+<p>That one makes an assertion on a regular expression with <code>re:run/3</code>, and the rest is similar to what we did in <code>in/1</code>. We receive the output, match it, and that’s it.</p>
+<p>And there we go, we can run the tests:</p>
+<pre><code>λ → rebar3 ct
+→ rebar3 ct
+===&gt; Verifying dependencies...
+===&gt; Fetching meck ({pkg,&lt;&lt;&quot;meck&quot;&gt;&gt;,&lt;&lt;&quot;0.8.2&quot;&gt;&gt;})
+===&gt; Compiling meck
+===&gt; Compiling muumuu
+===&gt; Running Common Test suites...
+
+&lt;test output omitted&gt;
+
+All 1 tests passed.</code></pre>
+<p>After this, I check in the rebar lock files into version control, and I go do something else because I’m pretty much done. You can see all the <a href="https://github.com/ferd/howistart-erlang1-code">code here</a>.</p>
+<div class="figure">
+<img src="../../../posts/erlang/1/images/1/outdoors.gif" />
+
+</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr />
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-6 col-lg-6">
+    <div class="col-lg-5 col-lg-offset-5">
+      <img class="img-responsive" src="../../../posts/erlang/1/images/headshot.png" alt>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-lg-6">
+    <h3>Fred Hebert</h3>
+    <h4>Erlang</h4>
+    <h3><small> Author of Learn You Some Erlang For Great Good</small></h3>
+    <p><a href="https://twitter.com/mononcqc/">Fred</a> is the author of <a href="http://learnyousomeerlang.com/">Learn You Some Erlang for Great Good!</a>, a free online (also paid for, on paper) book designed to teach Erlang, as well as <a href="http://www.erlang-in-anger.com/">Erlang in Anger</a>,  a guide about how to be the Erlang medic in a time of war. He’s worked on writing and teaching training course material for <a href="http://erlang-solutions.com">Erlang Solutions Ltd</a>, and on Real Time Bidding software for <a href="http://adgear.com/">AdGear</a>. He has since then moved to Heroku’s routing team, writing and maintaining large scale distributed systems in the cloud.</p>
+    <a class="btn btn-primary" href="../../../posts/erlang/1/index.html">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+</div>
+
+      </div>
+
+      <footer>
+        <hr />
+        <div class="row">
+          <div class="col-md-4 col-md-offset-8">
+            <p class="text-right">
+              <small>Except where otherwise noted.</small>
+              <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" title="Creative Commons License Details">
+                <img src="../../../images/cc.png" alt="Creative Commons Attribution Non-Commercial No Derivative License" />
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../../../js/jquery-1.10.2.js"></script>
+    <script src="../../../js/bootstrap.js"></script>
+
+  </body>
+</html>

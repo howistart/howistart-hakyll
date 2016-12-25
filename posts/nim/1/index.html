@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>How I Start.</title>
+
+    <link href="../../../posts.rss" rel="alternate" type="application/rss+xml" title="How I Start." />
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/readable.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS for the 'Thumbnail Gallery' Template -->
+    <link href="../../../css/1-col-portfolio.css" rel="stylesheet" />
+    <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+      margin: 0; padding: 0; vertical-align: baseline; border: none; }
+      table.sourceCode { width: 100%; line-height: 100%; }
+      td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+      td.sourceCode { padding-left: 5px; }
+      code > span.kw { color: #007020; font-weight: bold; }
+      code > span.dt { color: #902000; }
+      code > span.dv { color: #40a070; }
+      code > span.bn { color: #40a070; }
+      code > span.fl { color: #40a070; }
+      code > span.ch { color: #4070a0; }
+      code > span.st { color: #4070a0; }
+      code > span.co { color: #60a0b0; font-style: italic; }
+      code > span.ot { color: #007020; }
+      code > span.al { color: #ff0000; font-weight: bold; }
+      code > span.fu { color: #06287e; }
+      code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-top navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" href="../../../">How I Start.</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="category"><a href="../../../posts/clojure">clojure</a></li><li class="category"><a href="../../../posts/cpp">cpp</a></li><li class="category"><a href="../../../posts/elixir">elixir</a></li><li class="category"><a href="../../../posts/erlang">erlang</a></li><li class="category"><a href="../../../posts/go">go</a></li><li class="category"><a href="../../../posts/haskell">haskell</a></li><li class="category"><a href="../../../posts/nim">nim</a></li><li class="category"><a href="../../../posts/ruby">ruby</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="../../../about.html">About</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
+
+    <div class="container">
+      <div id="content">
+        <div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Nim <small>with Dennis Felsing</small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <p><a href="http://nim-lang.org/">Nim</a> is a young and exciting imperative programming language that is nearing its 1.0 release. My main motivation for using Nim is its performance / productivity ratio and the joy of programming in Nim. In this guide I’m going to show you how I start a Nim project.</p>
+<p>For this purpose we will write a small interpreter for the <a href="https://en.wikipedia.org/wiki/Brainfuck">brainfuck language</a>. While Nim is a practical language with many interesting features, brainfuck is the opposite: It’s impractical to write in and its features consist of 8 single-character commands. Still, brainfuck is great for us, since its extreme simplicity makes it easy to write an interpreter for it. Later we will even write a high-performance compiler that transforms brainfuck programs into Nim at compile time. We will put all of this into a <a href="https://github.com/nim-lang/nimble">nimble</a> package and <a href="https://github.com/def-/nim-brainfuck">publish it online</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>Installing Nim is straightforward, you can follow the <a href="http://nim-lang.org/download.html">official instructions</a>. Binaries for Windows are provided. On other operating systems you can run the <code>build.sh</code> script to compile the generated C code, which should take less than 1 minute on a modern system.</p>
+<p>This brings us to the first interesting fact about Nim: It compiles to C primarily (C++, ObjectiveC and even JavaScript as well) and then uses the highly optimizing C compiler of your choice to generate the actual program. You get to benefit from the mature C ecosystem for free.</p>
+<p>If you opt for bootstrapping the <a href="https://github.com/Araq/Nim">Nim compiler</a>, which is written exclusively in Nim itself, you get to witness the compiler build itself with a few simple steps (in less than 2 minutes):</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> clone https://github.com/Araq/Nim
+$ <span class="kw">cd</span> Nim
+$ <span class="kw">git</span> clone --depth 1 https://github.com/nim-lang/csources
+$ <span class="kw">cd</span> csources <span class="kw">&amp;&amp;</span> <span class="kw">sh</span> build.sh
+$ <span class="kw">cd</span> ..
+$ <span class="kw">bin/nim</span> c koch
+$ <span class="kw">./koch</span> boot -d:release</code></pre></div>
+<p>This way you get a development version of Nim. To keep it up to date these two steps should be enough:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> pull
+$ <span class="kw">./koch</span> boot -d:release</code></pre></div>
+<p>If you haven’t done so already, now is a good time to install <code>git</code> as well. Most nimble packages are available on github, so we will need <code>git</code> to get them. On a Debian based distribution (like Ubuntu) we can install it like this:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">sudo</span> apt-get install git</code></pre></div>
+<p>After you’ve finished the installation, you should add the <code>nim</code> binary to your path. If you use bash, this is what to do:</p>
+<pre><code>$ echo 'export PATH=$PATH:$your_install_dir/bin' &gt;&gt; ~/.profile
+$ source ~/.profile
+$ nim
+Nim Compiler Version 0.10.2 (2014-12-29) [Linux: amd64]
+Copyright (c) 2006-2014 by Andreas Rumpf
+::
+
+    nim command [options] [projectfile] [arguments]
+
+Command:
+  compile, c                compile project with default code generator (C)
+  doc                       generate the documentation for inputfile
+  doc2                      generate the documentation for the whole project
+  i                         start Nim in interactive mode (limited)
+...</code></pre>
+<p>If <code>nim</code> reports its version and usage, we’re good to continue. Now the modules from <a href="http://nim-lang.org/lib.html">Nim’s standard library</a> are just an import away. All other packages can be retrieved with <a href="https://github.com/nim-lang/nimble">nimble</a>, Nim’s package manager. Let’s follow the <a href="https://github.com/nim-lang/nimble#nimble">simple installation instructions</a>. Again, for Windows a <a href="https://github.com/nim-lang/nimble/releases">prebuilt archive</a> is available, while building from source is quite comfortable as well:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> clone https://github.com/nim-lang/nimble
+$ <span class="kw">cd</span> nimble
+$ <span class="kw">nim</span> c -r src/nimble install</code></pre></div>
+<p>Nimble’s binary directory wants to be added to your path as well:</p>
+<pre><code>$ echo 'export PATH=$PATH:$HOME/.nimble/bin' &gt;&gt; ~/.profile
+$ source ~/.profile
+$ nimble update
+Downloading package list from https://github.com/nim-lang/packages/raw/master/packages.json
+Done.</code></pre>
+<p>Now we can browse the available <a href="http://nim-lang.org/lib.html#nimble">nimble packages</a> or search for them on the command line:</p>
+<pre><code>$ nimble search docopt
+docopt:
+  url:         git://github.com/docopt/docopt.nim (git)
+  tags:        commandline, arguments, parsing, library
+  description: Command-line args parser based on Usage message
+  license:     MIT
+  website:     https://github.com/docopt/docopt.nim</code></pre>
+<p>Let’s install this nice <a href="https://github.com/docopt/docopt.nim">docopt library</a> we found, maybe we’ll need it later:</p>
+<pre><code>$ nimble install docopt
+...
+docopt installed successfully.</code></pre>
+<p>Notice how quickly the library is installed (less than 1 second for me). This is another nice effect of Nim. Basically the source code of the library is just downloaded, nothing resembling a shared library is compiled. Instead the library will simply be compiled statically into our program once we use it.</p>
+<p>There is <a href="https://github.com/Araq/Nim/wiki/Editor-Support">Nim editor support</a> for most of the popular editors out there, like Emacs (<a href="https://github.com/reactormonk/nim-mode">nim-mode</a>), Vim (<a href="https://github.com/zah/nimrod.vim/">nimrod.vim</a>, my choice) and Sublime (<a href="https://github.com/Varriount/NimLime">NimLime</a>). For the scope of this guide any text editor will do.</p>
+<h2 id="project-setup">Project Setup</h2>
+<p>Now we’re ready to get our project started:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> brainfuck
+$ <span class="kw">cd</span> brainfuck</code></pre></div>
+<p>First step: To get <code>Hello World</code> on the terminal, we create a <code>hello.nim</code> with the following content:</p>
+<pre class="nimrod"><code>echo &quot;Hello World&quot;</code></pre>
+<p>We compile the code and run it, first in two separate steps:</p>
+<pre><code>$ nim c hello
+$ ./hello
+Hello World</code></pre>
+<p>Then in a single step, by instructing the Nim compiler to conveniently run the resulting binary immediately after creating it:</p>
+<pre><code>$ nim c -r hello
+Hello World</code></pre>
+<p>Let’s make our code do something slightly more complicated, that should take a bit longer to run:</p>
+<pre class="nimrod"><code>var x = 0
+for i in 1 .. 100_000_000:
+  inc x # increase x, this is a comment btw
+
+echo &quot;Hello World &quot;, x</code></pre>
+<p>Now we’re initializing the variable <code>x</code> to 0 and increase it by 1 a whole 100 million times. Try to compile and run it again. Notice how long it takes to run now. Is Nim’s performance that abysmal? Of course not, quite the opposite! We’re just currently building the binary in full debug mode, adding checks for integer overflows, array out of bounds and much more, as well as not optimizing the binary at all. The <code>-d:release</code> option allows us to switch into release mode, giving us full speed:</p>
+<pre><code>$ nim c hello
+$ time ./hello
+Hello World 100000000
+./hello  2.01s user 0.00s system 99% cpu 2.013 total
+$ nim -d:release c hello
+$ time ./hello
+Hello World 100000000
+./hello  0.00s user 0.00s system 74% cpu 0.002 total</code></pre>
+<p>That’s a bit too fast actually. The C compiler optimized away the entire <code>for</code> loop. Oops.</p>
+<p>To start a new project <code>nimble init</code> can generate a basic package config file:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">nimble</span> init brainfuck</code></pre></div>
+<p>The newly created <code>brainfuck.nimble</code> should look like this:</p>
+<pre><code>[Package]
+name          = &quot;brainfuck&quot;
+version       = &quot;0.1.0&quot;
+author        = &quot;Anonymous&quot;
+description   = &quot;New Nimble project for Nim&quot;
+license       = &quot;BSD&quot;
+
+[Deps]
+Requires: &quot;nim &gt;= 0.10.0&quot;</code></pre>
+<p>Let’s add the actual author, a description, as well as the requirement for docopt, as described in <a href="https://github.com/nim-lang/nimble/blob/master/developers.markdown">nimble’s developers info</a>. Most importantly, let’s set the binary we want to create:</p>
+<pre><code>[Package]
+name          = &quot;brainfuck&quot;
+version       = &quot;0.1.0&quot;
+author        = &quot;The 'How I Start Nim' Team&quot;
+description   = &quot;A brainfuck interpreter&quot;
+license       = &quot;MIT&quot;
+
+bin           = &quot;brainfuck&quot;
+
+[Deps]
+Requires: &quot;nim &gt;= 0.10.0, docopt &gt;= 0.1.0&quot;</code></pre>
+<p>Since we have git installed already, we’ll want to keep revisions of our source code and may want to publish them online at some point, let’s initialize a git repository:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> init
+$ <span class="kw">git</span> add hello.nim brainfuck.nimble .gitignore</code></pre></div>
+<p>Where I just initialized the <code>.gitignore</code> file to this:</p>
+<pre><code>nimcache/
+*.swp</code></pre>
+<p>We tell git to ignore vim’s swap files, as well as <code>nimcache</code> directories that contain the generated C code for our project. Check it out if you’re curious how Nim compiles to C.</p>
+<p>To see what nimble can do, let’s initialize <code>brainfuck.nim</code>, our main program:</p>
+<pre class="nimrod"><code>echo &quot;Welcome to brainfuck&quot;</code></pre>
+<p>We could compile it as we did before for <code>hello.nim</code>, but since we already set our package up to include the <code>brainfuck</code> binary, let’s make <code>nimble</code> do the work:</p>
+<pre><code>$ nimble build
+Looking for docopt (&gt;= 0.1.0)...
+Dependency already satisfied.
+Building brainfuck/brainfuck using c backend...
+...
+$ ./brainfuck
+Welcome to brainfuck</code></pre>
+<p><code>nimble install</code> can be used to install the binary on our system, so that we can run it from anywhere:</p>
+<pre><code>$ nimble install
+...
+brainfuck installed successfully.
+$ brainfuck
+Welcome to brainfuck</code></pre>
+<p>This is great for when the program works, but <code>nimble build</code> actually does a release build for us. That takes a bit longer than a debug build, and leaves out the checks which are so important during development, so <code>nim c -r brainfuck</code> will be a better fit for now. Feel free to execute our program quite often during development to get a feeling for how everything works.</p>
+<h2 id="coding">Coding</h2>
+<p>While programming Nim’s <a href="http://nim-lang.org/documentation.html">documentation</a> comes in handy. If you don’t know where to find what yet, there’s a <a href="http://nim-lang.org/theindex.html">documentation index</a>, in which you can search.</p>
+<p>Let’s start developing our interpreter by changing the <code>brainfuck.nim</code> file:</p>
+<pre class="nimrod"><code>import os</code></pre>
+<p>First we import the <a href="http://nim-lang.org/os.html">os module</a>, so that we can read command line arguments.</p>
+<pre class="nimrod"><code>let code = if paramCount() &gt; 0: readFile paramStr(1)
+           else: readAll stdin</code></pre>
+<p><code>paramCount()</code> tells us about the number of command line arguments passed to the application. If we get a command line argument, we assume it’s a filename, and read it in directly with <code>readFile paramStr(1)</code>. Otherwise we read everything from the standard input. In both cases, the result is stored in the <code>code</code> variable, which has been declared immutable with the <code>let</code> keyword.</p>
+<p>To see if this works, we can <code>echo</code> the <code>code</code>:</p>
+<pre class="nimrod"><code>echo code</code></pre>
+<p>And try it out:</p>
+<pre><code>$ nim c -r brainfuck
+...
+Welcome to brainfuck
+I'm entering something here and it is printed back later!
+I'm entering something here and it is printed back later!</code></pre>
+<p>After you’ve entered your “code” finish up with a newline and ctrl-d. Or you can pass in a filename, everything after <code>nim c -r brainfuck</code> is passed as command line arguments to the resulting binary:</p>
+<pre><code>$ nim c -r brainfuck .gitignore
+...
+Welcome to brainfuck
+nimcache/
+*.swp</code></pre>
+<p>On we go:</p>
+<pre class="nimrod"><code>var
+  tape = newSeq[char]()
+  codePos = 0
+  tapePos = 0</code></pre>
+<p>We declare a few variables that we’ll need. We have to remember our current position in the <code>code</code> string (<code>codePos</code>) as well as on the <code>tape</code> (<code>tapePos</code>). Brainfuck works on an infinitely growing <code>tape</code>, which we represent as a <code>seq</code> of <code>char</code>s. Sequences are Nim’s dynamic length arrays, other than with <code>newSeq</code> they can also be initialized using <code>var x = @[1, 2, 3]</code>.</p>
+<p>Let’s take a moment to appreciate that we don’t have to specify the type of our variables, it is automatically inferred. If we wanted to be more explicit, we could do so:</p>
+<pre class="nimrod"><code>var
+  tape: seq[char] = newSeq[char]()
+  codePos: int = 0
+  tapePos: int = 0</code></pre>
+<p>Next we write a small procedure, and call it immediately afterwards:</p>
+<pre class="nimrod"><code>proc run(skip = false): bool =
+  echo &quot;codePos: &quot;, codePos, &quot; tapePos: &quot;, tapePos
+
+discard run()</code></pre>
+<p>There are a few things to note here:</p>
+<ul>
+<li>We pass a <code>skip</code> parameter, initialized to <code>false</code>.</li>
+<li>Obviously the parameter must be of type <code>bool</code> then.</li>
+<li>The return type is <code>bool</code> as well, but we return nothing? Every result is initialized to binary 0 by default, meaning we return <code>false</code>.</li>
+<li>We can use the implicit <code>result</code> variable in every proc with a result and set <code>result = true</code>.</li>
+<li>Control flow can be changed by using <code>return true</code> to return immediately.</li>
+<li>We have to explicitly <code>discard</code> the returned bool value when calling <code>run()</code>. Otherwise the compiler complains with <code>brainfuck.nim(16, 3) Error: value of   type 'bool' has to be discarded</code>. This is to prevent us from forgetting to handle the result.</li>
+</ul>
+<p>Before we continue, let’s think about the way brainfuck works. Some of this may look familiar if you’ve encountered Turing machines before. We have an input string <code>code</code> and a <code>tape</code> of <code>char</code>s that can grow infinitely in one direction. These are the 8 commands that can occur in the input string, every other character is ignored:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Op</th>
+<th align="left">Meaning</th>
+<th align="left">Nim equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><code>&gt;</code></td>
+<td align="left">move right on tape</td>
+<td align="left"><code>inc tapePos</code></td>
+</tr>
+<tr class="even">
+<td align="center"><code>&lt;</code></td>
+<td align="left">move left on tape</td>
+<td align="left"><code>dec tapePos</code></td>
+</tr>
+<tr class="odd">
+<td align="center"><code>+</code></td>
+<td align="left">increment value on tape</td>
+<td align="left"><code>inc tape[tapePos]</code></td>
+</tr>
+<tr class="even">
+<td align="center"><code>-</code></td>
+<td align="left">decrement value on tape</td>
+<td align="left"><code>dec tape[tapePos]</code></td>
+</tr>
+<tr class="odd">
+<td align="center"><code>.</code></td>
+<td align="left">output value on tape</td>
+<td align="left"><code>stdout.write tape[tapePos]</code></td>
+</tr>
+<tr class="even">
+<td align="center"><code>,</code></td>
+<td align="left">input value to tape</td>
+<td align="left"><code>tape[tapePos] = stdin.readChar</code></td>
+</tr>
+<tr class="odd">
+<td align="center"><code>[</code></td>
+<td align="left">if value on tape is <code>\0</code>, jump forward to command after matching <code>]</code></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="center"><code>]</code></td>
+<td align="left">if value on tape is not <code>\0</code>, jump back to command after matching <code>[</code></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>With this alone, brainfuck is one of the simplest Turing complete programming languages.</p>
+<p>The first 6 commands can easily be converted into a case distinction in Nim:</p>
+<pre class="nimrod"><code>proc run(skip = false): bool =
+  case code[codePos]
+  of '+': inc tape[tapePos]
+  of '-': dec tape[tapePos]
+  of '&gt;': inc tapePos
+  of '&lt;': dec tapePos
+  of '.': stdout.write tape[tapePos]
+  of ',': tape[tapePos] = stdin.readChar
+  else: discard</code></pre>
+<p>We are handling a single character from the input so far, let’s make this a loop to handle them all:</p>
+<pre class="nimrod"><code>proc run(skip = false): bool =
+  while tapePos &gt;= 0 and codePos &lt; code.len:
+    case code[codePos]
+    of '+': inc tape[tapePos]
+    of '-': dec tape[tapePos]
+    of '&gt;': inc tapePos
+    of '&lt;': dec tapePos
+    of '.': stdout.write tape[tapePos]
+    of ',': tape[tapePos] = stdin.readChar
+    else: discard
+
+    inc codePos</code></pre>
+<p>Let’s try a simple program, like this:</p>
+<pre><code>$ echo &quot;&gt;+&quot; | nim -r c brainfuck
+Welcome to brainfuck
+Traceback (most recent call last)
+brainfuck.nim(26)        brainfuck
+brainfuck.nim(16)        run
+Error: unhandled exception: index out of bounds [IndexError]
+Error: execution of an external program failed</code></pre>
+<p>What a shocking result, our code crashes! What did we do wrong? The tape is supposed to grow infinitely, but we haven’t increased its size at all! That’s an easy fix right above the <code>case</code>:</p>
+<pre class="nimrod"><code>    if tapePos &gt;= tape.len:
+      tape.add '\0'</code></pre>
+<p>The last 2 commands, <code>[</code> and <code>]</code> form a simple loop. We can encode them into our code as well:</p>
+<pre class="nimrod"><code>proc run(skip = false): bool =
+  while tapePos &gt;= 0 and codePos &lt; code.len:
+    if tapePos &gt;= tape.len:
+      tape.add '\0'
+
+    if code[codePos] == '[':
+      inc codePos
+      let oldPos = codePos
+      while run(tape[tapePos] == '\0'):
+        codePos = oldPos
+    elif code[codePos] == ']':
+      return tape[tapePos] != '\0'
+    elif not skip:
+      case code[codePos]
+      of '+': inc tape[tapePos]
+      of '-': dec tape[tapePos]
+      of '&gt;': inc tapePos
+      of '&lt;': dec tapePos
+      of '.': stdout.write tape[tapePos]
+      of ',': tape[tapePos] = stdin.readChar
+      else: discard
+
+    inc codePos</code></pre>
+<p>If we encounter a <code>[</code> we recursively call the <code>run</code> function itself, looping until the corresponding <code>]</code> lands on a <code>tapePos</code> that doesn’t have <code>\0</code> on the tape.</p>
+<p>If you’re on Nim 0.11 or a newer version, you’ll run into another problem: The <code>inc</code> and <code>dec</code> procs for <code>char</code>s have overflow (and underflow) checks. This means that when we have the character <code>\0</code> and decrement it, we end up with a runtime error! Instead, in brainfuck, we want to wrap around and get <code>\255</code> instead. We cold use a <code>uint8</code> instead of a <code>char</code>, because unsigned ints wrap around in Nim. But then we have to convert that <code>uint8</code> to a <code>char</code> sometimes and the other way around. A more convenient way is to define our own, non-overflow-checking <code>xinc</code> and <code>xdec</code> procs:</p>
+<pre class="nimrod"><code>{.push overflowchecks: off.}
+proc xinc(c: var char) = inc c
+proc xdec(c: var char) = dec c
+{.pop.}</code></pre>
+<p>We use Nim’s pragma system to disable overflow checks just for this part of the code, not touching the settings for the rest of the program. Now of course two cases have to change:</p>
+<pre class="nimrod"><code>      of '+': xinc tape[tapePos]
+      of '-': xdec tape[tapePos]</code></pre>
+<p>And that’s it. We have a working brainfuck interpreter now. To test it, we create an <code>examples</code> directory containing these 3 files: <a href="../../../posts/nim/1/examples/helloworld.b">helloworld.b</a>, <a href="../../../posts/nim/1/examples/rot13.b">rot13.b</a>, <a href="../../../posts/nim/1/examples/mandelbrot.b">mandelbrot.b</a>.</p>
+<pre><code>$ nim -r c brainfuck examples/helloworld.b
+Welcome to brainfuck
+Hello World!
+$ ./brainfuck examples/rot13.b
+Welcome to brainfuck
+You can enter anything here!
+Lbh pna ragre nalguvat urer!
+ctrl-d
+$ ./brainfuck examples/mandelbrot.b</code></pre>
+<div class="figure">
+<img src="../../../posts/nim/1/images/mandelbrot.png" />
+
+</div>
+<p>With the last one you will notice how slow our interpreter is. Compiling with <code>-d:release</code> gives a nice speedup, but still takes about 90 seconds on my machine to draw the Mandelbrot set. To achieve a great speedup, later on we will compile brainfuck to Nim instead of interpreting it. Nim’s metaprogramming capabilities are perfect for this.</p>
+<p>But let’s keep it simple for now. Our interpreter is working, now we can turn our work into a reusable library. All we have to do is surround our code with a big <code>proc</code>:</p>
+<pre class="nimrod"><code>proc interpret*(code: string) =
+  var
+    tape = newSeq[char]()
+    codePos = 0
+    tapePos = 0
+
+  proc run(skip = false): bool =
+    ...
+
+  discard run()
+
+when isMainModule:
+  import os
+
+  echo &quot;Welcome to brainfuck&quot;
+
+  let code = if paramCount() &gt; 0: readFile paramStr(1)
+             else: readAll stdin
+
+  interpret code</code></pre>
+<p>Note that we also added a <code>*</code> to the proc, which indicates that it is exported and can be accessed from outside of our module. Everything else is hidden.</p>
+<p>At the end of the file we still kept the code for our binary. <code>when isMainModule</code> ensures that this code is only compiled when this module is the main one. After a quick <code>nimble install</code> our brainfuck library can be used from anywhere on your system, just like this:</p>
+<pre class="nimrod"><code>import brainfuck
+interpret &quot;++++++++[&gt;++++[&gt;++&gt;+++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;+&gt;+&gt;-&gt;&gt;+[&lt;]&lt;-]&gt;&gt;.&gt;---.+++++++..+++.&gt;&gt;.&lt;-.&lt;.+++.------.--------.&gt;&gt;+.&gt;++.&quot;</code></pre>
+<p>Looking good! At this point we could share the code with others already, but let’s add some documentation first:</p>
+<pre class="nimrod"><code>proc interpret*(code: string) =
+  ## Interprets the brainfuck `code` string, reading from stdin and writing to
+  ## stdout.
+  ...</code></pre>
+<p><code>nim doc brainfuck</code> builds the documentation, which you can <a href="http://hookrace.net/nim-brainfuck/brainfuck.html">see online</a> in its full glory.</p>
+<h2 id="metaprogramming">Metaprogramming</h2>
+<p>As I said before, our interpreter is still pretty slow for the mandelbrot program. Let’s write a procedure that creates <a href="http://nim-lang.org/docs/macros.html">Nim code AST</a> at compile time instead:</p>
+<pre class="nimrod"><code>import macros
+
+proc compile(code: string): PNimrodNode {.compiletime.} =
+  var stmts = @[newStmtList()]
+
+  template addStmt(text): stmt =
+    stmts[stmts.high].add parseStmt(text)
+
+  addStmt &quot;var tape: array[1_000_000, char]&quot;
+  addStmt &quot;var tapePos = 0&quot;
+
+  for c in code:
+    case c
+    of '+': addStmt &quot;xinc tape[tapePos]&quot;
+    of '-': addStmt &quot;xdec tape[tapePos]&quot;
+    of '&gt;': addStmt &quot;inc tapePos&quot;
+    of '&lt;': addStmt &quot;dec tapePos&quot;
+    of '.': addStmt &quot;stdout.write tape[tapePos]&quot;
+    of ',': addStmt &quot;tape[tapePos] = stdin.readChar&quot;
+    of '[': stmts.add newStmtList()
+    of ']':
+      var loop = newNimNode(nnkWhileStmt)
+      loop.add parseExpr(&quot;tape[tapePos] != '\\0'&quot;)
+      loop.add stmts.pop
+      stmts[stmts.high].add loop
+    else: discard
+
+  result = stmts[0]
+  echo result.repr</code></pre>
+<p>The template <code>addStmt</code> is just there to reduce boilerplate. We could also explicitly write the same operation at each position that currently uses <code>addStmt</code>. (And that’s exactly what a template does!) <code>parseStmt</code> turns a piece of Nim code from a string into its corresponding AST, which we store in a list.</p>
+<p>Most of the code is similar to the interpreter, except we’re not executing the code now, but generating it, and adding it to a list of statements. <code>[</code> and <code>]</code> are more complicated: They get translated into a while loop surrounding the code inbetween.</p>
+<p>We’re cheating a bit here because we use a fixed size <code>tape</code> now and don’t check for under- and overflows anymore. This is mainly for the sake of simplicity. To see what this code does, the last line, namely <code>echo result.repr</code> prints the Nim code we generated.</p>
+<p>Try it out by calling it inside a <code>static</code> block, which forces execution at compile time:</p>
+<pre class="nimrod"><code>static:
+  discard compile &quot;+&gt;+[-]&gt;,.&quot;</code></pre>
+<p>During compilation the generated code is printed:</p>
+<pre class="nimrod"><code>var tape: array[1000000, char]
+var codePos = 0
+var tapePos = 0
+xinc tape[tapePos]
+inc tapePos
+xinc tape[tapePos]
+while tape[tapePos] != '\0':
+  xdec tape[tapePos]
+inc tapePos
+tape[tapePos] = stdin.readChar
+stdout.write tape[tapePos]</code></pre>
+<p>Generally useful for writing macros is the <code>dumpTree</code> macro, which prints the AST of a piece of code (actual one, not as a string), for example:</p>
+<pre class="nimrod"><code>import macros
+
+dumpTree:
+  while tape[tapePos] != '\0':
+    inc tapePos</code></pre>
+<p>This shows us the following Tree:</p>
+<pre><code>StmtList
+  WhileStmt
+    Infix
+      Ident !&quot;!=&quot;
+      BracketExpr
+        Ident !&quot;tape&quot;
+        Ident !&quot;tapePos&quot;
+      CharLit 0
+    StmtList
+      Command
+        Ident !&quot;inc&quot;
+        Ident !&quot;tapePos&quot;</code></pre>
+<p>That’s how I knew that we would need a <code>StmtList</code>, for example. When you do metaprogramming in Nim, it’s generally a good idea to use <code>dumpTree</code> and print out the AST of the code you want to generate.</p>
+<p>Macros can be used to insert the generated code into a program directly:</p>
+<pre class="nimrod"><code>macro compileString*(code: string): stmt =
+  ## Compiles the brainfuck `code` string into Nim code that reads from stdin
+  ## and writes to stdout.
+  compile code.strval
+
+macro compileFile*(filename: string): stmt =
+  ## Compiles the brainfuck code read from `filename` at compile time into Nim
+  ## code that reads from stdin and writes to stdout.
+  compile staticRead(filename.strval)</code></pre>
+<p>We can now compile the mandelbrot program into Nim easily:</p>
+<pre class="nimrod"><code>proc mandelbrot = compileFile &quot;examples/mandelbrot.b&quot;
+
+mandelbrot()</code></pre>
+<p>Compiling with full optimizations takes quite long now (about 4 seconds), because the mandelbrot program is huge and GCC needs some time to optimize it. In return the program runs in just 1 second:</p>
+<pre><code>$ nim -d:release c brainfuck
+$ ./brainfuck</code></pre>
+<h2 id="compiler-settings">Compiler settings</h2>
+<p>By default Nim compiles its intermediate C code with GCC, but clang usually compiles faster and may even yield more efficient code. It’s always worth a try. To compile once with clang, use <code>nim -d:release --cc:clang c hello</code>. If you want to keep compiling <code>hello.nim</code> with clang, create a <code>hello.nim.cfg</code> file with the content <code>cc = clang</code>. To change the default backend compiler, edit <code>config/nim.cfg</code> in Nim’s directory.</p>
+<p>While we’re talking about changing default compiler options. The Nim compiler is quite talky at times, which can be disabled by setting <code>hints = off</code> in the Nim compiler’s <code>config/nim.cfg</code>. One of the more unexpected compiler warnings even warns you if you use <code>l</code> (lowercase <code>L</code>) as an identifier, because it may look similar to <code>1</code> (one):</p>
+<pre><code>a.nim(1, 4) Warning: 'l' should not be used as an identifier; may look like '1' (one) [SmallLshouldNotBeUsed]</code></pre>
+<p>If you’re not a fan of this, a simple <code>warning[SmallLshouldNotBeUsed] = off</code> suffices to make the compiler shut up.</p>
+<p>Another advantage of Nim is that we can use debuggers with C support, like GDB. Simply compile your program with <code>nim c --linedir:on --debuginfo c hello</code> and <code>gdb ./hello</code> can be used to debug your program.</p>
+<h2 id="command-line-argument-parsing">Command line argument parsing</h2>
+<p>So far we’ve been parsing the command line argument by hand. Since we already installed the <a href="https://github.com/docopt/docopt.nim">docopt.nim</a> library before, we can use it now:</p>
+<pre class="nimrod"><code>when isMainModule:
+  import docopt, tables, strutils
+
+  proc mandelbrot = compileFile(&quot;examples/mandelbrot.b&quot;)
+
+  let doc = &quot;&quot;&quot;
+brainfuck
+
+Usage:
+  brainfuck mandelbrot
+  brainfuck interpret [&lt;file.b&gt;]
+  brainfuck (-h | --help)
+  brainfuck (-v | --version)
+
+Options:
+  -h --help     Show this screen.
+  -v --version  Show version.
+&quot;&quot;&quot;
+
+  let args = docopt(doc, version = &quot;brainfuck 1.0&quot;)
+
+  if args[&quot;mandelbrot&quot;]:
+    mandelbrot()
+
+  elif args[&quot;interpret&quot;]:
+    let code = if args[&quot;&lt;file.b&gt;&quot;]: readFile($args[&quot;&lt;file.b&gt;&quot;])
+               else: readAll stdin
+
+    interpret(code)</code></pre>
+<p>The nice thing about docopt is that the documentation functions as the specification. Pretty simple to use:</p>
+<pre><code>$ nimble install
+...
+brainfuck installed successfully.
+$ brainfuck -h
+brainfuck
+
+Usage:
+  brainfuck mandelbrot
+  brainfuck interpret [&lt;file.b&gt;]
+  brainfuck (-h | --help)
+  brainfuck (-v | --version)
+
+Options:
+  -h --help     Show this screen.
+  -v --version  Show version.
+$ brainfuck interpret examples/helloworld.b
+Hello World!</code></pre>
+<h2 id="refactoring">Refactoring</h2>
+<p>Since our project is growing, we move the main source code into a <code>src</code> directory and add a <code>tests</code> directory, which we will soon need, resulting in a final directory structure like this:</p>
+<pre><code>$ tree
+.
+├── brainfuck.nimble
+├── examples
+│   ├── helloworld.b
+│   ├── mandelbrot.b
+│   └── rot13.b
+├── license.txt
+├── readme.md
+├── src
+│   └── brainfuck.nim
+└── tests
+    ├── all.nim
+    ├── compile.nim
+    ├── interpret.nim
+    └── nim.cfg</code></pre>
+<p>This also requires us to change the nimble file:</p>
+<pre><code>srcDir = &quot;src&quot;
+bin    = &quot;brainfuck&quot;</code></pre>
+<p>To improve reusability of our code, we turn to refactoring it. The main concern is that we always read from stdin and write to stdout.</p>
+<p>Instead of accepting just a <code>code: string</code> as its parameter, we extend the <code>interpret</code> procedure to also receive an input and output stream. This uses the <a href="http://nim-lang.org/streams.html">streams module</a> that provides <code>FileStream</code>s and <code>StringStream</code>s:</p>
+<pre class="nimrod"><code>## :Author: Dennis Felsing
+##
+## This module implements an interpreter for the brainfuck programming language
+## as well as a compiler of brainfuck into efficient Nim code.
+##
+## Example:
+##
+## .. code:: nim
+##   import brainfuck, streams
+##
+##   interpret(&quot;++++++++[&gt;++++[&gt;++&gt;+++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;+&gt;+&gt;-&gt;&gt;+[&lt;]&lt;-]&gt;&gt;.&gt;---.+++++++..+++.&gt;&gt;.&lt;-.&lt;.+++.------.--------.&gt;&gt;+.&gt;++.&quot;)
+##   # Prints &quot;Hello World!&quot;
+##
+##   proc mandelbrot = compileFile(&quot;examples/mandelbrot.b&quot;)
+##   mandelbrot() # Draws a mandelbrot set
+
+import streams
+
+proc interpret*(code: string; input, output: Stream) =
+  ## Interprets the brainfuck `code` string, reading from `input` and writing
+  ## to `output`.
+  ##
+  ## Example:
+  ##
+  ## .. code:: nim
+  ##   var inpStream = newStringStream(&quot;Hello World!\n&quot;)
+  ##   var outStream = newFileStream(stdout)
+  ##   interpret(readFile(&quot;examples/rot13.b&quot;), inpStream, outStream)</code></pre>
+<p>I’ve also added some module wide documentation, including example code for how our library can be used. Take a look at the <a href="http://hookrace.net/nim-brainfuck/brainfuck.html">resulting documentation</a>.</p>
+<p>Most of the code stays the same, except the handling of brainfuck operations <code>.</code> and <code>,</code>, which now use <code>output</code> instead of <code>stdout</code> and <code>input</code> instead of <code>stdin</code>:</p>
+<pre class="nimrod"><code>        of '.': output.write tape[tapePos]
+        of ',': tape[tapePos] = input.readCharEOF</code></pre>
+<p>What is this strange <code>readCharEOF</code> doing there instead of <code>readChar</code>? On many systems <code>EOF</code> (end of file) means <code>-1</code>. Our brainfuck programs actively use this. This means our brainfuck programs might actually not run on all systems. Meanwhile the streams module strives to be platform independent, so it returns a <code>0</code> if we have reached <code>EOF</code>. We use <code>readCharEOF</code> to convert this into a <code>-1</code> for brainfuck explicitly:</p>
+<pre class="nimrod"><code>proc readCharEOF*(input: Stream): char =
+  result = input.readChar
+  if result == '\0': # Streams return 0 for EOF
+    result = '\255'  # BF assumes EOF to be -1</code></pre>
+<p>At this point you may notice that the order of identifier declarations matters in Nim. If you declare <code>readCharEOF</code> below <code>interpret</code>, you can not use it in <code>interpret</code>. I personally try to adhere to this, as it creates a hierarchy from simple code to more complex code in each module. If you still want to circumvent this , split declaration and definition of <code>readCharEOF</code> by adding this declaration above <code>interpret</code>:</p>
+<pre class="nimrod"><code>proc readCharEOF*(input: Stream): char</code></pre>
+<p>The code to use the interpreter as conveniently as before is pretty simple:</p>
+<pre class="nimrod"><code>proc interpret*(code, input: string): string =
+  ## Interprets the brainfuck `code` string, reading from `input` and returning
+  ## the result directly.
+  var outStream = newStringStream()
+  interpret(code, input.newStringStream, outStream)
+  result = outStream.data
+
+proc interpret*(code: string) =
+  ## Interprets the brainfuck `code` string, reading from stdin and writing to
+  ## stdout.
+  interpret(code, stdin.newFileStream, stdout.newFileStream)</code></pre>
+<p>Now the <code>interpret</code> procedure can be used to return a string. This will be important for testing later:</p>
+<pre class="nimrod"><code>let res = interpret(readFile(&quot;examples/rot13.b&quot;), &quot;Hello World!\n&quot;)
+interpret(readFile(&quot;examples/rot13.b&quot;)) # with stdout</code></pre>
+<p>For the compiler the cleanup is a bit more complicated. First we have to take the <code>input</code> and <code>output</code> as strings, so that the user of this proc can use any stream they want:</p>
+<pre class="nimrod"><code>proc compile(code, input, output: string): PNimrodNode {.compiletime.} =</code></pre>
+<p>Two additional statements are necessary to initialize the input and output streams to the passed strings:</p>
+<pre class="nimrod"><code>  addStmt &quot;var inpStream = &quot; &amp; input
+  addStmt &quot;var outStream = &quot; &amp; output</code></pre>
+<p>Of course now we have to use <code>outStream</code> and <code>inpStream</code> instead of stdout and stdin, as well as <code>readCharEOF</code> instead of <code>readChar</code>. Note that we can directly reuse the <code>readCharEOF</code> procedure from the interpreter, no need to duplicate code:</p>
+<pre class="nimrod"><code>    of '.': addStmt &quot;outStream.write tape[tapePos]&quot;
+    of ',': addStmt &quot;tape[tapePos] = inpStream.readCharEOF&quot;</code></pre>
+<p>We also add a statement that will abort compilation with a nice error message if the user of our library uses it wrongly:</p>
+<pre class="nimrod"><code>  addStmt &quot;&quot;&quot;
+    when not compiles(newStringStream()):
+      static:
+        quit(&quot;Error: Import the streams module to compile brainfuck code&quot;, 1)
+  &quot;&quot;&quot;</code></pre>
+<p>To connect the new <code>compile</code> procedure to a <code>compileFile</code> macro that uses stdout and stdin again, we can write:</p>
+<pre class="nimrod"><code>macro compileFile*(filename: string): stmt =
+  compile(staticRead(filename.strval),
+    &quot;stdin.newFileStream&quot;, &quot;stdout.newFileStream&quot;)</code></pre>
+<p>To read from an input string and write back to an output string:</p>
+<pre class="nimrod"><code>macro compileFile*(filename: string; input, output: expr): stmt =
+  result = compile(staticRead(filename.strval),
+    &quot;newStringStream(&quot; &amp; $input &amp; &quot;)&quot;, &quot;newStringStream()&quot;)
+  result.add parseStmt($output &amp; &quot; = outStream.data&quot;)</code></pre>
+<p>This unwieldy code allows us to write a compiled <code>rot13</code> procedure like this, connecting <code>input</code> string and <code>result</code> to the compiled program:</p>
+<pre class="nimrod"><code>proc rot13(input: string): string =
+  compileFile(&quot;../examples/rot13.b&quot;, input, result)
+echo rot13(&quot;Hello World!\n&quot;)</code></pre>
+<p>I did the same for <code>compileString</code> for convenience. You can check out the full code of <code>brainfuck.nim</code> <a href="https://github.com/def-/nim-brainfuck/blob/master/src/brainfuck.nim">on Github</a>.</p>
+<h2 id="testing">Testing</h2>
+<p>There are two main ways of testing code in Nim that you will run across. For small pieces of code you can simply use <code>assert</code>s inside a <code>when isMainModule</code> block at the end of the file. This ensures that the testing code will not be executed when the module is used as a library.</p>
+<p>Regular assertions can be turned off in Nim with <code>--assertions:off</code>, which is automatically set when we compile a release build. For this reason instead of <code>assert</code> we use <code>doAssert</code>, which will not be optimized away even in release builds. You will find tests like this at the end of many of the standard library’s modules:</p>
+<pre class="nimrod"><code>when isMainModule:
+  doAssert align(&quot;abc&quot;, 4) == &quot; abc&quot;
+  doAssert align(&quot;a&quot;, 0) == &quot;a&quot;
+  doAssert align(&quot;1232&quot;, 6) == &quot; 1232&quot;
+  doAssert align(&quot;1232&quot;, 6, '#') == &quot;##1232&quot;</code></pre>
+<p>For a bigger project the <a href="http://nim-lang.org/unittest.html">unittest module</a> comes in handy.</p>
+<p>We split up the tests into 3 files in the <code>tests/</code> directory:</p>
+<p><code>tests/interpret.nim</code> tests the interpreter. We define a new test suite, containing two testers, each checking the resulting strings:</p>
+<pre class="nimrod"><code>import unittest, brainfuck
+
+suite &quot;brainfuck interpreter&quot;:
+  test &quot;interpret helloworld&quot;:
+    let helloworld = readFile(&quot;examples/helloworld.b&quot;)
+    check interpret(helloworld, input = &quot;&quot;) == &quot;Hello World!\n&quot;
+
+  test &quot;interpret rot13&quot;:
+    let rot13 = readFile(&quot;examples/rot13.b&quot;)
+    let conv = interpret(rot13, &quot;How I Start\n&quot;)
+    check conv == &quot;Ubj V Fgneg\n&quot;
+    check interpret(rot13, conv) == &quot;How I Start\n&quot;</code></pre>
+<p>Similarly for <code>tests/compile.nim</code> to test our compiler:</p>
+<pre class="nimrod"><code>import unittest, brainfuck, streams
+
+suite &quot;brainfuck compiler&quot;:
+  test &quot;compile helloworld&quot;:
+    proc helloworld: string =
+      compileFile(&quot;../examples/helloworld.b&quot;, &quot;&quot;, result)
+    check helloworld() == &quot;Hello World!\n&quot;
+
+  test &quot;compile rot13&quot;:
+    proc rot13(input: string): string =
+      compileFile(&quot;../examples/rot13.b&quot;, input, result)
+    let conv = rot13(&quot;How I Start\n&quot;)
+    check conv == &quot;Ubj V Fgneg\n&quot;
+    check rot13(conv) == &quot;How I Start\n&quot;</code></pre>
+<p>Note how we have to read the examples from <code>../examples/</code> with the compiler, instead of <code>examples/</code> with the interpreter. The reason for this is that the compiler’s <code>staticRead</code> opens the files relative to the location of our file, which resides in <code>tests/</code>.</p>
+<p>To combine both tests we create a <code>tests/all.nim</code> that only imports and thereby automatically runs all available test suites:</p>
+<pre class="nimrod"><code>import interpret, compile</code></pre>
+<p>For convenience we also create a <code>tests/nim.cfg</code> that sets some reasonable compiler options for testing and debugging:</p>
+<pre class="cfg"><code># $projectPath is tests/
+path = &quot;$projectPath/../src&quot;
+hints = off
+linedir = on
+debuginfo
+stacktrace = on
+linetrace = on</code></pre>
+<p>Finally, to compile and run our tests:</p>
+<pre><code>$ nim c -r tests/all
+[OK] interpret helloworld
+[OK] interpret rot13
+[OK] compile helloworld
+[OK] compile rot13</code></pre>
+<p>Great success, our library works! With this we have a fully fledged library, binary and testing framework.</p>
+<p>Time to publish <a href="https://github.com/def-/nim-brainfuck">everything on Github</a> and submit a pull request to have <code>brainfuck</code> included in the <a href="https://github.com/nim-lang/packages">nimble packages</a>. Once the package is accepted you can find it in the <a href="http://nim-lang.org/lib.html#nimble">official list</a> and use nimble to search for it and install it:</p>
+<pre><code>$ nimble search brainfuck
+brainfuck:
+  url:         https://github.com/def-/nim-brainfuck.git (git)
+  tags:        library, binary, app, interpreter, compiler, language
+  description: A brainfuck interpreter and compiler
+  license:     MIT
+  website:     https://github.com/def-/nim-brainfuck
+$ nimble install brainfuck</code></pre>
+<h2 id="continuous-integration">Continuous Integration</h2>
+<p><a href="https://circleci.com/">CircleCI</a> can be used with Nim for continuous integration, so that our tests are compiled and run whenever a new commit is pushed to Github. Since CircleCI does not know about Nim itself, we have to teach it how to bootstrap the compiler:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">dependencies:
+  pre:
+<span class="bn">    - |</span>
+<span class="bn">        if [ ! -x ~/nim/bin/nim ]; then</span>
+<span class="bn">          git clone -b devel --depth 1 git://github.com/araq/nim ~/nim/</span>
+<span class="bn">          git clone -b devel --depth 1 git://github.com/nim-lang/csources ~/nim/csources/</span>
+<span class="bn">          cd ~/nim/csources; sh build.sh; cd ..; rm -rf csources</span>
+<span class="bn">          bin/nim c koch; ./koch boot -d:release</span>
+<span class="bn">          ln -fs ~/nim/bin/nim ~/bin/nim</span>
+<span class="bn">        else</span>
+<span class="bn">          cd ~/nim; git fetch origin</span>
+<span class="bn">          git merge FETCH_HEAD | grep &quot;Already up-to-date&quot; || (bin/nim c koch; ./koch boot -d:release)</span>
+<span class="bn">        fi</span>
+
+  cache_directories:
+<span class="bn">    - &quot;~/bin/&quot;</span>
+<span class="bn">    - &quot;~/nim/&quot;</span></code></pre></div>
+<p>This automatically keeps the compiler up to date. If you want to use the most recently released version of Nim instead of the development build, use the <code>master</code> branch instead of <code>devel</code> in the two <code>git clone</code> calls. Running the tests is straightfoward now:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">test:
+  override:
+<span class="bn">    - nim c -r tests/all</span></code></pre></div>
+<p>If your project just needs to compile and run <code>tests/all</code>, then you can drop in <a href="https://github.com/def-/nim-brainfuck/blob/master/circle.yml">this circle.yml</a> directly. Otherwise, the <code>test:</code> section is the only part you will need to change.</p>
+<p>The build status badge <a href="https://circleci.com/gh/def-/nim-brainfuck"><img src="https://circleci.com/gh/def-/nim-brainfuck.png" alt="Build Status" /></a> can be added to the <code>readme.md</code> like this:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span class="fu"># Brainfuck for Nim [![Build Status](https://circleci.com/gh/def-/nim-brainfuck.png)](https://circleci.com/gh/def-/nim-brainfuck)</span></code></pre></div>
+<p>See the <a href="https://github.com/def-/nim-brainfuck">Github page</a> again for the final result and the <a href="https://circleci.com/gh/def-/nim-brainfuck">CircleCI page</a> for the <a href="https://circleci.com/gh/def-/nim-brainfuck/27">actual builds</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is the end of our tour through the Nim ecosystem, I hope you enjoyed it and found it as interesting as it was for me to write it.</p>
+<p>If you still want to learn more about Nim, I have recently written about <a href="http://hookrace.net/blog/what-is-special-about-nim/">what is special about Nim</a> and <a href="http://hookrace.net/blog/what-makes-nim-practical/">what makes Nim practical</a>, and have an <a href="https://github.com/def-/nim-unsorted">extensive collection of small programs</a>.</p>
+<p>If you’re interested in a more traditional start into Nim, the <a href="http://nim-lang.org/tut1.html">official tutorial</a> and <a href="https://nim-by-example.github.io/">Nim by Example</a> can guide you.</p>
+<p>The <a href="http://nim-lang.org/community.html">Nim community</a> is very welcoming and helpful. Thanks to everyone who had suggestions and found bugs in this document, especially Flaviu Tamas, Andreas Rumpf and Dominik Picheta.</p>
+<link href="../../../css/github.css" rel="stylesheet">
+<script src="../../../js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr />
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-6 col-lg-6">
+    <div class="col-lg-5 col-lg-offset-5">
+      <img class="img-responsive" src="../../../posts/nim/1/images/headshot.png" alt>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-lg-6">
+    <h3>Dennis Felsing</h3>
+    <h4>Nim</h4>
+    <h3><small> Active Nim contributor and Master's candidate at KIT</small></h3>
+    <p><a href="http://felsin9.de/nnis/">Dennis</a> is an active contributor to the <a href="http://nim-lang.org">Nim</a> language while working on his Master's thesis at KIT. There he worked on research developing a new method for <a href="http://felsin9.de/nnis/teaching-research/#automating-regression-verification">Regression Verification</a> and teaching programming paradigms (Haskell, lambda calculus, type inference, Prolog, Scala, etc.). He also develops and runs <a href="http://ddnet.tw">DDNet</a>, a unique cooperative 2D game.</p>
+    <a class="btn btn-primary" href="../../../posts/nim/1/index.html">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+</div>
+
+      </div>
+
+      <footer>
+        <hr />
+        <div class="row">
+          <div class="col-md-4 col-md-offset-8">
+            <p class="text-right">
+              <small>Except where otherwise noted.</small>
+              <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" title="Creative Commons License Details">
+                <img src="../../../images/cc.png" alt="Creative Commons Attribution Non-Commercial No Derivative License" />
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../../../js/jquery-1.10.2.js"></script>
+    <script src="../../../js/bootstrap.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>How I Start.</title>
+
+    <link href="../../../posts.rss" rel="alternate" type="application/rss+xml" title="How I Start." />
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/readable.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS for the 'Thumbnail Gallery' Template -->
+    <link href="../../../css/1-col-portfolio.css" rel="stylesheet" />
+    <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+      margin: 0; padding: 0; vertical-align: baseline; border: none; }
+      table.sourceCode { width: 100%; line-height: 100%; }
+      td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+      td.sourceCode { padding-left: 5px; }
+      code > span.kw { color: #007020; font-weight: bold; }
+      code > span.dt { color: #902000; }
+      code > span.dv { color: #40a070; }
+      code > span.bn { color: #40a070; }
+      code > span.fl { color: #40a070; }
+      code > span.ch { color: #4070a0; }
+      code > span.st { color: #4070a0; }
+      code > span.co { color: #60a0b0; font-style: italic; }
+      code > span.ot { color: #007020; }
+      code > span.al { color: #ff0000; font-weight: bold; }
+      code > span.fu { color: #06287e; }
+      code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-top navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" href="../../../">How I Start.</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="category"><a href="../../../posts/clojure">clojure</a></li><li class="category"><a href="../../../posts/cpp">cpp</a></li><li class="category"><a href="../../../posts/elixir">elixir</a></li><li class="category"><a href="../../../posts/erlang">erlang</a></li><li class="category"><a href="../../../posts/go">go</a></li><li class="category"><a href="../../../posts/haskell">haskell</a></li><li class="category"><a href="../../../posts/nim">nim</a></li><li class="category"><a href="../../../posts/ruby">ruby</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="../../../about.html">About</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
+
+    <div class="container">
+      <div id="content">
+        <div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Elixir <small>with José Valim</small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <h1 id="portal">Portal</h1>
+<p><a href="http://en.wikipedia.org/wiki/Portal_(video_game)">Portal is a game</a> that consists of a series of puzzles that must be solved by teleporting the player’s character and simple objects from one place to another.</p>
+<p>In order to teleport, the player uses the Portal gun to shoot doors onto flat planes, like a floor or a wall. Entering one of those doors teleports you to the other:</p>
+<div class="figure">
+<img src="../../../posts/elixir/1/images/portal-drop.jpeg" />
+
+</div>
+<p>In this guide we will use the <a href="http://elixir-lang.org/getting-started/introduction.html">Elixir programming language</a> to build portals by shooting doors of different colors and transferring data between them! We will even learn how we can distribute doors across different machines in our network:</p>
+<div class="figure">
+<img src="../../../posts/elixir/1/images/portal-list.jpeg" />
+
+</div>
+<p>Here is what we will learn:</p>
+<ul>
+<li>Elixir’s interactive shell</li>
+<li>Creating new Elixir projects</li>
+<li>Pattern matching</li>
+<li>Using agents for state</li>
+<li>Using structs for custom data structures</li>
+<li>Extending the language with protocols</li>
+<li>Supervision trees and applications</li>
+<li>Distributed Elixir nodes</li>
+</ul>
+<p>Let’s get started!</p>
+<h2 id="installation">Installation</h2>
+<p>Elixir’s website explains how to get Elixir up and running. Just <a href="http://elixir-lang.org/install.html">follow the steps described in the Installing Elixir page</a>.</p>
+<p>Elixir developers spend a lot of time in their Operating System terminals; once installation is complete, you will have some new executables available. One of them is <code>iex</code>. Just type <code>iex</code> in your terminal (or <code>iex.bat</code> if you are on Windows) to get it up and running:</p>
+<pre><code>$ iex
+Interactive Elixir - press Ctrl+C to exit (type h() ENTER for help)</code></pre>
+<p><code>iex</code> stands for Interactive Elixir. In <code>iex</code> you can type any expression and you will get a result back:</p>
+<pre class="iex"><code>iex&gt; 40 + 2
+42
+iex&gt; &quot;hello&quot; &lt;&gt; &quot; world&quot;
+&quot;hello world&quot;
+iex&gt; # This is a code comment
+nil</code></pre>
+<p>Besides numbers and strings above, we also frequently use the following data types:</p>
+<pre class="iex"><code>iex&gt; :atom           # An identifier (known as Symbols in other languages)
+:atom
+iex&gt; [1, 2, &quot;three&quot;] # Lists (typically hold a dynamic amount of items)
+[1, 2, &quot;three&quot;]
+iex&gt; {:ok, &quot;value&quot;}  # Tuples (typically hold a fixed amount of items)
+{:ok, &quot;value&quot;}</code></pre>
+<p>Once we finish our portal application, we expect to be able to type the following code inside <code>iex</code>:</p>
+<pre class="iex"><code># Shoot two doors: one orange, another blue
+iex(1)&gt; Portal.shoot(:orange)
+{:ok, #PID&lt;0.72.0&gt;}
+iex(2)&gt; Portal.shoot(:blue)
+{:ok, #PID&lt;0.74.0&gt;}
+
+# Start transferring the list [1, 2, 3, 4] from orange to blue
+iex(3)&gt; portal = Portal.transfer(:orange, :blue, [1, 2, 3, 4])
+#Portal&lt;
+       :orange &lt;=&gt; :blue
+  [1, 2, 3, 4] &lt;=&gt; []
+&gt;
+
+# Now every time we call push_right, data goes to blue
+iex(4)&gt; Portal.push_right(portal)
+#Portal&lt;
+    :orange &lt;=&gt; :blue
+  [1, 2, 3] &lt;=&gt; [4]
+&gt;</code></pre>
+<p>It looks sweet, doesn’t it?</p>
+<h2 id="our-first-project">Our first project</h2>
+<p>Elixir ships with a tool called Mix. Mix is what Elixir developers use to create, compile and test new projects. Let’s create a project named <code>portal</code> with <code>mix</code>. When creating the project, we will also pass the <code>--sup</code> option that will create a supervision tree. We will explore what the supervision tree does in later sections. For now, just type:</p>
+<pre><code>$ mix new portal --sup</code></pre>
+<p>The command above created a new directory named <code>portal</code> with some files in it. Change your working directory into <code>portal</code> and run <code>mix test</code> to run the project tests:</p>
+<pre><code>$ cd portal
+$ mix test</code></pre>
+<p>Excellent, we already have a working project with a test suite set up.</p>
+<p>Let’s explore the generated project using a text editor. I personally don’t pay much attention to text editors, I mostly use a stock <a href="http://www.sublimetext.com/3">Sublime Text 3</a> but you can find <a href="http://elixir-lang.org">Elixir support for different text editors on the website</a> under the “Code Editor Support” section.</p>
+<p>With your editor open, explore the following directories:</p>
+<ul>
+<li><code>_build</code> - where Mix stores compilation artifacts</li>
+<li><code>config</code> - where we configure our project and its dependencies</li>
+<li><code>lib</code> - where we put our code</li>
+<li><code>mix.exs</code> - where we define our project name, version and dependencies</li>
+<li><code>test</code> - where we define our tests</li>
+</ul>
+<p>We can now start an <code>iex</code> session inside our project too. Just run:</p>
+<pre><code>$ iex -S mix</code></pre>
+<h2 id="pattern-matching">Pattern matching</h2>
+<p>Before we implement our application, we need to talk about pattern matching. The <code>=</code> operator in Elixir is a bit different from the ones we see in other languages:</p>
+<pre class="iex"><code>iex&gt; x = 1
+1
+iex&gt; x
+1</code></pre>
+<p>So far so good, what happens if we invert the operands?</p>
+<pre class="iex"><code>iex&gt; 1 = x
+1</code></pre>
+<p>It worked! That’s because Elixir tries to match the right side against the left side. Since both are set to <code>1</code>, it works. Let’s try something else:</p>
+<pre class="iex"><code>iex&gt; 2 = x
+** (MatchError) no match of right hand side value: 1</code></pre>
+<p>Now the sides did not match, so we got an error. We use pattern matching in Elixir to match data structures too. For example, we can use <code>[head|tail]</code> to extract the head (the first element) and tail (the remaining ones) from a list:</p>
+<pre class="iex"><code>iex&gt; [head|tail] = [1, 2, 3]
+[1, 2, 3]
+iex&gt; head
+1
+iex&gt; tail
+[2, 3]</code></pre>
+<p>Matching an empty list against <code>[head|tail]</code> causes a match error:</p>
+<pre class="iex"><code>iex&gt; [head|tail] = []
+** (MatchError) no match of right hand side value: []</code></pre>
+<p>Finally, we can also use the <code>[head|tail]</code> expression to add elements to the head of a list:</p>
+<pre class="iex"><code>iex&gt; list = [1, 2, 3]
+[1, 2, 3]
+iex&gt; [0|list]
+[0, 1, 2, 3]</code></pre>
+<h2 id="modeling-portal-doors-with-agents">Modeling portal doors with Agents</h2>
+<p>Elixir data structures are immutable. In the examples above, we never mutated the list. We can break a list apart or add new elements to the head, but the original list is never modified.</p>
+<p>That said, when we need to keep some sort of state, like the data transfering through a portal, we must use an abstraction that stores this state for us. One such abstraction in Elixir is called an agent. Before we use agents, we need to briefly talk about anonymous functions:</p>
+<pre class="iex"><code>iex&gt; adder = fn a, b -&gt; a + b end
+#Function&lt;12.90072148/2 in :erl_eval.expr/5&gt;
+iex&gt; adder.(1, 2)
+3</code></pre>
+<p>An anonymous function is delimited by the words <code>fn</code> and <code>end</code> and an arrow <code>-&gt;</code> is used to separate the arguments from the anonymous function body. We use anonymous functions to initialize, get and update the agent state:</p>
+<pre class="iex"><code>iex&gt; {:ok, agent} = Agent.start_link(fn -&gt; [] end)
+{:ok, #PID&lt;0.61.0&gt;}
+iex&gt; Agent.get(agent, fn list -&gt; list end)
+[]
+iex&gt; Agent.update(agent, fn list -&gt; [0|list] end)
+:ok
+iex&gt; Agent.get(agent, fn list -&gt; list end)
+[0]</code></pre>
+<blockquote>
+<p>Note: you will likely get different <code>#PID&lt;...&gt;</code> values than the ones we show throughout the tutorial. Don’t worry, this is expected!</p>
+</blockquote>
+<p>In the example above, we created a new agent, passing a function that returns the initial state of an empty list. The agent returns <code>{:ok, #PID&lt;0.61.0&gt;}</code>.</p>
+<p>Curly brackets in Elixir specify a tuple; the tuple above contains the atom <code>:ok</code> and a process identifier (PID). We use atoms in Elixir as tags. In the example above, we are tagging the agent as successfully started.</p>
+<p>The <code>#PID&lt;...&gt;</code> is a process identifier for the agent. When we say processes in Elixir, we don’t mean Operating System processes, but rather Elixir Processes, which are lightweight and isolated, allowing us to run hundreds of thousands of them on the same machine.</p>
+<p>We store the agent’s PID in the <code>agent</code> variable, which allows us to send messages to get and update the agent’s state.</p>
+<p>We will use agents to implement our portal doors. Create a new file named <code>lib/portal/door.ex</code> with the following contents:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defmodule</span> <span class="dt">Portal</span>.<span class="dt">Door</span> <span class="kw">do</span>
+  <span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">  Starts a door with the given `color`.</span>
+
+<span class="co">  The color is given as a name so we can identify</span>
+<span class="co">  the door by color name instead of using a PID.</span>
+<span class="co">  </span><span class="ot">&quot;&quot;&quot;</span>
+  <span class="kw">def</span> start_link(color) <span class="kw">do</span>
+    <span class="dt">Agent</span>.start_link(<span class="kw">fn</span> -&gt; [] <span class="kw">end</span>, <span class="st">name:</span> color)
+  <span class="kw">end</span>
+
+  <span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">  Get the data currently in the `door`.</span>
+<span class="co">  </span><span class="ot">&quot;&quot;&quot;</span>
+  <span class="kw">def</span> get(door) <span class="kw">do</span>
+    <span class="dt">Agent</span>.get(door, <span class="kw">fn</span> list -&gt; list <span class="kw">end</span>)
+  <span class="kw">end</span>
+
+  <span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">  Pushes `value` into the door.</span>
+<span class="co">  </span><span class="ot">&quot;&quot;&quot;</span>
+  <span class="kw">def</span> push(door, value) <span class="kw">do</span>
+    <span class="dt">Agent</span>.update(door, <span class="kw">fn</span> list -&gt; [value|list] <span class="kw">end</span>)
+  <span class="kw">end</span>
+
+  <span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">  Pops a value from the `door`.</span>
+
+<span class="co">  Returns `{:ok, value}` if there is a value</span>
+<span class="co">  or `:error` if the hole is currently empty.</span>
+<span class="co">  </span><span class="ot">&quot;&quot;&quot;</span>
+  <span class="kw">def</span> pop(door) <span class="kw">do</span>
+    <span class="dt">Agent</span>.get_and_update(door, <span class="kw">fn</span>
+      []    -&gt; {<span class="st">:error</span>, []}
+      [h|t] -&gt; {{<span class="st">:ok</span>, h}, t}
+    <span class="kw">end</span>)
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<p>In Elixir we define code inside modules, which are basically a group of functions. We have defined four functions above, all properly documented.</p>
+<p>Let’s give our implementation a try. Start a new shell with <code>iex -S mix</code>. When starting the shell, our new file will be automatically compiled, so we can use it directly:</p>
+<pre class="iex"><code>iex&gt; Portal.Door.start_link(:pink)
+{:ok, #PID&lt;0.68.0&gt;}
+iex&gt; Portal.Door.get(:pink)
+[]
+iex&gt; Portal.Door.push(:pink, 1)
+:ok
+iex&gt; Portal.Door.get(:pink)
+[1]
+iex&gt; Portal.Door.pop(:pink)
+{:ok, 1}
+iex&gt; Portal.Door.get(:pink)
+[]
+iex&gt; Portal.Door.pop(:pink)
+:error</code></pre>
+<p>Excellent!</p>
+<p>One interesting aspect of Elixir is that documentation is treated as a first-class citizen. Since we have documented our <code>Portal.Door</code> code, we can now easily access its documentation from the terminal. Try it out:</p>
+<pre class="iex"><code>iex&gt; h Portal.Door.start_link</code></pre>
+<h2 id="portal-transfers">Portal transfers</h2>
+<p>Our portal doors are ready so it is time to start working on portal transfers! In order to store the portal data, we are going to create a struct named <code>Portal</code>. Let’s give structs a try in IEx before moving forward:</p>
+<pre class="iex"><code>iex&gt; defmodule User do
+...&gt;   defstruct [:name, :age]
+...&gt; end
+iex&gt; user = %User{name: &quot;john doe&quot;, age: 27}
+%User{name: &quot;john doe&quot;, age: 27}
+iex&gt; user.name
+&quot;john doe&quot;
+iex&gt; %User{age: age} = user
+%User{name: &quot;john doe&quot;, age: 27}
+iex&gt; age
+27</code></pre>
+<p>A struct is defined inside a module and takes the same name as the module. After the struct is defined, we can use the <code>%User{...}</code> syntax to define new structs or match on them.</p>
+<p>Let’s open up <code>lib/portal.ex</code> and add some code to the <code>Portal</code> module. Note the current <code>Portal</code> module already has a function named <code>start/2</code>. Do not remove this function, we will talk about it in the next sections, for now just add the new contents below inside the <code>Portal</code> module:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defstruct</span> [<span class="st">:left</span>, <span class="st">:right</span>]
+
+<span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">Starts transfering `data` from `left` to `right`.</span>
+<span class="ot">&quot;&quot;&quot;</span>
+<span class="kw">def</span> transfer(left, right, data) <span class="kw">do</span>
+  <span class="co"># First add all data to the portal on the left</span>
+  <span class="kw">for</span> item &lt;- data <span class="kw">do</span>
+    <span class="dt">Portal</span>.<span class="dt">Door</span>.push(left, item)
+  <span class="kw">end</span>
+
+  <span class="co"># Returns a portal struct we will use next</span>
+  %<span class="dt">Portal</span>{<span class="st">left:</span> left, <span class="st">right:</span> right}
+<span class="kw">end</span>
+
+<span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">Pushes data to the right in the given `portal`.</span>
+<span class="ot">&quot;&quot;&quot;</span>
+<span class="kw">def</span> push_right(portal) <span class="kw">do</span>
+  <span class="co"># See if we can pop data from left. If so, push the</span>
+  <span class="co"># popped data to the right. Otherwise, do nothing.</span>
+  <span class="kw">case</span> <span class="dt">Portal</span>.<span class="dt">Door</span>.pop(portal.left) <span class="kw">do</span>
+    <span class="st">:error</span>   -&gt; <span class="st">:ok</span>
+    {<span class="st">:ok</span>, h} -&gt; <span class="dt">Portal</span>.<span class="dt">Door</span>.push(portal.right, h)
+  <span class="kw">end</span>
+
+  <span class="co"># Let's return the portal itself</span>
+  portal
+<span class="kw">end</span></code></pre></div>
+<p>We have defined our <code>Portal</code> struct and a <code>Portal.transfer/3</code> function (the <code>/3</code> indicates the function expects three arguments). Let’s give this transfer a try. Start another shell with <code>iex -S mix</code> so our changes are compiled and type:</p>
+<pre class="iex"><code># Start doors
+iex&gt; Portal.Door.start_link(:orange)
+{:ok, #PID&lt;0.59.0&gt;}
+iex&gt; Portal.Door.start_link(:blue)
+{:ok, #PID&lt;0.61.0&gt;}
+
+# Start transfer
+iex&gt; portal = Portal.transfer(:orange, :blue, [1, 2, 3])
+%Portal{left: :orange, right: :blue}
+
+# Check there is data on the orange/left door
+iex&gt; Portal.Door.get(:orange)
+[3, 2, 1]
+
+# Push right once
+iex&gt; Portal.push_right(portal)
+%Portal{left: :orange, right: :blue}
+
+# See changes
+iex&gt; Portal.Door.get(:orange)
+[2, 1]
+iex&gt; Portal.Door.get(:blue)
+[3]</code></pre>
+<p>Our portal transfer seems to work as expected. Note that the data is in reverse order in the left/orange door in the example above. That is expected because we want the end of the list (in this case the number 3) to be the first data pushed into the right/blue door.</p>
+<p>One difference in the snippet above, compared to the one we saw at the beginning of this tutorial, is that our portal is currently being printed as a struct: <code>%Portal{left: :orange, right: :blue}</code>. It would be nice if we actually had a printed representation of the portal transfer, allowing us to see the portal process as we push data.</p>
+<p>That’s what we will do next.</p>
+<h2 id="inspecting-portals-with-protocols">Inspecting portals with Protocols</h2>
+<p>We already know that data can be printed in <code>iex</code>. After all, when we type <code>1 + 2</code> in <code>iex</code>, we do get <code>3</code> back. However, can we customize how our own types are printed?</p>
+<p>Yes, we can! Elixir provides protocols, which allows behaviour to be extended and implemented for any data type, like our <code>Portal</code> struct, at any time.</p>
+<p>For example, every time something is printed in our <code>iex</code> terminal, Elixir uses the <code>Inspect</code> protocol. Since protocols can be extended at any time, by any data type, it means we can implement it for <code>Portal</code> too. Open up <code>lib/portal.ex</code> and, at the end of the file, outside the <code>Portal</code> module, add the following:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defimpl</span> <span class="dt">Inspect</span>, <span class="kw">for</span>: <span class="dt">Portal</span> <span class="kw">do</span>
+  <span class="kw">def</span> inspect(%<span class="dt">Portal</span>{<span class="st">left:</span> left, <span class="st">right:</span> right}, _) <span class="kw">do</span>
+    left_door  = inspect(left)
+    right_door = inspect(right)
+
+    left_data  = inspect(<span class="dt">Enum</span>.reverse(<span class="dt">Portal</span>.<span class="dt">Door</span>.get(left)))
+    right_data = inspect(<span class="dt">Portal</span>.<span class="dt">Door</span>.get(right))
+
+    max = max(<span class="dt">String</span>.length(left_door), <span class="dt">String</span>.length(left_data))
+
+    <span class="st">&quot;&quot;&quot;</span>
+<span class="st">    #Portal&lt;</span>
+<span class="st">      #{String.rjust(left_door, max)} &lt;=&gt; #{right_door}</span>
+<span class="st">      #{String.rjust(left_data, max)} &lt;=&gt; #{right_data}</span>
+<span class="st">    &gt;</span>
+<span class="st">    &quot;&quot;&quot;</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<p>In the snippet above, we have implemented the <code>Inspect</code> protocol for the <code>Portal</code> struct. The protocol expects just one function named <code>inspect</code> to be implemented. The function expects two arguments, the first is the <code>Portal</code> struct itself and the second is a set of options, which we don’t care about for now.</p>
+<p>Then we call <code>inspect</code> multiple times, to get a text representation of both <code>left</code> and <code>right</code> doors, as well as to get a representation of the data inside the doors. Finally, we return a string containing the portal presentation properly aligned.</p>
+<p>Start another <code>iex</code> session with <code>iex -S mix</code> to see our new representation being used:</p>
+<pre class="iex"><code>iex&gt; Portal.Door.start_link(:orange)
+{:ok, #PID&lt;0.59.0&gt;}
+iex&gt; Portal.Door.start_link(:blue)
+{:ok, #PID&lt;0.61.0&gt;}
+iex&gt; portal = Portal.transfer(:orange, :blue, [1, 2, 3])
+#Portal&lt;
+    :orange &lt;=&gt; :blue
+  [1, 2, 3] &lt;=&gt; []
+&gt;</code></pre>
+<h2 id="shooting-supervised-doors">Shooting supervised doors</h2>
+<p>We often hear that the Erlang VM, the virtual machine Elixir runs on, alongside the Erlang ecosystem are great for building fault-tolerant applications. One of the reasons for such are the so-called supervision trees.</p>
+<p>Our code so far is not supervised. Let’s see what happens when we explicitly shutdown one of the door agents:</p>
+<pre class="iex"><code># Start doors and transfer
+iex&gt; Portal.Door.start_link(:orange)
+{:ok, #PID&lt;0.59.0&gt;}
+iex&gt; Portal.Door.start_link(:blue)
+{:ok, #PID&lt;0.61.0&gt;}
+iex&gt; portal = Portal.transfer(:orange, :blue, [1, 2, 3])
+
+# First unlink the door from the shell to avoid the shell from crashing
+iex&gt; Process.unlink(Process.whereis(:blue))
+true
+# Send a shutdown exit signal to the blue agent
+iex&gt; Process.exit(Process.whereis(:blue), :shutdown)
+true
+
+# Try to move data
+iex&gt; Portal.push_right(portal)
+** (exit) exited in: :gen_server.call(:blue, ..., 5000)
+    ** (EXIT) no process
+    (stdlib) gen_server.erl:190: :gen_server.call/3
+    (portal) lib/portal.ex:25: Portal.push_right/1</code></pre>
+<p>We got an exit error because there is no <code>:blue</code> door. You can see there is an <code>** (EXIT) no process</code> message following our function call. To fix the situation we are going to setup a supervisor that will be responsible for restarting a portal door whenever it crashes.</p>
+<p>Remember when we passed the <code>--sup</code> flag when creating our <code>portal</code> project? We passed that flag because supervisors typically run inside supervision trees and supervision trees are usually started as part of application. All the <code>--sup</code> flag does is to create a supervised structure by default which we can see in our <code>Portal</code> module:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defmodule</span> <span class="dt">Portal</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="dt">Application</span>
+
+  <span class="co"># See http://elixir-lang.org/docs/stable/elixir/Application.html</span>
+  <span class="co"># for more information on OTP Applications</span>
+  <span class="kw">def</span> start(_type, _args) <span class="kw">do</span>
+    <span class="kw">import</span> <span class="dt">Supervisor</span>.<span class="dt">Spec</span>, <span class="st">warn:</span> <span class="dv">false</span>
+
+    children = [
+      <span class="co"># Define workers and child supervisors to be supervised</span>
+      <span class="co"># worker(Portal.Worker, [arg1, arg2, arg3])</span>
+    ]
+
+    <span class="co"># See http://elixir-lang.org/docs/stable/elixir/Supervisor.html</span>
+    <span class="co"># for other strategies and supported options</span>
+    opts = [<span class="st">strategy:</span> <span class="st">:one_for_one</span>, <span class="st">name:</span> <span class="dt">Portal</span>.<span class="dt">Supervisor</span>]
+    <span class="dt">Supervisor</span>.start_link(children, opts)
+  <span class="kw">end</span>
+
+  <span class="co"># ... functions we have added ...</span>
+<span class="kw">end</span></code></pre></div>
+<p>The code above makes the <code>Portal</code> module an application callback. The application callback must provide a function named <code>start/2</code>, which we see above, and this function must start a supervisor representing the root of our supervision tree. Currently our supervisor has no children and that is exactly what we will change next.</p>
+<p>Replace the <code>start/2</code> function above by:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">def</span> start(_type, _args) <span class="kw">do</span>
+  <span class="kw">import</span> <span class="dt">Supervisor</span>.<span class="dt">Spec</span>, <span class="st">warn:</span> <span class="dv">false</span>
+
+  children = [
+    worker(<span class="dt">Portal</span>.<span class="dt">Door</span>, [])
+  ]
+
+  opts = [<span class="st">strategy:</span> <span class="st">:simple_one_for_one</span>, <span class="st">name:</span> <span class="dt">Portal</span>.<span class="dt">Supervisor</span>]
+  <span class="dt">Supervisor</span>.start_link(children, opts)
+<span class="kw">end</span></code></pre></div>
+<p>We have done two changes:</p>
+<ul>
+<li><p>We have added a child specification to the supervisor, of type <code>worker</code>, and the child is represented by the module <code>Portal.Door</code>. We pass no arguments to the worker, just an empty list <code>[]</code>, as the door color will be specified later on.</p></li>
+<li><p>We have changed the strategy from <code>:one_for_one</code> to <code>:simple_one_for_one</code>. Supervisors provide different strategies and <code>:simple_one_for_one</code> is useful when we want to dynamically create children, often with different arguments. This is exactly the case for our portal doors, where we want to spawn multiple doors with different colors.</p></li>
+</ul>
+<p>The last step is to add a function named <code>shoot/1</code> to the <code>Portal</code> module that receives a color and spawns a new door as part of the supervision tree:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="ot">@doc &quot;&quot;&quot;</span>
+<span class="co">Shoots a new door with the given `color`.</span>
+<span class="ot">&quot;&quot;&quot;</span>
+<span class="kw">def</span> shoot(color) <span class="kw">do</span>
+  <span class="dt">Supervisor</span>.start_child(<span class="dt">Portal</span>.<span class="dt">Supervisor</span>, [color])
+<span class="kw">end</span></code></pre></div>
+<p>The function above reaches the supervisor named <code>Portal.Supervisor</code> and asks for a new child to be started. <code>Portal.Supervisor</code> is the name of the supervisor we have defined in <code>start/2</code> and the child is going to be a <code>Portal.Door</code> which was specified as a worker of that supervisor.</p>
+<p>Internally, to start the child, the supervisor will invoke <code>Portal.Door.start_link(color)</code>, where color is the value passed on the <code>start_child/2</code> call above. If we had invoked <code>Supervisor.start_child(Portal.Supervisor, [foo, bar, baz])</code>, the supervisor would have attempted to start a child with <code>Portal.Door.start_link(foo, bar, baz)</code>.</p>
+<p>Let’s give our shooting function a try. Start a new <code>iex -S mix</code> session and:</p>
+<pre class="iex"><code>iex&gt; Portal.shoot(:orange)
+{:ok, #PID&lt;0.72.0&gt;}
+iex&gt; Portal.shoot(:blue)
+{:ok, #PID&lt;0.74.0&gt;}
+iex&gt; portal = Portal.transfer(:orange, :blue, [1, 2, 3, 4])
+#Portal&lt;
+       :orange &lt;=&gt; :blue
+  [1, 2, 3, 4] &lt;=&gt; []
+&gt;
+
+iex&gt; Portal.push_right(portal)
+#Portal&lt;
+    :orange &lt;=&gt; :blue
+  [1, 2, 3] &lt;=&gt; [4]
+&gt;</code></pre>
+<p>And what happens if we stop the <code>:blue</code> process now?</p>
+<pre class="iex"><code>iex&gt; Process.unlink(Process.whereis(:blue))
+true
+iex&gt; Process.exit(Process.whereis(:blue), :shutdown)
+true
+iex&gt; Portal.push_right(portal)
+#Portal&lt;
+  :orange &lt;=&gt; :blue
+   [1, 2] &lt;=&gt; [3]
+&gt;</code></pre>
+<p>Notice this time the following <code>push_right/1</code> operation worked because the supervisor automatically started another <code>:blue</code> portal. Unfortunately the data that was in the blue door before the crash was lost but our system did recover from the crash.</p>
+<p>In practice there are different supervision strategies to choose from as well as mechanisms to persist data in case something goes wrong, allowing you to choose the best option for your applications.</p>
+<p>Outstanding!</p>
+<h2 id="distributed-transfers">Distributed transfers</h2>
+<p>With our portals working, we are ready to give distributed transfers a try. This can be extra awesome if you launch the code on two different machines on the same network. However, if you don’t have another machine handy, it will work just fine.</p>
+<p>We can start an <code>iex</code> session as node inside of a network by passing the <code>--sname</code> option. Let’s give it a try:</p>
+<pre><code>$ iex --sname room1 --cookie secret -S mix
+Interactive Elixir - press Ctrl+C to exit (type h() ENTER for help)
+iex(room1@jv)1&gt;</code></pre>
+<p>You can see this <code>iex</code> terminal is different from the previous ones. Now, we can see <code>room1@jv</code> in the prompt. <code>room1</code> is the name we gave to the node and <code>jv</code> is the network name of the computer the node is started. In my case, my machine is named <code>jv</code>, but you will get a different result. From now on, we will use <code>room1@COMPUTER-NAME</code> and <code>room2@COMPUTER-NAME</code> and you must replace <code>COMPUTER-NAME</code> by your respective computer names.</p>
+<p>In the <code>iex</code> session named <code>room1</code>, let’s shoot a <code>:blue</code> door:</p>
+<pre class="iex"><code>iex(room1@COMPUTER-NAME)&gt; Portal.shoot(:blue)
+{:ok, #PID&lt;0.65.0&gt;}</code></pre>
+<p>Let’s start another <code>iex</code> session named <code>room2</code>:</p>
+<pre><code>$ iex --sname room2 --cookie secret -S mix</code></pre>
+<blockquote>
+<p>Note: the cookie has to be the same on both computers in order for the two Elixir nodes to be able to communicate with each other.</p>
+</blockquote>
+<p>The Agent API out of the box allows us to do cross-node requests. All we need to do is to pass the node name where the named agent we want to reach is running when invoking the <code>Portal.Door</code> functions. For example, let’s reach the blue door from <code>room2</code>:</p>
+<pre class="iex"><code>iex(room2@COMPUTER-NAME)&gt; Portal.Door.get({:blue, :&quot;room1@COMPUTER-NAME&quot;})
+[]</code></pre>
+<p>This means we can have distributed transfer by simply using node names. Still on <code>room2</code>, let’s try:</p>
+<pre class="iex"><code>iex(room2@COMPUTER-NAME)&gt; Portal.shoot(:orange)
+{:ok, #PID&lt;0.71.0&gt;}
+iex(room2@COMPUTER-NAME)&gt; orange = {:orange, :&quot;room2@COMPUTER-NAME&quot;}
+{:orange, :&quot;room2@COMPUTER-NAME&quot;}
+iex(room2@COMPUTER-NAME)&gt; blue = {:blue, :&quot;room1@COMPUTER-NAME&quot;}
+{:blue, :&quot;room1@COMPUTER-NAME&quot;}
+iex(room2@COMPUTER-NAME)&gt; portal = Portal.transfer(orange, blue, [1, 2, 3, 4])
+#Portal&lt;
+  {:orange, :room2@COMPUTER-NAME} &lt;=&gt; {:blue, :room1@COMPUTER-NAME}
+          [1, 2, 3, 4] &lt;=&gt; []
+&gt;
+iex(room2@COMPUTER-NAME)&gt; Portal.push_right(portal)
+#Portal&lt;
+  {:orange, :room2@COMPUTER-NAME} &lt;=&gt; {:blue, :room1@COMPUTER-NAME}
+             [1, 2, 3] &lt;=&gt; [4]
+&gt;
+</code></pre>
+<p>Awesome. We have distributed transfers working in our code base without changing a single line of code!</p>
+<p>Even though <code>room2</code> is coordinating the transfer, we can still observe the transfer from <code>room1</code>:</p>
+<pre class="iex"><code>iex(room1@COMPUTER-NAME)&gt; orange = {:orange, :&quot;room2@COMPUTER-NAME&quot;}
+{:orange, :&quot;room2@COMPUTER-NAME&quot;}
+iex(room1@COMPUTER-NAME)&gt; blue = {:blue, :&quot;room1@COMPUTER-NAME&quot;}
+{:blue, :&quot;room1@COMPUTER-NAME&quot;}
+iex(room1@COMPUTER-NAME)&gt; Portal.Door.get(orange)
+[3, 2, 1]
+iex(room1@COMPUTER-NAME)&gt; Portal.Door.get(blue)
+[4]</code></pre>
+<p>Our distributed portal transfer works because the doors are just processes and accessing/pushing the data through doors is done by sending messages to those processes via the Agent API. We say sending a message in Elixir is location transparent: we can send messages to any PID regardless if it is in the same node as the sender or in different nodes of the same network.</p>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>So we have reached the end of this guide on how to get started with Elixir! It was a fun ride and we quickly went from manually starting doors processes to shooting fault-tolerant doors for distributed portal transfers!</p>
+<p>We challenge you to continue learning and exploring more of Elixir by taking your portal application to the next level:</p>
+<ul>
+<li><p>Add a <code>Portal.push_left/1</code> function that transfers the data in the other direction. How can you avoid the code duplication existing between the <code>push_left/1</code> and <code>push_right/1</code> functions?</p></li>
+<li><p>Learn more about <a href="http://elixir-lang.org/docs/stable/ex_unit/ExUnit.html">ExUnit</a>, Elixir’s testing framework, and write tests for the functionality we have built so far. Remember we already have a default structure laid out in the <code>test</code> directory.</p></li>
+<li><p>Generate HTML documentation for your project with <a href="http://github.com/elixir-lang/ex_doc">ExDoc</a>.</p></li>
+<li><p>Push your project to an external source, like <a href="https://github.com">Github</a>, and publish a package using the <a href="https://hex.pm">Hex package manager</a>.</p></li>
+</ul>
+<p>We welcome you to explore our <a href="http://elixir-lang.org">website</a> and read our Getting Started guide or many of the available resources to learn more about Elixir and our vibrant community.</p>
+<p>Finally, huge thanks to <a href="http://twitter.com/augiedb">Augie De Blieck Jr.</a> for the drawings in this tutorial.</p>
+<p>See you around!</p>
+<link href="../../../css/github.css" rel="stylesheet">
+<script src="../../../js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    <hr />
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-6 col-lg-6">
+    <div class="col-lg-5 col-lg-offset-5">
+      <img class="img-responsive" src="../../../posts/elixir/1/images/headshot.png" alt>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-lg-6">
+    <h3>José Valim</h3>
+    <h4>Elixir</h4>
+    <h3><small> Creator of Elixir</small></h3>
+    <p><a href="https://twitter.com/josevalim">José Valim</a> is creator of <a href="http://elixir-lang.org">Elixir</a> and member of the <a href="http://rubyonrails.org">Rails Core Team</a>. He is also co-founder of <a href="http://plataformatec.com.br">Plataformatec</a>, a consultancy based in Brazil, and an active conference speaker.</p>
+    <a class="btn btn-primary" href="../../../posts/elixir/1/index.html">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+</div>
+
+      </div>
+
+      <footer>
+        <hr />
+        <div class="row">
+          <div class="col-md-4 col-md-offset-8">
+            <p class="text-right">
+              <small>Except where otherwise noted.</small>
+              <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" title="Creative Commons License Details">
+                <img src="../../../images/cc.png" alt="Creative Commons Attribution Non-Commercial No Derivative License" />
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../../../js/jquery-1.10.2.js"></script>
+    <script src="../../../js/bootstrap.js"></script>
+
+  </body>
+</html>
