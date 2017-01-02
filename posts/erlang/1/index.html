@@ -85,7 +85,7 @@
 <p>Once they’re all installed somewhere in your system, arm yourself with the text editor or IDE of your choice (mine is Vim, because I’m a terrible person) and get ready to write a few things.</p>
 <h2 id="my-environment">My Environment</h2>
 <div class="figure">
-<img src="../../../posts/erlang/1/images/1/env.png" />
+<img src="../../../posts/erlang/1/images/env.png" />
 
 </div>
 <p>Despite you being free to develop on whatever you want, I’m gonna go through whatever my setup is.</p>
@@ -103,7 +103,7 @@ au BufNewFile,BufRead *.erl,*.es,*.hrl,*.yaws,*.xrl setf erlang</code></pre>
 <p>To avoid the usual Hello World stuff, this tutorial will use a somewhat more fun application to get up and running from a basic Erlang app that can be run within a module, to a proper OTP library that can be included by other projects, to a release than can be self-executing and distributed to client’s computer, or on a server.</p>
 <p>Our project will be the replication of one of the most well-known software programs in popular history, used in life-critical situations: Homer Simpson’s console in the episode where he’s so fat he can work at home.</p>
 <div class="figure">
-<img src="../../../posts/erlang/1/images/1/homer-computer.gif" />
+<img src="../../../posts/erlang/1/images/homer-computer.gif" />
 
 </div>
 <p>From this episode we can infer the following about the software:</p>
@@ -369,7 +369,7 @@ Sound alertness horn? (Y/N)
 <p>That works. Using <code>-s &lt;module&gt;</code> runs the <code>start/0</code> function from that module, and using <code>-noshell</code> makes it so that the Erlang VM won’t fight with all the <code>io</code> calls I’m doing for user input ownership.</p>
 <p>Sadly, the implementation is kind of ugly and shouldn’t go in production.</p>
 <div class="figure">
-<img src="../../../posts/erlang/1/images/1/muumuu.gif" />
+<img src="../../../posts/erlang/1/images/muumuu.gif" />
 
 </div>
 <h2 id="making-it-a-library">Making it a library</h2>
@@ -464,7 +464,7 @@ Vent radioactive gas? (Y/N)
 <p>That’s kind of an ugly command to run the app, but the app is now something other people can use to pull it within their own systems.</p>
 <p>In order to run it ourselves and actually ship it to customers, we will need to build a release. In any other case, though, you may want to <a href="http://www.rebar3.org/v3.0/docs/publishing-packages">publish your library as a Hex package</a> with the help of the <a href="http://www.rebar3.org/v3.0/docs/using-available-plugins#hex-package-management">proper rebar3 plugin</a>.</p>
 <div class="figure">
-<img src="../../../posts/erlang/1/images/1/y-y-y.gif" />
+<img src="../../../posts/erlang/1/images/y-y-y.gif" />
 
 </div>
 <h2 id="releases">Releases</h2>
@@ -721,7 +721,7 @@ Check core temperature? (Y/N)
 All 1 tests passed.</code></pre>
 <p>After this, I check in the rebar lock files into version control, and I go do something else because I’m pretty much done. You can see all the <a href="https://github.com/ferd/howistart-erlang1-code">code here</a>.</p>
 <div class="figure">
-<img src="../../../posts/erlang/1/images/1/outdoors.gif" />
+<img src="../../../posts/erlang/1/images/outdoors.gif" />
 
 </div>
   </div>
