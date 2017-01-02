@@ -33,7 +33,7 @@ get ready to write a few things.
 
 ## My Environment
 
-![](/posts/erlang/1/images/1/env.png)
+![](/posts/erlang/1/images/env.png)
 
 Despite you being free to develop on whatever you want, I'm gonna go through
 whatever my setup is.
@@ -72,7 +72,7 @@ Our project will be the replication of one of the most well-known software
 programs in popular history, used in life-critical situations: Homer Simpson's
 console in the episode where he's so fat he can work at home.
 
-![](/posts/erlang/1/images/1/homer-computer.gif)
+![](/posts/erlang/1/images/homer-computer.gif)
 
 From this episode we can infer the following about the software:
 
@@ -398,7 +398,7 @@ and using `-noshell` makes it so that the Erlang VM won't fight with all the
 
 Sadly, the implementation is kind of ugly and shouldn't go in production.
 
-![](/posts/erlang/1/images/1/muumuu.gif)
+![](/posts/erlang/1/images/muumuu.gif)
 
 
 ## Making it a library
@@ -589,7 +589,7 @@ build a release. In any other case, though, you may want to [publish your
 library as a Hex package](http://www.rebar3.org/v3.0/docs/publishing-packages)
 with the help of the [proper rebar3 plugin](http://www.rebar3.org/v3.0/docs/using-available-plugins#hex-package-management).
 
-![](/posts/erlang/1/images/1/y-y-y.gif)
+![](/posts/erlang/1/images/y-y-y.gif)
 
 
 ## Releases
@@ -996,4 +996,4 @@ After this, I check in the rebar lock files into version control, and I go do
 something else because I'm pretty much done. You can see all the [code
 here](https://github.com/ferd/howistart-erlang1-code).
 
-![](/posts/erlang/1/images/1/outdoors.gif)
+![](/posts/erlang/1/images/outdoors.gif)
