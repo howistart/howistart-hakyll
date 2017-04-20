@@ -3540,7 +3540,7 @@ hello!</code></pre>
 }</code></pre></div>
 <p>Finally, we start the HTTP server on port 8080 and with the default ServeMux via <a href="http://golang.org/pkg/net/http/#ListenAndServe">http.ListenAndServe</a>. That’s a synchronous, or blocking, call, which will keep the program alive until interrupted. Compile and run just as before.</p>
 <pre><code>$ go build
-./hello</code></pre>
+$ ./hello</code></pre>
 <p>And in another terminal, or your browser, make an HTTP request.</p>
 <pre><code>$ curl http://localhost:8080
 hello!</code></pre>
@@ -3795,7 +3795,7 @@ $ ./hello</code></pre>
 <pre><code>$ ./hello
 2015/01/01 13:14:15 openWeatherMap: tokyo: 295.46
 2015/01/01 13:14:16 weatherUnderground: tokyo: 273.15</code></pre>
-<pre><code>$ curl http://localhost/weather/tokyo
+<pre><code>$ curl http://localhost:8080/weather/tokyo
 {&quot;city&quot;:&quot;tokyo&quot;,&quot;temp&quot;:284.30499999999995,&quot;took&quot;:&quot;821.665230ms&quot;}</code></pre>
 <p>Commit and push!</p>
 <h2 id="make-it-concurrent">Make it concurrent</h2>
@@ -4512,7 +4512,7 @@ iex&gt; %User{age: age} = user
 iex&gt; age
 27</code></pre>
 <p>A struct is defined inside a module and takes the same name as the module. After the struct is defined, we can use the <code>%User{...}</code> syntax to define new structs or match on them.</p>
-<p>Let’s open up <code>lib/portal.ex</code> and add some code to the <code>Portal</code> module. Note the current <code>Portal</code> module already has a function named <code>start/2</code>. Do not remove this function, we will talk about it in the next sections, for now just add the new contents below inside the <code>Portal</code> module:</p>
+<p>Let’s open up <code>lib/portal.ex</code> and add some code to the <code>Portal</code> module. Note the current <code>Portal</code> module already has a function named <code>hello/0</code>. You can remove this function, then add the new contents inside the <code>Portal</code> module:</p>
 <div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defstruct</span> [<span class="st">:left</span>, <span class="st">:right</span>]
 
 <span class="ot">@doc &quot;&quot;&quot;</span>
@@ -4627,12 +4627,14 @@ iex&gt; Portal.push_right(portal)
     (stdlib) gen_server.erl:190: :gen_server.call/3
     (portal) lib/portal.ex:25: Portal.push_right/1</code></pre>
 <p>We got an exit error because there is no <code>:blue</code> door. You can see there is an <code>** (EXIT) no process</code> message following our function call. To fix the situation we are going to setup a supervisor that will be responsible for restarting a portal door whenever it crashes.</p>
-<p>Remember when we passed the <code>--sup</code> flag when creating our <code>portal</code> project? We passed that flag because supervisors typically run inside supervision trees and supervision trees are usually started as part of application. All the <code>--sup</code> flag does is to create a supervised structure by default which we can see in our <code>Portal</code> module:</p>
-<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defmodule</span> <span class="dt">Portal</span> <span class="kw">do</span>
-  <span class="kw">use</span> <span class="dt">Application</span>
-
+<p>Remember when we passed the <code>--sup</code> flag when creating our <code>portal</code> project? We passed that flag because supervisors typically run inside supervision trees and supervision trees are usually started as part of application. All the <code>--sup</code> flag does is to create a supervised structure by default which we can see in our <code>Portal.Application</code> module in `lib/portal/application.ex:</p>
+<div class="sourceCode"><pre class="sourceCode elixir"><code class="sourceCode elixir"><span class="kw">defmodule</span> <span class="dt">Portal</span>.<span class="dt">Application</span> <span class="kw">do</span>
   <span class="co"># See http://elixir-lang.org/docs/stable/elixir/Application.html</span>
   <span class="co"># for more information on OTP Applications</span>
+  <span class="ot">@moduledoc</span> <span class="dv">false</span>
+  
+  <span class="kw">use</span> <span class="dt">Application</span>
+  
   <span class="kw">def</span> start(_type, _args) <span class="kw">do</span>
     <span class="kw">import</span> <span class="dt">Supervisor</span>.<span class="dt">Spec</span>, <span class="st">warn:</span> <span class="dv">false</span>
 
@@ -4646,8 +4648,6 @@ iex&gt; Portal.push_right(portal)
     opts = [<span class="st">strategy:</span> <span class="st">:one_for_one</span>, <span class="st">name:</span> <span class="dt">Portal</span>.<span class="dt">Supervisor</span>]
     <span class="dt">Supervisor</span>.start_link(children, opts)
   <span class="kw">end</span>
-
-  <span class="co"># ... functions we have added ...</span>
 <span class="kw">end</span></code></pre></div>
 <p>The code above makes the <code>Portal</code> module an application callback. The application callback must provide a function named <code>start/2</code>, which we see above, and this function must start a supervisor representing the root of our supervision tree. Currently our supervisor has no children and that is exactly what we will change next.</p>
 <p>Replace the <code>start/2</code> function above by:</p>

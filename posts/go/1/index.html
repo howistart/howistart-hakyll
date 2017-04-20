@@ -144,7 +144,7 @@ hello!</code></pre>
 }</code></pre></div>
 <p>Finally, we start the HTTP server on port 8080 and with the default ServeMux via <a href="http://golang.org/pkg/net/http/#ListenAndServe">http.ListenAndServe</a>. That’s a synchronous, or blocking, call, which will keep the program alive until interrupted. Compile and run just as before.</p>
 <pre><code>$ go build
-./hello</code></pre>
+$ ./hello</code></pre>
 <p>And in another terminal, or your browser, make an HTTP request.</p>
 <pre><code>$ curl http://localhost:8080
 hello!</code></pre>
@@ -399,7 +399,7 @@ $ ./hello</code></pre>
 <pre><code>$ ./hello
 2015/01/01 13:14:15 openWeatherMap: tokyo: 295.46
 2015/01/01 13:14:16 weatherUnderground: tokyo: 273.15</code></pre>
-<pre><code>$ curl http://localhost/weather/tokyo
+<pre><code>$ curl http://localhost:8080/weather/tokyo
 {&quot;city&quot;:&quot;tokyo&quot;,&quot;temp&quot;:284.30499999999995,&quot;took&quot;:&quot;821.665230ms&quot;}</code></pre>
 <p>Commit and push!</p>
 <h2 id="make-it-concurrent">Make it concurrent</h2>
