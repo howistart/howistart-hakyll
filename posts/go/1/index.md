@@ -557,7 +557,7 @@ $ ./hello
 ```
 
 ```
-$ curl http://localhost/weather/tokyo
+$ curl http://localhost:8080/weather/tokyo
 {"city":"tokyo","temp":284.30499999999995,"took":"821.665230ms"}
 ```
 
