@@ -78,7 +78,7 @@
   <div class="col-lg-10 col-lg-offset-1">
     <p>Go is a lovely little programming language designed by <a href="http://en.wikipedia.org/wiki/Go_(programming_language)#History">smart people you can trust</a> and continuously improved by <a href="https://groups.google.com/forum/#!forum/golang-nuts">a large and growing open-source community</a>.</p>
 <p>Go is meant to be simple, but sometimes the conventions can be a little hard to grasp. I’d like to show you how I start all of my Go projects, and how to use Go’s idioms. Let’s build a backend service for a web app.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li><a href="#setting-up-your-environment">Setting up your environment</a></li>
 <li><a href="#a-new-project">A new project</a></li>
 <li><a href="#making-a-web-server">Making a web server</a></li>
@@ -106,11 +106,11 @@ $ cd $GOPATH/src/github.com/your-username
 $ git clone git@github.com:your-username/hello
 $ cd hello</code></pre>
 <p>Great. Create <code>main.go</code>, which will be our absolute-minimum Go program.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">package</span> main
-
-<span class="kw">func</span> main() {
-    <span class="fu">println</span>(<span class="st">&quot;hello!&quot;</span>)
-}</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">package</span> main</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">func</span> main() {</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="bu">println</span>(<span class="st">&quot;hello!&quot;</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">}</a></code></pre></div>
 <p>Invoke <code>go build</code> to compile everything in the current directory. It’ll produce a binary with the same name as the directory.</p>
 <pre><code>$ go build
 $ ./hello
@@ -122,26 +122,26 @@ $ $GOPATH/bin/hello
 hello!</code></pre>
 <h2 id="making-a-web-server">Making a web server</h2>
 <p>Let’s turn our hello, world into a web server. Here’s the full program.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">package</span> main
-
-<span class="kw">import</span> <span class="st">&quot;net/http&quot;</span>
-
-<span class="kw">func</span> main() {
-    http.HandleFunc(<span class="st">&quot;/&quot;</span>, hello)
-    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)
-}
-
-<span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {
-    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))
-}</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">package</span> main</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">import</span> <span class="st">&quot;net/http&quot;</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">func</span> main() {</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">    http.HandleFunc(<span class="st">&quot;/&quot;</span>, hello)</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">}</a></code></pre></div>
 <p>There’s a little bit to unpack. First, we need to import the <a href="http://golang.org/pkg/net/http">net/http</a> package from the standard library.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">import</span> <span class="st">&quot;net/http&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">import</span> <span class="st">&quot;net/http&quot;</span></a></code></pre></div>
 <p>Then, in the main function, we install a handler function at the root path of our webserver. <a href="http://golang.org/pkg/net/http/#HandleFunc">http.HandleFunc</a> operates on the default HTTP router, officially called a <a href="http://golang.org/pkg/net/http/#ServeMux">ServeMux</a>.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go">http.HandleFunc(<span class="st">&quot;/&quot;</span>, hello)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb9-1" data-line-number="1">http.HandleFunc(<span class="st">&quot;/&quot;</span>, hello)</a></code></pre></div>
 <p>The function hello is an <a href="http://golang.org/pkg/net/http/#HandlerFunc">http.HandlerFunc</a>, which means it has a specific type signature, and can be passed as an argument to HandleFunc. Every time a new request comes into the HTTP server matching the root path, the server will spawn a new goroutine executing the hello function. And the hello function simply uses the <a href="http://golang.org/pkg/net/http/#ResponseWriter">http.ResponseWriter</a> to write a response to the client. Since http.ResponseWriter.Write takes the more general <code>[]byte</code>, or byte-slice, as a parameter, we do a simple type conversion of our string.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {
-    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))
-}</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">}</a></code></pre></div>
 <p>Finally, we start the HTTP server on port 8080 and with the default ServeMux via <a href="http://golang.org/pkg/net/http/#ListenAndServe">http.ListenAndServe</a>. That’s a synchronous, or blocking, call, which will keep the program alive until interrupted. Compile and run just as before.</p>
 <pre><code>$ go build
 $ ./hello</code></pre>
@@ -151,125 +151,125 @@ hello!</code></pre>
 <p>Easy! No frameworks to install, no dependencies to download, no project skeletons to create. Even the binary itself is native code, statically linked, with no runtime dependencies. Plus, the standard library’s HTTP server is production-grade, with defenses against common attacks. It can serve requests directly from the live internet—no intermediary required.</p>
 <h2 id="adding-more-routes">Adding more routes</h2>
 <p>We can do something more interesting than just say hello. Let’s take a city as input, call out to a weather API, and forward a response with the temperature. The <a href="http://openweathermap.org/">OpenWeatherMap</a> provides a <a href="http://openweathermap.org/api">simple and free API</a> for <a href="http://openweathermap.org/current">current forecast info</a>. <a href="http://home.openweathermap.org/users/sign_up">Register</a> for a free account to get an API key. OpenWeatherMap’s API can be <a href="http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=Tokyo">queried by city</a>. It returns responses like this (partially redacted):</p>
-<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
-    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Tokyo&quot;</span><span class="fu">,</span>
-    <span class="dt">&quot;coord&quot;</span><span class="fu">:</span> <span class="fu">{</span>
-        <span class="dt">&quot;lon&quot;</span><span class="fu">:</span> <span class="fl">139.69</span><span class="fu">,</span>
-        <span class="dt">&quot;lat&quot;</span><span class="fu">:</span> <span class="fl">35.69</span>
-    <span class="fu">},</span>
-    <span class="dt">&quot;weather&quot;</span><span class="fu">:</span> <span class="ot">[</span>
-        <span class="fu">{</span>
-            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">803</span><span class="fu">,</span>
-            <span class="dt">&quot;main&quot;</span><span class="fu">:</span> <span class="st">&quot;Clouds&quot;</span><span class="fu">,</span>
-            <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;broken clouds&quot;</span><span class="fu">,</span>
-            <span class="dt">&quot;icon&quot;</span><span class="fu">:</span> <span class="st">&quot;04n&quot;</span>
-        <span class="fu">}</span>
-    <span class="ot">]</span><span class="fu">,</span>
-    <span class="dt">&quot;main&quot;</span><span class="fu">:</span> <span class="fu">{</span>
-        <span class="dt">&quot;temp&quot;</span><span class="fu">:</span> <span class="fl">296.69</span><span class="fu">,</span>
-        <span class="dt">&quot;pressure&quot;</span><span class="fu">:</span> <span class="dv">1014</span><span class="fu">,</span>
-        <span class="dt">&quot;humidity&quot;</span><span class="fu">:</span> <span class="dv">83</span><span class="fu">,</span>
-        <span class="dt">&quot;temp_min&quot;</span><span class="fu">:</span> <span class="fl">295.37</span><span class="fu">,</span>
-        <span class="dt">&quot;temp_max&quot;</span><span class="fu">:</span> <span class="fl">298.15</span>
-    <span class="fu">}</span>
-<span class="fu">}</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Tokyo&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="dt">&quot;coord&quot;</span><span class="fu">:</span> <span class="fu">{</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">        <span class="dt">&quot;lon&quot;</span><span class="fu">:</span> <span class="fl">139.69</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">        <span class="dt">&quot;lat&quot;</span><span class="fu">:</span> <span class="fl">35.69</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="fu">},</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">    <span class="dt">&quot;weather&quot;</span><span class="fu">:</span> <span class="ot">[</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">        <span class="fu">{</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">            <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">803</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">            <span class="dt">&quot;main&quot;</span><span class="fu">:</span> <span class="st">&quot;Clouds&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">            <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;broken clouds&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">            <span class="dt">&quot;icon&quot;</span><span class="fu">:</span> <span class="st">&quot;04n&quot;</span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">        <span class="fu">}</span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">    <span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">    <span class="dt">&quot;main&quot;</span><span class="fu">:</span> <span class="fu">{</span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16">        <span class="dt">&quot;temp&quot;</span><span class="fu">:</span> <span class="fl">296.69</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17">        <span class="dt">&quot;pressure&quot;</span><span class="fu">:</span> <span class="dv">1014</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18">        <span class="dt">&quot;humidity&quot;</span><span class="fu">:</span> <span class="dv">83</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-19" data-line-number="19">        <span class="dt">&quot;temp_min&quot;</span><span class="fu">:</span> <span class="fl">295.37</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20">        <span class="dt">&quot;temp_max&quot;</span><span class="fu">:</span> <span class="fl">298.15</span></a>
+<a class="sourceLine" id="cb13-21" data-line-number="21">    <span class="fu">}</span></a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="fu">}</span></a></code></pre></div>
 <p>Go is a statically-typed language, so we should create a structure that mirrors this response format. We don’t need to capture every piece of information, just the stuff we care about. For now, let’s just get the city name and temperature, which is (hilariously) returned in Kelvin. We’ll define a struct to represent the data we need returned by the weather API.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">type</span> weatherData <span class="kw">struct</span> {
-    Name <span class="dt">string</span> <span class="st">`json:&quot;name&quot;`</span>
-    Main <span class="kw">struct</span> {
-        Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span>
-    } <span class="st">`json:&quot;main&quot;`</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">type</span> weatherData <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">    Name <span class="dt">string</span> <span class="st">`json:&quot;name&quot;`</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">    Main <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">        Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">    } <span class="st">`json:&quot;main&quot;`</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">}</a></code></pre></div>
 <p>The <code>type</code> keyword defines a new type, which we call <code>weatherData</code>, and declare as a struct. Each field in the struct has a name (e.g. <code>Name</code>, <code>Main</code>), a type (<code>string</code>, another anonymous <code>struct</code>), and what’s known as a tag. Tags are like metadata, and allow us to use the <a href="http://golang.org/pkg/encoding/json">encoding/json</a> package to directly unmarshal the API’s response into our struct. It’s a bit more typing compared to dynamic languages like Python or Ruby, but it gets us the highly desirable property of type safety. For more about JSON and Go, see <a href="http://blog.golang.org/json-and-go">this blog post</a>, or <a href="https://gobyexample.com/json">this example code</a>.</p>
 <p>We’ve defined the structure, and now we need to define a way to populate it. Let’s write a function to do that.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">func</span> query(city <span class="dt">string</span>) (weatherData, <span class="dt">error</span>) {
-    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)
-    <span class="kw">if</span> err != <span class="ot">nil</span> {
-        <span class="kw">return</span> weatherData{}, err
-    }
-
-    <span class="kw">defer</span> resp.Body.Close()
-
-    <span class="kw">var</span> d weatherData
-
-    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {
-        <span class="kw">return</span> weatherData{}, err
-    }
-
-    <span class="kw">return</span> d, <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">func</span> query(city <span class="dt">string</span>) (weatherData, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">        <span class="kw">return</span> weatherData{}, err</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">    }</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">    <span class="kw">defer</span> resp.Body.Close()</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">    <span class="kw">var</span> d weatherData</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11">    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb15-12" data-line-number="12">        <span class="kw">return</span> weatherData{}, err</a>
+<a class="sourceLine" id="cb15-13" data-line-number="13">    }</a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15">    <span class="kw">return</span> d, <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16">}</a></code></pre></div>
 <p>The function takes a string representing the city, and returns a weatherData struct and an error. This is the fundamental error-handling idiom in Go. Functions encode behavior, and behaviors typically can fail. For us, the GET request against OpenWeatherMap can fail for any number of reasons, and the data returned might not be what we expect. In either case, we return a non-nil error to the client, who’s expected to deal it in a way that makes sense in the calling context.</p>
 <p>If the <a href="http://golang.org/pkg/net/http/#Get">http.Get</a> succeeds, we <a href="http://golang.org/doc/effective_go.html#defer">defer</a> a call to close the response body, which will execute when we leave the function scope (when we return from the query function) and is an elegant form of resource management. Meanwhile, we allocate a weatherData struct, and use a <a href="http://golang.org/pkg/encoding/json/#Decoder">json.Decoder</a> to unmarshal from the response body directly into our struct.</p>
 <p>As an aside, the <a href="http://golang.org/pkg/encoding/json/#NewDecoder">json.NewDecoder</a> leverages an elegant feature of Go, which are <a href="http://go-book.appspot.com/interfaces.html">interfaces</a>. The Decoder doesn’t take a concrete HTTP response body; rather, it takes an <a href="http://golang.org/pkg/io/#Reader">io.Reader</a> interface, which the <a href="http://golang.org/pkg/net/http/#Response">http.Response.Body</a> happens to satisfy. The Decoder supplies a behavior (Decode) which works just by invoking methods on types that satisfy other behaviors (Read). In Go, we tend to implement behavior in terms of functions operating on interfaces. It gives us a clean separation of data and control planes, easy testability with mocks, and code that’s a lot easier to reason about.</p>
 <p>Finally, if the decode succeeds, we return the weatherData to the caller, with a nil error to indicate success. Now let’s wire that function up to a request handler.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go">http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {
-    city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]
-
-    data, err := query(city)
-    <span class="kw">if</span> err != <span class="ot">nil</span> {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        <span class="kw">return</span>
-    }
-
-    w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)
-    json.NewEncoder(w).Encode(data)
-})</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb16-1" data-line-number="1">http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">    city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">    data, err := query(city)</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">    <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">        http.Error(w, err.Error(), http.StatusInternalServerError)</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">        <span class="kw">return</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">    }</a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10">    w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)</a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">    json.NewEncoder(w).Encode(data)</a>
+<a class="sourceLine" id="cb16-12" data-line-number="12">})</a></code></pre></div>
 <p>Here, we’re definining the handler inline, rather than as a separate function. We use <a href="http://golang.org/pkg/strings/#SplitN">strings.SplitN</a> to take everything in the path after <code>/weather/</code> and treat it as the city. We make our query, and if there’s an error, we report it to the client with the <a href="http://golang.org/pkg/net/http/#Error">http.Error</a> helper function. We need to return at that point, so the HTTP request is completed. Otherwise, we tell our client that we’re going to send them JSON data, and use <a href="http://golang.org/pkg/encoding/json/#NewEncoder">json.NewEncoder</a> to JSON-encode the weatherData directly.</p>
 <p>The code so far is nice and procedural, and easy to understand. No opportunity for misinterpretation, and no way to miss the common errors. If we move the “hello, world” handler to <code>/hello</code>, and make the necessary imports, we have our complete program:</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">package</span> main
-
-<span class="kw">import</span> (
-    <span class="st">&quot;encoding/json&quot;</span>
-    <span class="st">&quot;net/http&quot;</span>
-    <span class="st">&quot;strings&quot;</span>
-)
-
-<span class="kw">func</span> main() {
-    http.HandleFunc(<span class="st">&quot;/hello&quot;</span>, hello)
-
-    http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {
-        city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]
-
-        data, err := query(city)
-        <span class="kw">if</span> err != <span class="ot">nil</span> {
-            http.Error(w, err.Error(), http.StatusInternalServerError)
-            <span class="kw">return</span>
-        }
-
-        w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)
-        json.NewEncoder(w).Encode(data)
-    })
-
-    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)
-}
-
-<span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {
-    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))
-}
-
-<span class="kw">func</span> query(city <span class="dt">string</span>) (weatherData, <span class="dt">error</span>) {
-    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)
-    <span class="kw">if</span> err != <span class="ot">nil</span> {
-        <span class="kw">return</span> weatherData{}, err
-    }
-
-    <span class="kw">defer</span> resp.Body.Close()
-
-    <span class="kw">var</span> d weatherData
-
-    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {
-        <span class="kw">return</span> weatherData{}, err
-    }
-
-    <span class="kw">return</span> d, <span class="ot">nil</span>
-}
-
-<span class="kw">type</span> weatherData <span class="kw">struct</span> {
-    Name <span class="dt">string</span> <span class="st">`json:&quot;name&quot;`</span>
-    Main <span class="kw">struct</span> {
-        Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span>
-    } <span class="st">`json:&quot;main&quot;`</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">package</span> main</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">import</span> (</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">    <span class="st">&quot;encoding/json&quot;</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">    <span class="st">&quot;net/http&quot;</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">    <span class="st">&quot;strings&quot;</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="kw">func</span> main() {</a>
+<a class="sourceLine" id="cb17-10" data-line-number="10">    http.HandleFunc(<span class="st">&quot;/hello&quot;</span>, hello)</a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12">    http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb17-13" data-line-number="13">        city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb17-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb17-15" data-line-number="15">        data, err := query(city)</a>
+<a class="sourceLine" id="cb17-16" data-line-number="16">        <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb17-17" data-line-number="17">            http.Error(w, err.Error(), http.StatusInternalServerError)</a>
+<a class="sourceLine" id="cb17-18" data-line-number="18">            <span class="kw">return</span></a>
+<a class="sourceLine" id="cb17-19" data-line-number="19">        }</a>
+<a class="sourceLine" id="cb17-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb17-21" data-line-number="21">        w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)</a>
+<a class="sourceLine" id="cb17-22" data-line-number="22">        json.NewEncoder(w).Encode(data)</a>
+<a class="sourceLine" id="cb17-23" data-line-number="23">    })</a>
+<a class="sourceLine" id="cb17-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb17-25" data-line-number="25">    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)</a>
+<a class="sourceLine" id="cb17-26" data-line-number="26">}</a>
+<a class="sourceLine" id="cb17-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb17-28" data-line-number="28"><span class="kw">func</span> hello(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb17-29" data-line-number="29">    w.Write([]<span class="dt">byte</span>(<span class="st">&quot;hello!&quot;</span>))</a>
+<a class="sourceLine" id="cb17-30" data-line-number="30">}</a>
+<a class="sourceLine" id="cb17-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb17-32" data-line-number="32"><span class="kw">func</span> query(city <span class="dt">string</span>) (weatherData, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb17-33" data-line-number="33">    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)</a>
+<a class="sourceLine" id="cb17-34" data-line-number="34">    <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb17-35" data-line-number="35">        <span class="kw">return</span> weatherData{}, err</a>
+<a class="sourceLine" id="cb17-36" data-line-number="36">    }</a>
+<a class="sourceLine" id="cb17-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb17-38" data-line-number="38">    <span class="kw">defer</span> resp.Body.Close()</a>
+<a class="sourceLine" id="cb17-39" data-line-number="39"></a>
+<a class="sourceLine" id="cb17-40" data-line-number="40">    <span class="kw">var</span> d weatherData</a>
+<a class="sourceLine" id="cb17-41" data-line-number="41"></a>
+<a class="sourceLine" id="cb17-42" data-line-number="42">    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb17-43" data-line-number="43">        <span class="kw">return</span> weatherData{}, err</a>
+<a class="sourceLine" id="cb17-44" data-line-number="44">    }</a>
+<a class="sourceLine" id="cb17-45" data-line-number="45"></a>
+<a class="sourceLine" id="cb17-46" data-line-number="46">    <span class="kw">return</span> d, <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb17-47" data-line-number="47">}</a>
+<a class="sourceLine" id="cb17-48" data-line-number="48"></a>
+<a class="sourceLine" id="cb17-49" data-line-number="49"><span class="kw">type</span> weatherData <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb17-50" data-line-number="50">    Name <span class="dt">string</span> <span class="st">`json:&quot;name&quot;`</span></a>
+<a class="sourceLine" id="cb17-51" data-line-number="51">    Main <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb17-52" data-line-number="52">        Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span></a>
+<a class="sourceLine" id="cb17-53" data-line-number="53">    } <span class="st">`json:&quot;main&quot;`</span></a>
+<a class="sourceLine" id="cb17-54" data-line-number="54">}</a></code></pre></div>
 <p>Build and run it, same as before.</p>
 <pre><code>$ go build
 $ ./hello</code></pre>
@@ -279,122 +279,122 @@ $ ./hello</code></pre>
 <h2 id="querying-multiple-apis">Querying multiple APIs</h2>
 <p>Maybe we can build a more accurate temperature for a city, by querying and averaging multiple weather APIs. Unfortunately for us, most weather APIs require authentication. So, get yourself an API key for <a href="http://www.wunderground.com/weather/api">Weather Underground</a>.</p>
 <p>Since we want the same behavior from all of our weather APIs, it makes sense to encode that behavior as an interface.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">type</span> weatherProvider <span class="kw">interface</span> {
-    temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) <span class="co">// in Kelvin, naturally</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">type</span> weatherProvider <span class="kw">interface</span> {</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">    temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) <span class="co">// in Kelvin, naturally</span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">}</a></code></pre></div>
 <p>Now, we can transform our old OpenWeatherMap query function into a type that satisfies the weatherProvider interface. Since we don’t need to store any state to make the HTTP GET, we’ll just use an empty struct. And we’ll add a simple line of logging, so we can see what’s happening.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">type</span> openWeatherMap <span class="kw">struct</span>{}
-
-<span class="kw">func</span> (w openWeatherMap) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {
-    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)
-    <span class="kw">if</span> err != <span class="ot">nil</span> {
-        <span class="kw">return</span> <span class="dv">0</span>, err
-    }
-
-    <span class="kw">defer</span> resp.Body.Close()
-
-    <span class="kw">var</span> d <span class="kw">struct</span> {
-        Main <span class="kw">struct</span> {
-            Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span>
-        } <span class="st">`json:&quot;main&quot;`</span>
-    }
-
-    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {
-        <span class="kw">return</span> <span class="dv">0</span>, err
-    }
-
-    log.Printf(<span class="st">&quot;openWeatherMap: %s: %.2f&quot;</span>, city, d.Main.Kelvin)
-    <span class="kw">return</span> d.Main.Kelvin, <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">type</span> openWeatherMap <span class="kw">struct</span>{}</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">func</span> (w openWeatherMap) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">    resp, err := http.Get(<span class="st">&quot;http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&amp;q=&quot;</span> + city)</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">    <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">        <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">    }</a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb21-9" data-line-number="9">    <span class="kw">defer</span> resp.Body.Close()</a>
+<a class="sourceLine" id="cb21-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11">    <span class="kw">var</span> d <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb21-12" data-line-number="12">        Main <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">            Kelvin <span class="dt">float64</span> <span class="st">`json:&quot;temp&quot;`</span></a>
+<a class="sourceLine" id="cb21-14" data-line-number="14">        } <span class="st">`json:&quot;main&quot;`</span></a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">    }</a>
+<a class="sourceLine" id="cb21-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb21-17" data-line-number="17">    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb21-18" data-line-number="18">        <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb21-19" data-line-number="19">    }</a>
+<a class="sourceLine" id="cb21-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb21-21" data-line-number="21">    log.Printf(<span class="st">&quot;openWeatherMap: %s: %.2f&quot;</span>, city, d.Main.Kelvin)</a>
+<a class="sourceLine" id="cb21-22" data-line-number="22">    <span class="kw">return</span> d.Main.Kelvin, <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb21-23" data-line-number="23">}</a></code></pre></div>
 <p>Since we only want to extract the Kelvin temperature from the response, we can define the response struct inline. Otherwise, it’s pretty much the same as the query function, just defined as a method on an openWeatherMap struct. That way, we can use an instance of openWeatherMap as a weatherProvider.</p>
 <p>Let’s do the same for the Weather Underground. The only difference is we need to provide an API key. We’ll store the key in the struct, and use it in the method. It will be a very similar function.</p>
 <p>(Note that the Weather Underground doesn’t disambiguate cities quite as nicely as OpenWeatherMap. We’re skipping some important logic to handle ambiguous city names for the purposes of the example.)</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">type</span> weatherUnderground <span class="kw">struct</span> {
-    apiKey <span class="dt">string</span>
-}
-
-<span class="kw">func</span> (w weatherUnderground) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {
-    resp, err := http.Get(<span class="st">&quot;http://api.wunderground.com/api/&quot;</span> + w.apiKey + <span class="st">&quot;/conditions/q/&quot;</span> + city + <span class="st">&quot;.json&quot;</span>)
-    <span class="kw">if</span> err != <span class="ot">nil</span> {
-        <span class="kw">return</span> <span class="dv">0</span>, err
-    }
-
-    <span class="kw">defer</span> resp.Body.Close()
-
-    <span class="kw">var</span> d <span class="kw">struct</span> {
-        Observation <span class="kw">struct</span> {
-            Celsius <span class="dt">float64</span> <span class="st">`json:&quot;temp_c&quot;`</span>
-        } <span class="st">`json:&quot;current_observation&quot;`</span>
-    }
-
-    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {
-        <span class="kw">return</span> <span class="dv">0</span>, err
-    }
-
-    kelvin := d.Observation.Celsius + <span class="dv">273</span><span class="fl">.15</span>
-    log.Printf(<span class="st">&quot;weatherUnderground: %s: %.2f&quot;</span>, city, kelvin)
-    <span class="kw">return</span> kelvin, <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">type</span> weatherUnderground <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">    apiKey <span class="dt">string</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="kw">func</span> (w weatherUnderground) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">    resp, err := http.Get(<span class="st">&quot;http://api.wunderground.com/api/&quot;</span> + w.apiKey + <span class="st">&quot;/conditions/q/&quot;</span> + city + <span class="st">&quot;.json&quot;</span>)</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7">    <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb22-8" data-line-number="8">        <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb22-9" data-line-number="9">    }</a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb22-11" data-line-number="11">    <span class="kw">defer</span> resp.Body.Close()</a>
+<a class="sourceLine" id="cb22-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb22-13" data-line-number="13">    <span class="kw">var</span> d <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb22-14" data-line-number="14">        Observation <span class="kw">struct</span> {</a>
+<a class="sourceLine" id="cb22-15" data-line-number="15">            Celsius <span class="dt">float64</span> <span class="st">`json:&quot;temp_c&quot;`</span></a>
+<a class="sourceLine" id="cb22-16" data-line-number="16">        } <span class="st">`json:&quot;current_observation&quot;`</span></a>
+<a class="sourceLine" id="cb22-17" data-line-number="17">    }</a>
+<a class="sourceLine" id="cb22-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb22-19" data-line-number="19">    <span class="kw">if</span> err := json.NewDecoder(resp.Body).Decode(&amp;d); err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb22-20" data-line-number="20">        <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb22-21" data-line-number="21">    }</a>
+<a class="sourceLine" id="cb22-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb22-23" data-line-number="23">    kelvin := d.Observation.Celsius + <span class="dv">273</span><span class="fl">.15</span></a>
+<a class="sourceLine" id="cb22-24" data-line-number="24">    log.Printf(<span class="st">&quot;weatherUnderground: %s: %.2f&quot;</span>, city, kelvin)</a>
+<a class="sourceLine" id="cb22-25" data-line-number="25">    <span class="kw">return</span> kelvin, <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb22-26" data-line-number="26">}</a></code></pre></div>
 <p>Now that we have a couple of weather providers, let’s write a function to query them all, and return the average temperature. For simplicity, if we encounter any errors, we’ll just give up.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">func</span> temperature(city <span class="dt">string</span>, providers ...weatherProvider) (<span class="dt">float64</span>, <span class="dt">error</span>) {
-    sum := <span class="dv">0</span><span class="fl">.0</span>
-
-    <span class="kw">for</span> _, provider := <span class="kw">range</span> providers {
-        k, err := provider.temperature(city)
-        <span class="kw">if</span> err != <span class="ot">nil</span> {
-            <span class="kw">return</span> <span class="dv">0</span>, err
-        }
-
-        sum += k
-    }
-
-    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="fu">len</span>(providers)), <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">func</span> temperature(city <span class="dt">string</span>, providers ...weatherProvider) (<span class="dt">float64</span>, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">    sum := <span class="dv">0</span><span class="fl">.0</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">    <span class="kw">for</span> _, provider := <span class="kw">range</span> providers {</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">        k, err := provider.temperature(city)</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">        <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">            <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">        }</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">        sum += k</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11">    }</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13">    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="bu">len</span>(providers)), <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14">}</a></code></pre></div>
 <p>Notice that the function definition is very close to the weatherProvider temperature method. If we collect the individual weatherProviders into a type, and define the temperature method on that type, we can implement a meta-weatherProvider, comprised of other weatherProviders.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">type</span> multiWeatherProvider []weatherProvider
-
-<span class="kw">func</span> (w multiWeatherProvider) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {
-    sum := <span class="dv">0</span><span class="fl">.0</span>
-
-    <span class="kw">for</span> _, provider := <span class="kw">range</span> w {
-        k, err := provider.temperature(city)
-        <span class="kw">if</span> err != <span class="ot">nil</span> {
-            <span class="kw">return</span> <span class="dv">0</span>, err
-        }
-
-        sum += k
-    }
-
-    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="fu">len</span>(w)), <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">type</span> multiWeatherProvider []weatherProvider</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">func</span> (w multiWeatherProvider) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">    sum := <span class="dv">0</span><span class="fl">.0</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">    <span class="kw">for</span> _, provider := <span class="kw">range</span> w {</a>
+<a class="sourceLine" id="cb24-7" data-line-number="7">        k, err := provider.temperature(city)</a>
+<a class="sourceLine" id="cb24-8" data-line-number="8">        <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb24-9" data-line-number="9">            <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb24-10" data-line-number="10">        }</a>
+<a class="sourceLine" id="cb24-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb24-12" data-line-number="12">        sum += k</a>
+<a class="sourceLine" id="cb24-13" data-line-number="13">    }</a>
+<a class="sourceLine" id="cb24-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb24-15" data-line-number="15">    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="bu">len</span>(w)), <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb24-16" data-line-number="16">}</a></code></pre></div>
 <p>Perfect. We can pass a multiWeatherProvider anywhere that accepts a weatherProvider.</p>
 <p>Now, we can wire that up to our HTTP server, very similar to before.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">func</span> main() {
-    mw := multiWeatherProvider{
-        openWeatherMap{},
-        weatherUnderground{apiKey: <span class="st">&quot;your-key-here&quot;</span>},
-    }
-
-    http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {
-        begin := time.Now()
-        city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]
-
-        temp, err := mw.temperature(city)
-        <span class="kw">if</span> err != <span class="ot">nil</span> {
-            http.Error(w, err.Error(), http.StatusInternalServerError)
-            <span class="kw">return</span>
-        }
-
-        w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)
-        json.NewEncoder(w).Encode(<span class="kw">map</span>[<span class="dt">string</span>]<span class="kw">interface</span>{}{
-            <span class="st">&quot;city&quot;</span>: city,
-            <span class="st">&quot;temp&quot;</span>: temp,
-            <span class="st">&quot;took&quot;</span>: time.Since(begin).String(),
-        })
-    })
-
-    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)
-}</code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">func</span> main() {</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">    mw := multiWeatherProvider{</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">        openWeatherMap{},</a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">        weatherUnderground{apiKey: <span class="st">&quot;your-key-here&quot;</span>},</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5">    }</a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">    http.HandleFunc(<span class="st">&quot;/weather/&quot;</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">        begin := time.Now()</a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">        city := strings.SplitN(r.URL.Path, <span class="st">&quot;/&quot;</span>, <span class="dv">3</span>)[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb25-11" data-line-number="11">        temp, err := mw.temperature(city)</a>
+<a class="sourceLine" id="cb25-12" data-line-number="12">        <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb25-13" data-line-number="13">            http.Error(w, err.Error(), http.StatusInternalServerError)</a>
+<a class="sourceLine" id="cb25-14" data-line-number="14">            <span class="kw">return</span></a>
+<a class="sourceLine" id="cb25-15" data-line-number="15">        }</a>
+<a class="sourceLine" id="cb25-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb25-17" data-line-number="17">        w.Header().Set(<span class="st">&quot;Content-Type&quot;</span>, <span class="st">&quot;application/json; charset=utf-8&quot;</span>)</a>
+<a class="sourceLine" id="cb25-18" data-line-number="18">        json.NewEncoder(w).Encode(<span class="kw">map</span>[<span class="dt">string</span>]<span class="kw">interface</span>{}{</a>
+<a class="sourceLine" id="cb25-19" data-line-number="19">            <span class="st">&quot;city&quot;</span>: city,</a>
+<a class="sourceLine" id="cb25-20" data-line-number="20">            <span class="st">&quot;temp&quot;</span>: temp,</a>
+<a class="sourceLine" id="cb25-21" data-line-number="21">            <span class="st">&quot;took&quot;</span>: time.Since(begin).String(),</a>
+<a class="sourceLine" id="cb25-22" data-line-number="22">        })</a>
+<a class="sourceLine" id="cb25-23" data-line-number="23">    })</a>
+<a class="sourceLine" id="cb25-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb25-25" data-line-number="25">    http.ListenAndServe(<span class="st">&quot;:8080&quot;</span>, <span class="ot">nil</span>)</a>
+<a class="sourceLine" id="cb25-26" data-line-number="26">}</a></code></pre></div>
 <p>Compile, run, and GET, just as before. In addition to the JSON response, you’ll see some output in your server logs.</p>
 <pre><code>$ ./hello
 2015/01/01 13:14:15 openWeatherMap: tokyo: 295.46
@@ -405,40 +405,40 @@ $ ./hello</code></pre>
 <h2 id="make-it-concurrent">Make it concurrent</h2>
 <p>Right now we just query the APIs synchronously, one after the other. But there’s no reason we couldn’t query them at the same time. That should decrease our response times.</p>
 <p>To do that, we leverage Go’s concurrency primitives: goroutines and channels. We’ll spawn each API query in its own goroutine, which will run concurrently. We’ll collect the responses in a single channel, and perform the average calculation when everything is finished.</p>
-<div class="sourceCode"><pre class="sourceCode go"><code class="sourceCode go"><span class="kw">func</span> (w multiWeatherProvider) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {
-    <span class="co">// Make a channel for temperatures, and a channel for errors.</span>
-    <span class="co">// Each provider will push a value into only one.</span>
-    temps := <span class="fu">make</span>(<span class="kw">chan</span> <span class="dt">float64</span>, <span class="fu">len</span>(w))
-    errs := <span class="fu">make</span>(<span class="kw">chan</span> <span class="dt">error</span>, <span class="fu">len</span>(w))
-
-    <span class="co">// For each provider, spawn a goroutine with an anonymous function.</span>
-    <span class="co">// That function will invoke the temperature method, and forward the response.</span>
-    <span class="kw">for</span> _, provider := <span class="kw">range</span> w {
-        <span class="kw">go</span> <span class="kw">func</span>(p weatherProvider) {
-            k, err := p.temperature(city)
-            <span class="kw">if</span> err != <span class="ot">nil</span> {
-                errs &lt;- err
-                <span class="kw">return</span>
-            }
-            temps &lt;- k
-        }(provider)
-    }
-
-    sum := <span class="dv">0</span><span class="fl">.0</span>
-
-    <span class="co">// Collect a temperature or an error from each provider.</span>
-    <span class="kw">for</span> i := <span class="dv">0</span>; i &lt; <span class="fu">len</span>(w); i++ {
-        <span class="kw">select</span> {
-        <span class="kw">case</span> temp := &lt;-temps:
-            sum += temp
-        <span class="kw">case</span> err := &lt;-errs:
-            <span class="kw">return</span> <span class="dv">0</span>, err
-        }
-    }
-
-    <span class="co">// Return the average, same as before.</span>
-    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="fu">len</span>(w)), <span class="ot">nil</span>
-}</code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode go"><code class="sourceCode go"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">func</span> (w multiWeatherProvider) temperature(city <span class="dt">string</span>) (<span class="dt">float64</span>, <span class="dt">error</span>) {</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">    <span class="co">// Make a channel for temperatures, and a channel for errors.</span></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">    <span class="co">// Each provider will push a value into only one.</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">    temps := <span class="bu">make</span>(<span class="kw">chan</span> <span class="dt">float64</span>, <span class="bu">len</span>(w))</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">    errs := <span class="bu">make</span>(<span class="kw">chan</span> <span class="dt">error</span>, <span class="bu">len</span>(w))</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">    <span class="co">// For each provider, spawn a goroutine with an anonymous function.</span></a>
+<a class="sourceLine" id="cb28-8" data-line-number="8">    <span class="co">// That function will invoke the temperature method, and forward the response.</span></a>
+<a class="sourceLine" id="cb28-9" data-line-number="9">    <span class="kw">for</span> _, provider := <span class="kw">range</span> w {</a>
+<a class="sourceLine" id="cb28-10" data-line-number="10">        <span class="kw">go</span> <span class="kw">func</span>(p weatherProvider) {</a>
+<a class="sourceLine" id="cb28-11" data-line-number="11">            k, err := p.temperature(city)</a>
+<a class="sourceLine" id="cb28-12" data-line-number="12">            <span class="kw">if</span> err != <span class="ot">nil</span> {</a>
+<a class="sourceLine" id="cb28-13" data-line-number="13">                errs &lt;- err</a>
+<a class="sourceLine" id="cb28-14" data-line-number="14">                <span class="kw">return</span></a>
+<a class="sourceLine" id="cb28-15" data-line-number="15">            }</a>
+<a class="sourceLine" id="cb28-16" data-line-number="16">            temps &lt;- k</a>
+<a class="sourceLine" id="cb28-17" data-line-number="17">        }(provider)</a>
+<a class="sourceLine" id="cb28-18" data-line-number="18">    }</a>
+<a class="sourceLine" id="cb28-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb28-20" data-line-number="20">    sum := <span class="dv">0</span><span class="fl">.0</span></a>
+<a class="sourceLine" id="cb28-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb28-22" data-line-number="22">    <span class="co">// Collect a temperature or an error from each provider.</span></a>
+<a class="sourceLine" id="cb28-23" data-line-number="23">    <span class="kw">for</span> i := <span class="dv">0</span>; i &lt; <span class="bu">len</span>(w); i++ {</a>
+<a class="sourceLine" id="cb28-24" data-line-number="24">        <span class="kw">select</span> {</a>
+<a class="sourceLine" id="cb28-25" data-line-number="25">        <span class="kw">case</span> temp := &lt;-temps:</a>
+<a class="sourceLine" id="cb28-26" data-line-number="26">            sum += temp</a>
+<a class="sourceLine" id="cb28-27" data-line-number="27">        <span class="kw">case</span> err := &lt;-errs:</a>
+<a class="sourceLine" id="cb28-28" data-line-number="28">            <span class="kw">return</span> <span class="dv">0</span>, err</a>
+<a class="sourceLine" id="cb28-29" data-line-number="29">        }</a>
+<a class="sourceLine" id="cb28-30" data-line-number="30">    }</a>
+<a class="sourceLine" id="cb28-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb28-32" data-line-number="32">    <span class="co">// Return the average, same as before.</span></a>
+<a class="sourceLine" id="cb28-33" data-line-number="33">    <span class="kw">return</span> sum / <span class="dt">float64</span>(<span class="bu">len</span>(w)), <span class="ot">nil</span></a>
+<a class="sourceLine" id="cb28-34" data-line-number="34">}</a></code></pre></div>
 <p>Now, our requests take as long as the slowest individual weatherProvider. And we only needed to change the behavior of the multiWeatherProvider, which, notably, still satisfies the simple, synchronous weatherProvider interface.</p>
 <p>Commit and push!</p>
 <h2 id="simplicity">Simplicity</h2>

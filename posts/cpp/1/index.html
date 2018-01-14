@@ -121,74 +121,74 @@
     +-- Main.cpp</code></pre>
 <p>There are countless ways one can organize files within a C++ project. Personally, I like having public headers separated other files within the same module and in an easily identifiable folder name (like “pub”). I also ensure that modules themselves (standalone libraries and executables) are separated. Occasionally, I introduce more folder nesting within a module to provide even more structure where it makes sense (e.g. grouping platform specific code, test harness code, etc). The contents of lib will be used to make our library, and the contents of runtime will make our executable. The file <code>RePlex/lib/pub/RePlex.h</code> will be the public interface of the library. Note that we’ll add files as we need them throughout this article; this is just a starting point.</p>
 <p>What you’re actually curious about though, is that <code>lua</code> file. The Premake build configuration system actually consumes Lua files in order to generate project files or makefiles appropriate to your target platform. For example, on Windows, you could invoke <code>premake5 vs2015</code> in the <code>RePlex</code> directory to generate Visual Studio 2015 solution files to then edit and compile the code. Alternatively, on OSX you could generate Xcode project files, or GNU makefiles on Linux. Many more backends to premake <a href="https://github.com/premake/premake-core/wiki/Using-Premake">exist</a> and you can even <a href="https://github.com/premake/premake-core/wiki/Adding-a-New-Action">make your own</a>. The Lua files Premake consumes are declarative in nature, but you can use the entire Lua runtime at your disposal to do more complex build tasks if you wish (like preprocessing, or what have you). Here are the contents of <code>premake5.lua</code> file.</p>
-<div class="sourceCode"><pre class="sourceCode lua"><code class="sourceCode lua">workspace <span class="st">&quot;RePlex&quot;</span>
-  configurations <span class="ot">{</span><span class="st">&quot;Debug&quot;</span><span class="ot">,</span> <span class="st">&quot;Release&quot;</span><span class="ot">}</span>
-  <span class="co">-- Use C++ as the target language for all builds</span>
-  language <span class="st">&quot;C++&quot;</span>
-  targetdir <span class="st">&quot;bin/%{cfg.buildcfg}&quot;</span>
-
-  <span class="co">-- Get that C++14 goodness</span>
-  flags <span class="ot">{</span> <span class="st">&quot;C++14&quot;</span> <span class="ot">}</span>
-
-  filter <span class="st">&quot;configurations:Debug&quot;</span>
-    <span class="co">-- Add the preprocessor definition DEBUG to debug builds</span>
-    defines <span class="ot">{</span> <span class="st">&quot;DEBUG&quot;</span> <span class="ot">}</span>
-    <span class="co">-- Ensure symbols are bundled with debug builds</span>
-    flags <span class="ot">{</span> <span class="st">&quot;Symbols&quot;</span> <span class="ot">}</span>
-
-  filter <span class="st">&quot;configurations:Release&quot;</span>
-    <span class="co">-- Add the preprocessor definition RELEASE to debug builds</span>
-    defines <span class="ot">{</span> <span class="st">&quot;RELEASE&quot;</span> <span class="ot">}</span>
-    <span class="co">-- Turn on compiler optimizations for release builds</span>
-    optimize <span class="st">&quot;On&quot;</span>
-
-  <span class="co">-- RePlex Library</span>
-  project <span class="st">&quot;RePlex&quot;</span>
-    kind <span class="st">&quot;SharedLib&quot;</span>
-    <span class="co">-- recursively glob .h and .cpp files in the lib directory</span>
-    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;lib/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;lib/**.cpp&quot;</span> <span class="ot">}</span>
-
-  <span class="co">-- RePlex Runtime</span>
-  project <span class="st">&quot;RePlexRuntime&quot;</span>
-    kind <span class="st">&quot;ConsoleApp&quot;</span>
-    <span class="co">-- recursively glob .h and .cpp files in the runtime directory</span>
-    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;runtime/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;runtime/**.cpp&quot;</span> <span class="ot">}</span>
-    <span class="co">-- link the RePlexLib library at runtime</span>
-    links <span class="ot">{</span> <span class="st">&quot;RePlex&quot;</span> <span class="ot">}</span>
-    includedirs <span class="ot">{</span> <span class="st">&quot;lib/pub&quot;</span> <span class="ot">}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode lua"><code class="sourceCode lua"><a class="sourceLine" id="cb3-1" data-line-number="1">workspace <span class="st">&quot;RePlex&quot;</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  configurations <span class="ot">{</span><span class="st">&quot;Debug&quot;</span><span class="ot">,</span> <span class="st">&quot;Release&quot;</span><span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="do">-- Use C++ as the target language for all builds</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  language <span class="st">&quot;C++&quot;</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  targetdir <span class="st">&quot;bin/%{cfg.buildcfg}&quot;</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="do">-- Get that C++14 goodness</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  flags <span class="ot">{</span> <span class="st">&quot;C++14&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">  filter <span class="st">&quot;configurations:Debug&quot;</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">    <span class="do">-- Add the preprocessor definition DEBUG to debug builds</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">    defines <span class="ot">{</span> <span class="st">&quot;DEBUG&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">    <span class="do">-- Ensure symbols are bundled with debug builds</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">    flags <span class="ot">{</span> <span class="st">&quot;Symbols&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">  filter <span class="st">&quot;configurations:Release&quot;</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">    <span class="do">-- Add the preprocessor definition RELEASE to debug builds</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">    defines <span class="ot">{</span> <span class="st">&quot;RELEASE&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">    <span class="do">-- Turn on compiler optimizations for release builds</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">    optimize <span class="st">&quot;On&quot;</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22">  <span class="do">-- RePlex Library</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">  project <span class="st">&quot;RePlex&quot;</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">    kind <span class="st">&quot;SharedLib&quot;</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">    <span class="do">-- recursively glob .h and .cpp files in the lib directory</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26">    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;lib/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;lib/**.cpp&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">  <span class="do">-- RePlex Runtime</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">  project <span class="st">&quot;RePlexRuntime&quot;</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30">    kind <span class="st">&quot;ConsoleApp&quot;</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31">    <span class="do">-- recursively glob .h and .cpp files in the runtime directory</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;runtime/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;runtime/**.cpp&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">    <span class="do">-- link the RePlexLib library at runtime</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34">    links <span class="ot">{</span> <span class="st">&quot;RePlex&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35">    includedirs <span class="ot">{</span> <span class="st">&quot;lib/pub&quot;</span> <span class="ot">}</span></a></code></pre></div>
 <p>I don’t want to belabor the mechanics of this in too much detail, but hopefully the structure makes sense. At the top level, we have a workspace called “RePlex” which is purely semantic; it has no meaning as far as C++ is concerned but acts as a container for all our build targets (i.e. libraries and executables). This is useful for signalling what should be grouped to IDEs like Visual Studio, Xcode. Premake files are structured with lexical scoping, where keywords like <code>workspace</code> and <code>project</code> increase the depth of the scope tree. Thus all the properties defined underneath line 1 apply to all projects in that workspace. Here, we define two possible build configurations, the workspace language, target directory, and configuration specific compiler flags and preprocessor definitions.</p>
 <p>Then, we define two projects for our shared library and console application respectively. Note that RePlexLib is a dependency of RePlexRuntime; RePlexRuntime has access to all headers in <code>lib/pub</code> and also links RePlexLib. Note that we could have overridden or specified any of global workspace properties on a per project basis.</p>
 <p>Let’s make some stub files too:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// lib/pub/RePlex.h</span>
-
-<span class="ot">#pragma once</span>
-
-<span class="kw">class</span> Foo
-{
-<span class="kw">public</span>:
-    <span class="dt">int</span> GetTheAnswer() <span class="dt">const</span>;
-<span class="kw">private</span>:
-    <span class="dt">int</span> m_answer = <span class="dv">42</span>;
-};</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// lib/RePlex.cpp</span>
-
-<span class="ot">#include &quot;pub/RePlex.h&quot;</span>
-
-<span class="dt">int</span> Foo::GetTheAnswer() <span class="dt">const</span>
-{
-    <span class="kw">return</span> m_answer;
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// runtime/Main.cpp</span>
-
-<span class="ot">#include &lt;RePlex.h&gt;</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-
-<span class="dt">int</span> main()
-{
-    Foo foo;
-    std::cout &lt;&lt; <span class="st">&quot;The answer is &quot;</span> &lt;&lt; foo.GetTheAnswer() &lt;&lt; std::endl;
-    <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">// lib/pub/RePlex.h</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="pp">#pragma once</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">class</span> Foo</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">{</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">int</span> GetTheAnswer() <span class="at">const</span>;</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw">private</span>:</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="dt">int</span> <span class="va">m_answer</span> = <span class="dv">42</span>;</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">};</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">// lib/RePlex.cpp</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="pp">#include </span><span class="im">&quot;pub/RePlex.h&quot;</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="dt">int</span> Foo::GetTheAnswer() <span class="at">const</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">{</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">    <span class="cf">return</span> <span class="va">m_answer</span>;</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">// runtime/Main.cpp</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="pp">#include </span><span class="im">&lt;RePlex.h&gt;</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="dt">int</span> main()</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">{</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">    Foo foo;</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;The answer is &quot;</span> &lt;&lt; foo.GetTheAnswer() &lt;&lt; <span class="bu">std::</span>endl;</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">    <span class="cf">return</span> <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">}</a></code></pre></div>
 <p>As a side note, my preference for editing code varies based on the platform I am using. When developing on Windows, I prefer Visual Studio (which has improved dramatically since 2010, the version I first learned on). When developing on OSX, I use Xcode due to its integration with the various simulators for iOS devices. On Linux, I use Emacs with Vim emulation, or Eclipse when I need a visual debugger (I’ve had issues using Eclipse as an editor due to stability, although this may have been addressed in more recent builds since my last experience with it in 2014). When writing this article, I opted to use a simple text editor and the make system, as this is the most ubiquitous build system and the reader should be able to reproduce all the work with the IDE of their choosing relatively easily.</p>
 <p>At this point, you should install Premake if you haven’t already for the operating system of your choice. With this, you should be able to invoke <code>premake5 gmake</code> (substitute <code>gmake</code> with whatever action you like) in the root directory of the app should create the corresponding Makefiles or project files depending on what action you choose. Subsequently, building the workspace should emit <code>bin/Debug/RePlexRuntime</code> and <code>bin/Debug/libRePlex.dylib</code>. Running <code>bin/Debug/RePlexRuntime</code> should give us the output we expect.</p>
 <pre><code>The answer is 42</code></pre>
@@ -218,120 +218,120 @@
     *--&gt; |RePlexTest| Library that gets reloaded
          +----------+</code></pre>
 <p>RePlexRuntime is the executable that will be running in our test. RePlexTest will be the library that we eventually want to hotload. Replex will be our library for encapsulating the various functions to interact with the dynamic library. To accommodate this structure, let’s add the test library to our Premake file.</p>
-<div class="sourceCode"><pre class="sourceCode lua"><code class="sourceCode lua">project <span class="st">&quot;RePlexTest&quot;</span>
-  kind <span class="st">&quot;SharedLib&quot;</span>
-  <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;test/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;test/**.cpp&quot;</span><span class="ot">,</span> <span class="st">&quot;test/pub/*.h&quot;</span> <span class="ot">}</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode lua"><code class="sourceCode lua"><a class="sourceLine" id="cb9-1" data-line-number="1">project <span class="st">&quot;RePlexTest&quot;</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  kind <span class="st">&quot;SharedLib&quot;</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;test/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;test/**.cpp&quot;</span><span class="ot">,</span> <span class="st">&quot;test/pub/*.h&quot;</span> <span class="ot">}</span></a></code></pre></div>
 <p>Easy enough. We’ll also add a header and source file to our test library.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// test/pub/Test.h</span>
-
-<span class="ot">#pragma once</span>
-
-<span class="co">// This line prevents C++ name mangling which would prevent dlsym from retrieving</span>
-<span class="co">// the correct symbols.</span>
-<span class="dt">extern</span> <span class="st">&quot;C&quot;</span>
-{
-    <span class="dt">void</span> foo();
-
-    <span class="co">// The extern keyword here exports a global variable that will be defined in Test.cpp</span>
-    <span class="dt">extern</span> <span class="dt">int</span> bar;
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// test/Test.cpp</span>
-<span class="ot">#include &quot;pub/Test.h&quot;</span>
-<span class="ot">#include &lt;cstdio&gt;</span>
-
-<span class="dt">void</span> foo()
-{
-    printf(<span class="st">&quot;Hi</span><span class="ch">\n</span><span class="st">&quot;</span>);
-}
-
-<span class="dt">int</span> bar = <span class="dv">4</span>;</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">// test/pub/Test.h</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="pp">#pragma once</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">// This line prevents C++ name mangling which would prevent dlsym from retrieving</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">// the correct symbols.</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="at">extern</span> <span class="st">&quot;C&quot;</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">{</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">    <span class="dt">void</span> foo();</a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11">    <span class="co">// The extern keyword here exports a global variable that will be defined in Test.cpp</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12">    <span class="at">extern</span> <span class="dt">int</span> bar;</a>
+<a class="sourceLine" id="cb10-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">// test/Test.cpp</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="pp">#include </span><span class="im">&quot;pub/Test.h&quot;</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="pp">#include </span><span class="im">&lt;cstdio&gt;</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="dt">void</span> foo()</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">{</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">    printf(<span class="st">&quot;Hi</span><span class="sc">\n</span><span class="st">&quot;</span>);</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="dt">int</span> bar = <span class="dv">4</span>;</a></code></pre></div>
 <p>Our RePlex library for now will just have a very thin wrapper to the various <code>dl*</code> functions.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// lib/pub/RePlex.h</span>
-
-<span class="ot">#pragma once</span>
-
-<span class="ot">#include &lt;dlfcn.h&gt;</span>
-
-<span class="dt">void</span>* Load(<span class="dt">const</span> <span class="dt">char</span>* filepath);
-
-<span class="dt">void</span>* LoadSymbol(<span class="dt">void</span>* library, <span class="dt">const</span> <span class="dt">char</span>* symbol);
-
-<span class="dt">void</span> Reload(<span class="dt">void</span>* &amp;library, <span class="dt">const</span> <span class="dt">char</span>* filepath);
-
-<span class="dt">void</span> PrintError();</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// lib/RePlex.cpp</span>
-
-<span class="ot">#include &quot;pub/RePlex.h&quot;</span>
-
-<span class="ot">#include &lt;cstdio&gt;</span>
-
-<span class="dt">void</span>* Load(<span class="dt">const</span> <span class="dt">char</span>* filepath)
-{
-  <span class="kw">return</span> dlopen(filepath, RTLD_NOW);
-}
-
-<span class="dt">void</span>* LoadSymbol(<span class="dt">void</span>* library, <span class="dt">const</span> <span class="dt">char</span>* symbol)
-{
-  <span class="kw">return</span> dlsym(library, symbol);
-}
-
-<span class="dt">void</span> Reload(<span class="dt">void</span>* &amp;library, <span class="dt">const</span> <span class="dt">char</span>* filepath)
-{
-  dlclose(library);
-  library = dlopen(filepath, RTLD_NOW);
-}
-
-<span class="dt">void</span> PrintError()
-{
-  printf(<span class="st">&quot;Error: </span><span class="ch">%s\n</span><span class="st">&quot;</span>, dlerror());
-}</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">// lib/pub/RePlex.h</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="pp">#pragma once</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="pp">#include </span><span class="im">&lt;dlfcn.h&gt;</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="dt">void</span>* Load(<span class="at">const</span> <span class="dt">char</span>* filepath);</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="dt">void</span>* LoadSymbol(<span class="dt">void</span>* library, <span class="at">const</span> <span class="dt">char</span>* symbol);</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="dt">void</span> Reload(<span class="dt">void</span>* &amp;library, <span class="at">const</span> <span class="dt">char</span>* filepath);</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="dt">void</span> PrintError();</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">// lib/RePlex.cpp</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="pp">#include </span><span class="im">&quot;pub/RePlex.h&quot;</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="pp">#include </span><span class="im">&lt;cstdio&gt;</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="dt">void</span>* Load(<span class="at">const</span> <span class="dt">char</span>* filepath)</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">{</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">  <span class="cf">return</span> dlopen(filepath, RTLD_NOW);</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="dt">void</span>* LoadSymbol(<span class="dt">void</span>* library, <span class="at">const</span> <span class="dt">char</span>* symbol)</a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">{</a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">  <span class="cf">return</span> dlsym(library, symbol);</a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">}</a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="dt">void</span> Reload(<span class="dt">void</span>* &amp;library, <span class="at">const</span> <span class="dt">char</span>* filepath)</a>
+<a class="sourceLine" id="cb13-18" data-line-number="18">{</a>
+<a class="sourceLine" id="cb13-19" data-line-number="19">  dlclose(library);</a>
+<a class="sourceLine" id="cb13-20" data-line-number="20">  library = dlopen(filepath, RTLD_NOW);</a>
+<a class="sourceLine" id="cb13-21" data-line-number="21">}</a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="dt">void</span> PrintError()</a>
+<a class="sourceLine" id="cb13-24" data-line-number="24">{</a>
+<a class="sourceLine" id="cb13-25" data-line-number="25">  printf(<span class="st">&quot;Error: </span><span class="sc">%s\n</span><span class="st">&quot;</span>, dlerror());</a>
+<a class="sourceLine" id="cb13-26" data-line-number="26">}</a></code></pre></div>
 <p>Finally, we’ll modify our runtime to use these new functions and test run a dll hot-load.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;RePlex.h&gt;</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-
-<span class="ot">#ifdef DEBUG</span>
-<span class="dt">const</span> <span class="dt">char</span>* g_libPath = <span class="st">&quot;bin/Debug/libRePlexTest.dylib&quot;</span>;
-<span class="ot">#else</span>
-<span class="dt">const</span> <span class="dt">char</span>* g_libPath = <span class="st">&quot;bin/Release/libRePlexTest.dylib&quot;</span>;
-<span class="ot">#endif</span>
-
-<span class="dt">void</span> (*foo)();
-
-<span class="dt">int</span> main()
-{
-  <span class="dt">void</span>* handle = Load(g_libPath);
-  <span class="kw">if</span> (handle)
-  {
-    <span class="co">// Set the memory address of the function foo from the library to our foo.</span>
-    foo = <span class="kw">reinterpret_cast</span>&lt;<span class="dt">void</span> (*)()&gt;(LoadSymbol(handle, <span class="st">&quot;foo&quot;</span>));
-    <span class="co">// Call foo</span>
-    foo();
-
-    <span class="co">// Read the data from the global variable bar in the test library</span>
-    <span class="dt">int</span> bar = *<span class="kw">reinterpret_cast</span>&lt;<span class="dt">int</span>*&gt;(LoadSymbol(handle, <span class="st">&quot;bar&quot;</span>));
-    std::cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; bar &lt;&lt; std::endl;
-
-    <span class="co">// Wait for input to give us a chance to recompile the library</span>
-    std::cout &lt;&lt; <span class="st">&quot;Make some changes, recompile, and press enter.&quot;</span> &lt;&lt; std::flush;
-    <span class="kw">while</span>(std::cin.get() != <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>) {}
-
-    <span class="co">// Reload the library!</span>
-    Reload(handle, g_libPath);
-
-    <span class="co">// We need to refetch the symbol because it's location in memory may have changed</span>
-    foo = <span class="kw">reinterpret_cast</span>&lt;<span class="dt">void</span> (*)()&gt;(LoadSymbol(handle, <span class="st">&quot;foo&quot;</span>));
-    foo();
-
-    <span class="co">// Do the same for bar</span>
-    bar = *<span class="kw">reinterpret_cast</span>&lt;<span class="dt">int</span>*&gt;(LoadSymbol(handle, <span class="st">&quot;bar&quot;</span>));
-    std::cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; bar &lt;&lt; std::endl;
-  }
-  <span class="kw">else</span>
-  {
-    PrintError();
-  }
-  <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="pp">#include </span><span class="im">&lt;RePlex.h&gt;</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="pp">#ifdef DEBUG</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="at">const</span> <span class="dt">char</span>* <span class="va">g_libPath</span> = <span class="st">&quot;bin/Debug/libRePlexTest.dylib&quot;</span>;</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="pp">#else</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="at">const</span> <span class="dt">char</span>* <span class="va">g_libPath</span> = <span class="st">&quot;bin/Release/libRePlexTest.dylib&quot;</span>;</a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="pp">#endif</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="dt">void</span> (*foo)();</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="dt">int</span> main()</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13">{</a>
+<a class="sourceLine" id="cb14-14" data-line-number="14">  <span class="dt">void</span>* handle = Load(<span class="va">g_libPath</span>);</a>
+<a class="sourceLine" id="cb14-15" data-line-number="15">  <span class="cf">if</span> (handle)</a>
+<a class="sourceLine" id="cb14-16" data-line-number="16">  {</a>
+<a class="sourceLine" id="cb14-17" data-line-number="17">    <span class="co">// Set the memory address of the function foo from the library to our foo.</span></a>
+<a class="sourceLine" id="cb14-18" data-line-number="18">    foo = <span class="kw">reinterpret_cast</span>&lt;<span class="dt">void</span> (*)()&gt;(LoadSymbol(handle, <span class="st">&quot;foo&quot;</span>));</a>
+<a class="sourceLine" id="cb14-19" data-line-number="19">    <span class="co">// Call foo</span></a>
+<a class="sourceLine" id="cb14-20" data-line-number="20">    foo();</a>
+<a class="sourceLine" id="cb14-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb14-22" data-line-number="22">    <span class="co">// Read the data from the global variable bar in the test library</span></a>
+<a class="sourceLine" id="cb14-23" data-line-number="23">    <span class="dt">int</span> bar = *<span class="kw">reinterpret_cast</span>&lt;<span class="dt">int</span>*&gt;(LoadSymbol(handle, <span class="st">&quot;bar&quot;</span>));</a>
+<a class="sourceLine" id="cb14-24" data-line-number="24">    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; bar &lt;&lt; <span class="bu">std::</span>endl;</a>
+<a class="sourceLine" id="cb14-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb14-26" data-line-number="26">    <span class="co">// Wait for input to give us a chance to recompile the library</span></a>
+<a class="sourceLine" id="cb14-27" data-line-number="27">    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Make some changes, recompile, and press enter.&quot;</span> &lt;&lt; <span class="bu">std::</span>flush;</a>
+<a class="sourceLine" id="cb14-28" data-line-number="28">    <span class="cf">while</span>(<span class="bu">std::</span>cin.get() != <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span>) {}</a>
+<a class="sourceLine" id="cb14-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb14-30" data-line-number="30">    <span class="co">// Reload the library!</span></a>
+<a class="sourceLine" id="cb14-31" data-line-number="31">    Reload(handle, <span class="va">g_libPath</span>);</a>
+<a class="sourceLine" id="cb14-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb14-33" data-line-number="33">    <span class="co">// We need to refetch the symbol because it's location in memory may have changed</span></a>
+<a class="sourceLine" id="cb14-34" data-line-number="34">    foo = <span class="kw">reinterpret_cast</span>&lt;<span class="dt">void</span> (*)()&gt;(LoadSymbol(handle, <span class="st">&quot;foo&quot;</span>));</a>
+<a class="sourceLine" id="cb14-35" data-line-number="35">    foo();</a>
+<a class="sourceLine" id="cb14-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb14-37" data-line-number="37">    <span class="co">// Do the same for bar</span></a>
+<a class="sourceLine" id="cb14-38" data-line-number="38">    bar = *<span class="kw">reinterpret_cast</span>&lt;<span class="dt">int</span>*&gt;(LoadSymbol(handle, <span class="st">&quot;bar&quot;</span>));</a>
+<a class="sourceLine" id="cb14-39" data-line-number="39">    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; bar &lt;&lt; <span class="bu">std::</span>endl;</a>
+<a class="sourceLine" id="cb14-40" data-line-number="40">  }</a>
+<a class="sourceLine" id="cb14-41" data-line-number="41">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb14-42" data-line-number="42">  {</a>
+<a class="sourceLine" id="cb14-43" data-line-number="43">    PrintError();</a>
+<a class="sourceLine" id="cb14-44" data-line-number="44">  }</a>
+<a class="sourceLine" id="cb14-45" data-line-number="45">  <span class="cf">return</span> <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb14-46" data-line-number="46">}</a></code></pre></div>
 <p>Running this on my machine generates output like the following:</p>
 <pre><code>Hi
 bar == 4
@@ -340,333 +340,333 @@ Can i haz hot-reloading
 bar == 314159</code></pre>
 <p>Note that after the second line of that output, I changed the contents of Test.cpp and reinvoked <code>make</code> to recompile the library. So far so good! Now that we have some grasp of the strange incantations of this program, we can start to think about a better way to structure it. One thing worth noting is our use of <code>extern &quot;C&quot;</code>. This has a special meaning in C++ and informs the compiler to not use name-mangling on the symbols defined in its scope (in our case, the <code>foo</code> function and <code>bar</code> global). This makes those symbols callable from C code, and also allows functions like <code>dlsym</code> to locate them using a simple C-string lookup. Symbol lookup for C++ functions and variables is a bit more complex due to the various decorators that can be attached to functions and variables. More importantly, the way in which the compiler assigns names to these decorated functions and variables is not standardized and can vary from compiler to compiler.</p>
 <p>The existing program has a number of problems. First, we need to manually load the symbol ourselves. This will certainly become tedious if a module exports a lot of functions and variables. In addition, the test library where the actual code resides doesn’t actually specify it’s own exports which is a little odd. What we really want is a way to package all exports in a pretty package. This means that RePlex will need to expose two public interfaces, one for publishing a hot-loadable library, and one for loading and reloading those hot-loadable libraries. To do this, we’ll make a class called <code>RePlexModule</code> in Replex.h. The intended usage of this module is to be inherited by the test library and specialized so it can load all the correct symbols and expose a cleaner interface to the end user of the library. Let’s start with just the public interface:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// lib/pub/RePlex.h</span>
-<span class="ot">#pragma once</span>
-
-<span class="ot">#include &lt;array&gt;</span>
-<span class="ot">#include &lt;unordered_map&gt;</span>
-<span class="ot">#include &lt;string&gt;</span>
-<span class="ot">#include &lt;dlfcn.h&gt;</span>
-
-<span class="kw">template</span> &lt;<span class="kw">typename</span> E, size_t NumSymbols&gt;
-<span class="kw">class</span> RePlexModule
-{
-<span class="kw">public</span>:
-  <span class="dt">static</span> <span class="dt">void</span> LoadLibrary() { GetInstance().Load(); }
-  <span class="dt">static</span> <span class="dt">void</span> ReloadLibrary() { GetInstance().Reload(); }
-
-<span class="kw">protected</span>:
-  <span class="dt">static</span> E&amp; GetInstance()
-  {
-    <span class="dt">static</span> E instance;
-    <span class="kw">return</span> instance;
-  }
-
-  <span class="co">//...</span>
-  <span class="co">//... continued later</span>
-};</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">// lib/pub/RePlex.h</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="pp">#pragma once</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="pp">#include </span><span class="im">&lt;array&gt;</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="pp">#include </span><span class="im">&lt;unordered_map&gt;</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="pp">#include </span><span class="im">&lt;string&gt;</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="pp">#include </span><span class="im">&lt;dlfcn.h&gt;</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="kw">template</span> &lt;<span class="kw">typename</span> E, <span class="dt">size_t</span> NumSymbols&gt;</a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="kw">class</span> RePlexModule</a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">{</a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb16-13" data-line-number="13">  <span class="at">static</span> <span class="dt">void</span> LoadLibrary() { GetInstance().Load(); }</a>
+<a class="sourceLine" id="cb16-14" data-line-number="14">  <span class="at">static</span> <span class="dt">void</span> ReloadLibrary() { GetInstance().Reload(); }</a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="kw">protected</span>:</a>
+<a class="sourceLine" id="cb16-17" data-line-number="17">  <span class="at">static</span> E&amp; GetInstance()</a>
+<a class="sourceLine" id="cb16-18" data-line-number="18">  {</a>
+<a class="sourceLine" id="cb16-19" data-line-number="19">    <span class="at">static</span> E instance;</a>
+<a class="sourceLine" id="cb16-20" data-line-number="20">    <span class="cf">return</span> instance;</a>
+<a class="sourceLine" id="cb16-21" data-line-number="21">  }</a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23">  <span class="co">//...</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24">  <span class="co">//... continued later</span></a>
+<a class="sourceLine" id="cb16-25" data-line-number="25">};</a></code></pre></div>
 <p>The first thing you’ll notice are the template parameters attached to our class. That’s right, this is a template class! If you haven’t seen them before (or saw them and didn’t understand them), the following example should give you the basic gist.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;
-<span class="kw">class</span> Foo
-{
-<span class="kw">public</span>:
-    T GetT() { <span class="kw">return</span> t; }
-    T t;
-}</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">class</span> Foo</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">{</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">    T GetT() { <span class="cf">return</span> t; }</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">    T t;</a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">}</a></code></pre></div>
 <p><code>Foo</code> is a class template (you might have heard the term “template class” before, but honestly, I don’t think that makes any sense; just know that they’re interchangeable and “template class” is a bit more common) and has one template parameter. We can’t make an object of type <code>Foo</code> since we don’t know what <code>T</code> is. However, later we might <em>instantiate</em> the class template like so:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">Foo&lt;<span class="dt">double</span>&gt; foo;</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb18-1" data-line-number="1">Foo&lt;<span class="dt">double</span>&gt; foo;</a></code></pre></div>
 <p>This makes an instance of the class template <code>Foo</code> with <code>T = double</code>. The compiler essentially writes out the code like so:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">class</span> Foo&lt;<span class="dt">double</span>&gt;
-{
-<span class="kw">public</span>:
-    <span class="dt">double</span> GetT() { <span class="kw">return</span> t; }
-    <span class="dt">double</span> t;
-}</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">class</span> Foo&lt;<span class="dt">double</span>&gt;</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">{</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">    <span class="dt">double</span> GetT() { <span class="cf">return</span> t; }</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">    <span class="dt">double</span> t;</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">}</a></code></pre></div>
 <p>The compiler simply did a substitution of the unqualified type <code>T</code> for the type <code>double</code>. If you conceptually think of templates in this way and do mental substitutions, you’ll have a good mental model for what’s going on. In addition to types, template arguments can be countable numbers (like <code>NumSymbols</code>).</p>
 <p>Going back to <code>RePlexModule</code>, the only two public functions RePlexModule will expose to our runtime is <code>LoadLibrary</code> and <code>ReloadLibrary</code> which both depend on <code>GetInstance</code>. Notice that these are all static functions that operate on a singleton. Singletons are often considered an antipattern, however, in this case we actually want to enforce that only one copy of this class exists in memory. It really doesn’t make sense to have multiple instances (if we wanted, say, two separate versions of the library to coexist, we would associate them with entirely different types, not two instances of the same type). Why doesn’t <code>GetInstance</code> return a reference to <code>RePlexModule</code>? Because remember, we want our test library to inherit from this class to specialize behavior. Thus, we expect it to supply the value of the template parameter <code>E</code> as itself. If this is confusing now, don’t worry. It will get clarified better later on. We also need to remember to remove the <code>RePlex</code> library as a Premake project since it now is a header only file that doesn’t require standalone compilation (this includes removing it as a link dependency of the runtime).</p>
 <p>Now, let’s look at the functions exposed to the test library that will inherit <code>RePlexModule</code>:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  <span class="co">// Start of RePlexModule declaration above</span>
-  <span class="co">// ...</span>
-<span class="kw">protected</span>:
-
-  <span class="co">// Should return the path to the library on disk</span>
-  <span class="kw">virtual</span> <span class="dt">const</span> <span class="dt">char</span>* GetPath() <span class="dt">const</span> = <span class="dv">0</span>;
-
-  <span class="co">// Should return a reference to an array of C-strings of size NumSymbols</span>
-  <span class="co">// Used when loading or reloading the library to lookup the address of</span>
-  <span class="co">// all exported symbols</span>
-  <span class="kw">virtual</span> std::array&lt;<span class="dt">const</span> <span class="dt">char</span>*, NumSymbols&gt;&amp; GetSymbolNames() <span class="dt">const</span> = <span class="dv">0</span>;
-
-  <span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;
-  Ret Execute(<span class="dt">const</span> <span class="dt">char</span>* name, Args... args)
-  {
-    <span class="co">// Lookup the function address</span>
-    <span class="kw">auto</span> symbol = m_symbols.find(name);
-    <span class="kw">if</span> (symbol != m_symbols.end())
-    {
-      <span class="co">// Cast the address to the appropriate function type and call it,</span>
-      <span class="co">// forwarding all arguments</span>
-      <span class="kw">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol-&gt;second)(args...);
-    }
-    <span class="kw">else</span>
-    {
-      <span class="kw">throw</span> std::runtime_error(std::string(<span class="st">&quot;Function not found: &quot;</span>) + name);
-    }
-  }
-
-  <span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;
-  T* GetVar(<span class="dt">const</span> <span class="dt">char</span>* name)
-  {
-    <span class="kw">auto</span> symbol = m_symbols.find(name);
-    <span class="kw">if</span> (symbol != m_symbols.end())
-    {
-      <span class="kw">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol-&gt;second);
-    }
-    <span class="kw">else</span>
-    {
-      <span class="co">// We didn't find the variable. Return an empty pointer</span>
-      <span class="kw">return</span> <span class="kw">nullptr</span>;
-    }
-  }
-
-<span class="kw">private</span>:
-  <span class="dt">void</span> Load()
-  {
-    m_libHandle = dlopen(GetPath(), RTLD_NOW);
-    LoadSymbols();
-  }
-
-  <span class="dt">void</span> Reload()
-  {
-    dlclose(m_libHandle);
-    m_symbols.clear();
-    Load();
-  }
-
-  <span class="dt">void</span> LoadSymbols()
-  {
-    <span class="kw">for</span> (<span class="dt">const</span> <span class="dt">char</span>* symbol : GetSymbolNames())
-    {
-      m_symbols[symbol] = dlsym(m_libHandle, symbol);
-    }
-  }
-
-  <span class="dt">void</span>* m_libHandle;
-  std::unordered_map&lt;std::string, <span class="dt">void</span>*&gt; m_symbols;
-};</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb20-1" data-line-number="1">  <span class="co">// Start of RePlexModule declaration above</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">  <span class="co">// ...</span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw">protected</span>:</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">  <span class="co">// Should return the path to the library on disk</span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6">  <span class="kw">virtual</span> <span class="at">const</span> <span class="dt">char</span>* GetPath() <span class="at">const</span> = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">  <span class="co">// Should return a reference to an array of C-strings of size NumSymbols</span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9">  <span class="co">// Used when loading or reloading the library to lookup the address of</span></a>
+<a class="sourceLine" id="cb20-10" data-line-number="10">  <span class="co">// all exported symbols</span></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11">  <span class="kw">virtual</span> <span class="bu">std::</span>array&lt;<span class="at">const</span> <span class="dt">char</span>*, NumSymbols&gt;&amp; GetSymbolNames() <span class="at">const</span> = <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb20-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb20-13" data-line-number="13">  <span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;</a>
+<a class="sourceLine" id="cb20-14" data-line-number="14">  Ret Execute(<span class="at">const</span> <span class="dt">char</span>* name, Args... args)</a>
+<a class="sourceLine" id="cb20-15" data-line-number="15">  {</a>
+<a class="sourceLine" id="cb20-16" data-line-number="16">    <span class="co">// Lookup the function address</span></a>
+<a class="sourceLine" id="cb20-17" data-line-number="17">    <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>.find(name);</a>
+<a class="sourceLine" id="cb20-18" data-line-number="18">    <span class="cf">if</span> (symbol != <span class="va">m_symbols</span>.end())</a>
+<a class="sourceLine" id="cb20-19" data-line-number="19">    {</a>
+<a class="sourceLine" id="cb20-20" data-line-number="20">      <span class="co">// Cast the address to the appropriate function type and call it,</span></a>
+<a class="sourceLine" id="cb20-21" data-line-number="21">      <span class="co">// forwarding all arguments</span></a>
+<a class="sourceLine" id="cb20-22" data-line-number="22">      <span class="cf">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol-&gt;second)(args...);</a>
+<a class="sourceLine" id="cb20-23" data-line-number="23">    }</a>
+<a class="sourceLine" id="cb20-24" data-line-number="24">    <span class="cf">else</span></a>
+<a class="sourceLine" id="cb20-25" data-line-number="25">    {</a>
+<a class="sourceLine" id="cb20-26" data-line-number="26">      <span class="cf">throw</span> <span class="bu">std::</span>runtime_error(<span class="bu">std::</span>string(<span class="st">&quot;Function not found: &quot;</span>) + name);</a>
+<a class="sourceLine" id="cb20-27" data-line-number="27">    }</a>
+<a class="sourceLine" id="cb20-28" data-line-number="28">  }</a>
+<a class="sourceLine" id="cb20-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb20-30" data-line-number="30">  <span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;</a>
+<a class="sourceLine" id="cb20-31" data-line-number="31">  T* GetVar(<span class="at">const</span> <span class="dt">char</span>* name)</a>
+<a class="sourceLine" id="cb20-32" data-line-number="32">  {</a>
+<a class="sourceLine" id="cb20-33" data-line-number="33">    <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>.find(name);</a>
+<a class="sourceLine" id="cb20-34" data-line-number="34">    <span class="cf">if</span> (symbol != <span class="va">m_symbols</span>.end())</a>
+<a class="sourceLine" id="cb20-35" data-line-number="35">    {</a>
+<a class="sourceLine" id="cb20-36" data-line-number="36">      <span class="cf">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol-&gt;second);</a>
+<a class="sourceLine" id="cb20-37" data-line-number="37">    }</a>
+<a class="sourceLine" id="cb20-38" data-line-number="38">    <span class="cf">else</span></a>
+<a class="sourceLine" id="cb20-39" data-line-number="39">    {</a>
+<a class="sourceLine" id="cb20-40" data-line-number="40">      <span class="co">// We didn't find the variable. Return an empty pointer</span></a>
+<a class="sourceLine" id="cb20-41" data-line-number="41">      <span class="cf">return</span> <span class="kw">nullptr</span>;</a>
+<a class="sourceLine" id="cb20-42" data-line-number="42">    }</a>
+<a class="sourceLine" id="cb20-43" data-line-number="43">  }</a>
+<a class="sourceLine" id="cb20-44" data-line-number="44"></a>
+<a class="sourceLine" id="cb20-45" data-line-number="45"><span class="kw">private</span>:</a>
+<a class="sourceLine" id="cb20-46" data-line-number="46">  <span class="dt">void</span> Load()</a>
+<a class="sourceLine" id="cb20-47" data-line-number="47">  {</a>
+<a class="sourceLine" id="cb20-48" data-line-number="48">    <span class="va">m_libHandle</span> = dlopen(GetPath(), RTLD_NOW);</a>
+<a class="sourceLine" id="cb20-49" data-line-number="49">    LoadSymbols();</a>
+<a class="sourceLine" id="cb20-50" data-line-number="50">  }</a>
+<a class="sourceLine" id="cb20-51" data-line-number="51"></a>
+<a class="sourceLine" id="cb20-52" data-line-number="52">  <span class="dt">void</span> Reload()</a>
+<a class="sourceLine" id="cb20-53" data-line-number="53">  {</a>
+<a class="sourceLine" id="cb20-54" data-line-number="54">    dlclose(<span class="va">m_libHandle</span>);</a>
+<a class="sourceLine" id="cb20-55" data-line-number="55">    <span class="va">m_symbols</span>.clear();</a>
+<a class="sourceLine" id="cb20-56" data-line-number="56">    Load();</a>
+<a class="sourceLine" id="cb20-57" data-line-number="57">  }</a>
+<a class="sourceLine" id="cb20-58" data-line-number="58"></a>
+<a class="sourceLine" id="cb20-59" data-line-number="59">  <span class="dt">void</span> LoadSymbols()</a>
+<a class="sourceLine" id="cb20-60" data-line-number="60">  {</a>
+<a class="sourceLine" id="cb20-61" data-line-number="61">    <span class="cf">for</span> (<span class="at">const</span> <span class="dt">char</span>* symbol : GetSymbolNames())</a>
+<a class="sourceLine" id="cb20-62" data-line-number="62">    {</a>
+<a class="sourceLine" id="cb20-63" data-line-number="63">      <span class="va">m_symbols</span>[symbol] = dlsym(<span class="va">m_libHandle</span>, symbol);</a>
+<a class="sourceLine" id="cb20-64" data-line-number="64">    }</a>
+<a class="sourceLine" id="cb20-65" data-line-number="65">  }</a>
+<a class="sourceLine" id="cb20-66" data-line-number="66"></a>
+<a class="sourceLine" id="cb20-67" data-line-number="67">  <span class="dt">void</span>* <span class="va">m_libHandle</span>;</a>
+<a class="sourceLine" id="cb20-68" data-line-number="68">  <span class="bu">std::</span>unordered_map&lt;<span class="bu">std::</span>string, <span class="dt">void</span>*&gt; <span class="va">m_symbols</span>;</a>
+<a class="sourceLine" id="cb20-69" data-line-number="69">};</a></code></pre></div>
 <p>The data members of the class at the very bottom are a pointer to the library handle after it gets loaded and an associative container mapping symbol names to their pointers in memory. Working upwards, we have functions that operate very similarly to our initial toy implementation. <code>LoadSymbols</code> iterates over all elements returned from <code>GetSymbols</code> and populates <code>m_symbols</code>. <code>Load</code> works as before but also calls <code>LoadSymbols</code>. <code>Reload</code> also works as before but clears the contents of <code>m_symbols</code> first to ensure there aren’t any invalid symbols lingering around. <code>Load</code> and <code>Reload</code> are called by the static functions <code>LoadLibrary</code> and <code>ReloadLibrary</code> defined above respectively.</p>
 <p>Towards the top, we have pure virtual functions we expect implementers of this class to override: <code>GetPath</code> and <code>GetSymbols</code>. We’ll override these soon, but first, let’s look at the (possibly terrifying) functions <code>Execute</code> and <code>GetVar</code>.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;
-Ret Execute(<span class="dt">const</span> <span class="dt">char</span>* name, Args... args)
-{
-  <span class="kw">auto</span> symbol = m_symbols.find(name);
-  <span class="kw">if</span> (symbol != m_symbols.end())
-  {
-    <span class="kw">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol-&gt;second)(args...);
-  }
-  <span class="kw">else</span>
-  {
-    <span class="kw">throw</span> std::runtime_error(std::string(<span class="st">&quot;Function not found: &quot;</span>) + name);
-  }
-}</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">Ret Execute(<span class="at">const</span> <span class="dt">char</span>* name, Args... args)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">{</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>.find(name);</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">  <span class="cf">if</span> (symbol != <span class="va">m_symbols</span>.end())</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">  {</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">    <span class="cf">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol-&gt;second)(args...);</a>
+<a class="sourceLine" id="cb21-8" data-line-number="8">  }</a>
+<a class="sourceLine" id="cb21-9" data-line-number="9">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb21-10" data-line-number="10">  {</a>
+<a class="sourceLine" id="cb21-11" data-line-number="11">    <span class="cf">throw</span> <span class="bu">std::</span>runtime_error(<span class="bu">std::</span>string(<span class="st">&quot;Function not found: &quot;</span>) + name);</a>
+<a class="sourceLine" id="cb21-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">}</a></code></pre></div>
 <p><code>Execute</code> takes a function name and <code>Args... args</code> as arguments. Its return type is <code>Ret</code>. The first argument is unlikely to be contentious but the second is likely unfamiliar to those who haven’t touched C++ since the advent of the C++11 standard. The <code>...</code> syntax denotes a parameter pack and is useful for specifying a variadic number of arguments with varying types. For example, if I called this function like:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">Execute&lt;<span class="dt">char</span>, <span class="dt">int</span>, <span class="dt">float</span>&gt;(<span class="st">&quot;stuff&quot;</span>, <span class="dv">7</span>, <span class="fl">2.4f</span>);
-
-<span class="co">// Compiler turns this into something like:</span>
-<span class="co">// char Execute(const char* name, int arg1, float arg2)</span>
-<span class="co">// {</span>
-<span class="co">//   auto symbol = m_symbols.find(name);</span>
-<span class="co">//   if (symbol != m_symbols.end())</span>
-<span class="co">//   {</span>
-<span class="co">//     return reinterpret_cast&lt;char(*)(int, float)&gt;(symbol-&gt;second)(arg1, arg2);</span>
-<span class="co">//   }</span>
-<span class="co">//   else</span>
-<span class="co">//   {</span>
-<span class="co">//     throw std::runtime_error(std::string(&quot;Function not found: &quot;) + name);</span>
-<span class="co">//   }</span>
-<span class="co">// }</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb22-1" data-line-number="1">Execute&lt;<span class="dt">char</span>, <span class="dt">int</span>, <span class="dt">float</span>&gt;(<span class="st">&quot;stuff&quot;</span>, <span class="dv">7</span>, <span class="fl">2.4f</span>);</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">// Compiler turns this into something like:</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co">// char Execute(const char* name, int arg1, float arg2)</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">// {</span></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="co">//   auto symbol = m_symbols.find(name);</span></a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="co">//   if (symbol != m_symbols.end())</span></a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">//   {</span></a>
+<a class="sourceLine" id="cb22-9" data-line-number="9"><span class="co">//     return reinterpret_cast&lt;char(*)(int, float)&gt;(symbol-&gt;second)(arg1, arg2);</span></a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="co">//   }</span></a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="co">//   else</span></a>
+<a class="sourceLine" id="cb22-12" data-line-number="12"><span class="co">//   {</span></a>
+<a class="sourceLine" id="cb22-13" data-line-number="13"><span class="co">//     throw std::runtime_error(std::string(&quot;Function not found: &quot;) + name);</span></a>
+<a class="sourceLine" id="cb22-14" data-line-number="14"><span class="co">//   }</span></a>
+<a class="sourceLine" id="cb22-15" data-line-number="15"><span class="co">// }</span></a></code></pre></div>
 <p>The compiler would interpret <code>Ret</code> as a <code>char</code>, <code>args...</code> would be expanded to 7 and 2.4f, and <code>Args...</code> would be expanded to an int and float type. This allows us to invoke <code>Execute</code> to first lookup the symbol, call it as a function with the appropriate arguments, and subsequently return the correct return value. Neat! We throw an exception if the function isn’t found because it’s hard to know what to return in this case.</p>
 <p>The function <code>GetVar</code> is a little simpler. We simply look up the symbol and cast it as a pointer to specified template type before returning it.</p>
 <p>Now, we’re ready to specialize this class for our test library.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// Test.h</span>
-<span class="ot">#pragma once</span>
-
-<span class="ot">#include &lt;RePlex.h&gt;</span>
-
-<span class="dt">extern</span> <span class="st">&quot;C&quot;</span>
-{
-  <span class="dt">void</span> foo();
-  <span class="dt">extern</span> <span class="dt">int</span> bar;
-}
-
-std::array&lt;<span class="dt">const</span> <span class="dt">char</span>*, <span class="dv">2</span>&gt; g_exports = { <span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span> };
-
-<span class="kw">class</span> TestModule : <span class="kw">public</span> RePlexModule&lt;TestModule, g_exports.size()&gt;
-{
-<span class="kw">public</span>:
-  <span class="dt">static</span> <span class="dt">void</span> Foo()
-  {
-    <span class="co">// Execute might throw, but we don't bother catching the exception here for brevity</span>
-    GetInstance().Execute&lt;<span class="dt">void</span>&gt;(<span class="st">&quot;foo&quot;</span>);
-  }
-
-  <span class="dt">static</span> <span class="dt">int</span> GetBar()
-  {
-    <span class="co">// decltype is a relatively new operator. decltype(bar) resolves to int</span>
-    <span class="co">// Note that this function does not protect against retrieving nullptr</span>
-    <span class="kw">return</span> *GetInstance().GetVar&lt;<span class="kw">decltype</span>(bar)&gt;(<span class="st">&quot;bar&quot;</span>);
-  }
-
-<span class="kw">protected</span>:
-  <span class="kw">virtual</span> <span class="dt">const</span> <span class="dt">char</span>* GetPath() <span class="dt">const</span> <span class="kw">override</span>
-  {
-<span class="ot">#ifdef DEBUG</span>
-    <span class="kw">return</span> <span class="st">&quot;bin/Debug/libRePlexTest.dylib&quot;</span>;
-<span class="ot">#else</span>
-    <span class="kw">return</span> <span class="st">&quot;bin/Release/libRePlexTest.dylib&quot;</span>;
-<span class="ot">#endif</span>
-  }
-
-  <span class="kw">virtual</span> std::array&lt;<span class="dt">const</span> <span class="dt">char</span>*, g_exports.size()&gt;&amp; GetSymbols() <span class="dt">const</span> <span class="kw">override</span>
-  {
-    <span class="kw">return</span> g_exports;
-  }
-};</code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">// Test.h</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="pp">#pragma once</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="pp">#include </span><span class="im">&lt;RePlex.h&gt;</span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="at">extern</span> <span class="st">&quot;C&quot;</span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">{</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">  <span class="dt">void</span> foo();</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">  <span class="at">extern</span> <span class="dt">int</span> bar;</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">}</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="bu">std::</span>array&lt;<span class="at">const</span> <span class="dt">char</span>*, <span class="dv">2</span>&gt; <span class="va">g_exports</span> = { <span class="st">&quot;foo&quot;</span>, <span class="st">&quot;bar&quot;</span> };</a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="kw">class</span> TestModule : <span class="kw">public</span> RePlexModule&lt;TestModule, <span class="va">g_exports</span>.size()&gt;</a>
+<a class="sourceLine" id="cb23-15" data-line-number="15">{</a>
+<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb23-17" data-line-number="17">  <span class="at">static</span> <span class="dt">void</span> Foo()</a>
+<a class="sourceLine" id="cb23-18" data-line-number="18">  {</a>
+<a class="sourceLine" id="cb23-19" data-line-number="19">    <span class="co">// Execute might throw, but we don't bother catching the exception here for brevity</span></a>
+<a class="sourceLine" id="cb23-20" data-line-number="20">    GetInstance().Execute&lt;<span class="dt">void</span>&gt;(<span class="st">&quot;foo&quot;</span>);</a>
+<a class="sourceLine" id="cb23-21" data-line-number="21">  }</a>
+<a class="sourceLine" id="cb23-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb23-23" data-line-number="23">  <span class="at">static</span> <span class="dt">int</span> GetBar()</a>
+<a class="sourceLine" id="cb23-24" data-line-number="24">  {</a>
+<a class="sourceLine" id="cb23-25" data-line-number="25">    <span class="co">// decltype is a relatively new operator. decltype(bar) resolves to int</span></a>
+<a class="sourceLine" id="cb23-26" data-line-number="26">    <span class="co">// Note that this function does not protect against retrieving nullptr</span></a>
+<a class="sourceLine" id="cb23-27" data-line-number="27">    <span class="cf">return</span> *GetInstance().GetVar&lt;<span class="kw">decltype</span>(bar)&gt;(<span class="st">&quot;bar&quot;</span>);</a>
+<a class="sourceLine" id="cb23-28" data-line-number="28">  }</a>
+<a class="sourceLine" id="cb23-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb23-30" data-line-number="30"><span class="kw">protected</span>:</a>
+<a class="sourceLine" id="cb23-31" data-line-number="31">  <span class="kw">virtual</span> <span class="at">const</span> <span class="dt">char</span>* GetPath() <span class="at">const</span> <span class="kw">override</span></a>
+<a class="sourceLine" id="cb23-32" data-line-number="32">  {</a>
+<a class="sourceLine" id="cb23-33" data-line-number="33"><span class="pp">#ifdef DEBUG</span></a>
+<a class="sourceLine" id="cb23-34" data-line-number="34">    <span class="cf">return</span> <span class="st">&quot;bin/Debug/libRePlexTest.dylib&quot;</span>;</a>
+<a class="sourceLine" id="cb23-35" data-line-number="35"><span class="pp">#else</span></a>
+<a class="sourceLine" id="cb23-36" data-line-number="36">    <span class="cf">return</span> <span class="st">&quot;bin/Release/libRePlexTest.dylib&quot;</span>;</a>
+<a class="sourceLine" id="cb23-37" data-line-number="37"><span class="pp">#endif</span></a>
+<a class="sourceLine" id="cb23-38" data-line-number="38">  }</a>
+<a class="sourceLine" id="cb23-39" data-line-number="39"></a>
+<a class="sourceLine" id="cb23-40" data-line-number="40">  <span class="kw">virtual</span> <span class="bu">std::</span>array&lt;<span class="at">const</span> <span class="dt">char</span>*, <span class="va">g_exports</span>.size()&gt;&amp; GetSymbols() <span class="at">const</span> <span class="kw">override</span></a>
+<a class="sourceLine" id="cb23-41" data-line-number="41">  {</a>
+<a class="sourceLine" id="cb23-42" data-line-number="42">    <span class="cf">return</span> <span class="va">g_exports</span>;</a>
+<a class="sourceLine" id="cb23-43" data-line-number="43">  }</a>
+<a class="sourceLine" id="cb23-44" data-line-number="44">};</a></code></pre></div>
 <p>In addition to the things we actually want to export from before (<code>foo</code> and <code>bar</code>), we make an array of exports of size 2 containing the correct string names. When we inherit from <code>RePlexModule</code>, we are careful to fully qualify all of its template arguments so the compiler can properly substitute all the template arguments where they are necessary. Thus, <code>GetInstance</code> will return a reference to a <code>TestModule</code> singleton, and <code>GetSymbolNames</code> will return an array of 2 strings. We override the methods that were declared pure virtual, <code>GetPath</code>, and <code>GetSymbolNames</code> in a straightforward manner. Finally, we provide convenient static functions <code>Foo</code> and <code>GetBar</code> for calling <code>foo</code> and retrieving <code>bar</code>. Notice that the body of <code>Foo</code> contains</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">GetInstance().Execute&lt;<span class="dt">void</span>&gt;(<span class="st">&quot;foo&quot;</span>);</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb24-1" data-line-number="1">GetInstance().Execute&lt;<span class="dt">void</span>&gt;(<span class="st">&quot;foo&quot;</span>);</a></code></pre></div>
 <p>because <code>foo</code> returns void and takes no arguments. We’re finally ready to modify our main program to take advantage of the new <code>TestModule</code> class.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// runtime/Main.cpp</span>
-
-<span class="ot">#include &lt;RePlex.h&gt;</span>
-<span class="ot">#include &lt;Test.h&gt;</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-
-<span class="dt">int</span> main()
-{
-  TestModule::LoadLibrary();
-  TestModule::Foo();
-  std::cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; TestModule::GetBar() &lt;&lt; std::endl;
-
-  std::cout &lt;&lt; <span class="st">&quot;Make some changes, recompile, and press enter.&quot;</span> &lt;&lt; std::flush;
-  <span class="kw">while</span>(std::cin.get() != <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>) {}
-
-  TestModule::ReloadLibrary();
-  TestModule::Foo();
-  std::cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; TestModule::GetBar() &lt;&lt; std::endl;
-  <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co">// runtime/Main.cpp</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="pp">#include </span><span class="im">&lt;RePlex.h&gt;</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="pp">#include </span><span class="im">&lt;Test.h&gt;</span></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="dt">int</span> main()</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">{</a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">  TestModule::LoadLibrary();</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10">  TestModule::Foo();</a>
+<a class="sourceLine" id="cb25-11" data-line-number="11">  <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; TestModule::GetBar() &lt;&lt; <span class="bu">std::</span>endl;</a>
+<a class="sourceLine" id="cb25-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb25-13" data-line-number="13">  <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Make some changes, recompile, and press enter.&quot;</span> &lt;&lt; <span class="bu">std::</span>flush;</a>
+<a class="sourceLine" id="cb25-14" data-line-number="14">  <span class="cf">while</span>(<span class="bu">std::</span>cin.get() != <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span>) {}</a>
+<a class="sourceLine" id="cb25-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb25-16" data-line-number="16">  TestModule::ReloadLibrary();</a>
+<a class="sourceLine" id="cb25-17" data-line-number="17">  TestModule::Foo();</a>
+<a class="sourceLine" id="cb25-18" data-line-number="18">  <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;bar == &quot;</span> &lt;&lt; TestModule::GetBar() &lt;&lt; <span class="bu">std::</span>endl;</a>
+<a class="sourceLine" id="cb25-19" data-line-number="19">  <span class="cf">return</span> <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb25-20" data-line-number="20">}</a></code></pre></div>
 <p>Much better. Now the user of the test module doesn’t need to think about the specifics regarding symbol names, reloading each symbol, or their types. We can just look at the public interface of <code>TestModule</code> to get it all down pat. If you’re following along in code, remember to add the correct include paths to the test library and runtime projects in <code>premake5.lua</code> so the preprocessor includes work before compiling.</p>
 <h1 id="some-refinements">Some refinements</h1>
 <p>What we have now is probably usable as an internal library for the purpose of iterating on a C++ module that exposes a public interface of variables and functions. By coupling this with enums, interfaces, structs, and classes in a public header, we can pretty quickly imagine how we might integrate this small library into our workflow. There are a number of refinements possibly worth making to the library which I’ll mention briefly in this section.</p>
 <p>First, the library as is will only work on Linux and OSX platforms. The way symbols get mapped and unmapped in memory is operating system dependent, and Windows exposes its own set of functions for doing so: <code>LoadLibrary</code>, <code>GetProcAddress</code>, and <code>FreeLibrary</code>. They are analogous to <code>dlopen</code>, <code>dlsym</code>, and <code>dlclose</code> respectively, and I will leave it as an exercise to the reader to implement this. There are at least two ways to accomplish this. One way is to add a Premake <a href="https://github.com/premake/premake-core/wiki/filter">filter</a> on the platform name and create preprocessor definitions that can be used to ensure the correct function is called. Alternatively, you can split the interface to the operating system in files based on operating system and exclude files that were meant for different platforms in Premake.</p>
 <p>A second problem is one of performance. If we are calling <code>Execute</code> or <code>GetVar</code> many times in an inner loop, we have to repeatedly hash the symbol name to do a lookup for the symbol address. To avoid this, we could cache the result of the lookup. Even easier though, is to avoid using the map in the first place and store the symbols in the same order as the symbol names. This might make it harder to change what symbols get loaded between loads, but it’s unlikely that this would be a useful feature anyways.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  <span class="co">// Before we stored a map</span>
-  <span class="co">// std::unordered_map&lt;std::string, void*&gt; m_symbols;</span>
-  <span class="co">//</span>
-  <span class="co">// Now we'll use a reference to the array that was passed in</span>
-  <span class="kw">using</span> SymbolArray = std::array&lt;std::pair&lt;<span class="dt">const</span> <span class="dt">char</span>*, <span class="dt">void</span>*&gt;&gt;;
-  SymbolArray&amp; m_symbols;</code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb26-1" data-line-number="1">  <span class="co">// Before we stored a map</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">  <span class="co">// std::unordered_map&lt;std::string, void*&gt; m_symbols;</span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">  <span class="co">//</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4">  <span class="co">// Now we'll use a reference to the array that was passed in</span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5">  <span class="kw">using</span> SymbolArray = <span class="bu">std::</span>array&lt;<span class="bu">std::</span>pair&lt;<span class="at">const</span> <span class="dt">char</span>*, <span class="dt">void</span>*&gt;&gt;;</a>
+<a class="sourceLine" id="cb26-6" data-line-number="6">  SymbolArray&amp; <span class="va">m_symbols</span>;</a></code></pre></div>
 <p>Also, we’ll change our <code>LoadSymbols</code> function to populate this array:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  <span class="dt">void</span> LoadSymbols()
-  {
-    <span class="kw">for</span> (<span class="kw">auto</span>&amp;&amp; symbol : m_symbols)
-    {
-      symbol.second = dlsym(m_libHandle, symbol.first);
-    }
-  }</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb27-1" data-line-number="1">  <span class="dt">void</span> LoadSymbols()</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">  {</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">    <span class="cf">for</span> (<span class="kw">auto</span>&amp;&amp; symbol : <span class="va">m_symbols</span>)</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">    {</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">      symbol.second = dlsym(<span class="va">m_libHandle</span>, symbol.first);</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">    }</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">  }</a></code></pre></div>
 <p>Note the <code>auto&amp;&amp;</code> here which shorthand for saying the variable <code>symbol</code> can bind to any type regardless of const-ness or <a href="http://en.cppreference.com/w/cpp/language/value_category">value category</a>. In this case, there is only one possibility of <code>auto&amp;&amp;</code> and the compiler will treat it as a <code>std::pair&lt;const char*, void*&gt;&amp;</code>.</p>
 <p>Next, we modify our <code>Execute</code> and <code>GetVar</code> functions to take an index instead of a string name, in addition to adding a constructor which accepts a reference to the symbol array.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  RePlexModule(SymbolArray&amp; symbols) : m_symbols(symbols) {}
-
-  <span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;
-  Ret Execute(<span class="dt">const</span> <span class="dt">int</span> index, Args... args)
-  {
-    <span class="kw">auto</span> symbol = m_symbols.at(index);
-    <span class="kw">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol.second)(args...);
-  }
-
-  <span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;
-  T* GetVar(<span class="dt">const</span> <span class="dt">int</span> index)
-  {
-    <span class="kw">auto</span> symbol = m_symbols.at(index);
-    <span class="kw">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol.second);
-  }</code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb28-1" data-line-number="1">  RePlexModule(SymbolArray&amp; symbols) : <span class="va">m_symbols</span>(symbols) {}</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">  <span class="kw">template</span> &lt;<span class="kw">typename</span> Ret, <span class="kw">typename</span>... Args&gt;</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">  Ret Execute(<span class="at">const</span> <span class="dt">int</span> index, Args... args)</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">  {</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">    <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>.at(index);</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">    <span class="cf">return</span> <span class="kw">reinterpret_cast</span>&lt;Ret(*)(Args...)&gt;(symbol.second)(args...);</a>
+<a class="sourceLine" id="cb28-8" data-line-number="8">  }</a>
+<a class="sourceLine" id="cb28-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb28-10" data-line-number="10">  <span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;</a>
+<a class="sourceLine" id="cb28-11" data-line-number="11">  T* GetVar(<span class="at">const</span> <span class="dt">int</span> index)</a>
+<a class="sourceLine" id="cb28-12" data-line-number="12">  {</a>
+<a class="sourceLine" id="cb28-13" data-line-number="13">    <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>.at(index);</a>
+<a class="sourceLine" id="cb28-14" data-line-number="14">    <span class="cf">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol.second);</a>
+<a class="sourceLine" id="cb28-15" data-line-number="15">  }</a></code></pre></div>
 <p>This is now quite a bit simpler than before because we leave it to the method <code>std::array::at</code> to do bounds checking for us. However, is it likely that this index will be dynamically determined at runtime? Not really. Instead, if we made the index a function template parameter, we can enforce that the correct address is retrieved without a bounds check. Doing this for the <code>GetVar</code> function for example:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  <span class="kw">template</span> &lt;<span class="kw">typename</span> T, size_t index&gt;
-  T* GetVar()
-  {
-    <span class="kw">static_assert</span>(Index &gt;= <span class="dv">0</span> &amp;&amp; Index &lt; NumSymbols, <span class="st">&quot;Out of bounds symbol index&quot;</span>);
-    <span class="kw">auto</span> symbol = m_symbols[index];
-    <span class="kw">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol.second);
-  }</code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb29-1" data-line-number="1">  <span class="kw">template</span> &lt;<span class="kw">typename</span> T, <span class="dt">size_t</span> index&gt;</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">  T* GetVar()</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">  {</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">    <span class="kw">static_assert</span>(Index &gt;= <span class="dv">0</span> &amp;&amp; Index &lt; NumSymbols, <span class="st">&quot;Out of bounds symbol index&quot;</span>);</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5">    <span class="kw">auto</span> symbol = <span class="va">m_symbols</span>[index];</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">    <span class="cf">return</span> <span class="kw">static_cast</span>&lt;T*&gt;(symbol.second);</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">  }</a></code></pre></div>
 <p>Doing <code>m_symbols[index]</code> doesn’t do a bounds check like <code>m_symbols.at(index)</code> does, but we still get the bounds checking via the <code>static_assert</code> which means it’s enforced at compile time instead of runtime. Great! There need to be a few changes to the <code>TestModule</code> to accommodate this new interface:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">std::array&lt;std::pair&lt;<span class="dt">const</span> <span class="dt">char</span>*, <span class="dt">void</span>*&gt;, <span class="dv">2</span>&gt; g_exports = {
-  std::make_pair(<span class="st">&quot;foo&quot;</span>, <span class="kw">nullptr</span>),
-  std::make_pair(<span class="st">&quot;bar&quot;</span>, <span class="kw">nullptr</span>)
-};
-
-
-<span class="kw">class</span> TestModule : <span class="kw">public</span> RePlexModule&lt;TestModule, g_exports.size()&gt;
-{
-<span class="kw">public</span>:
-  <span class="dt">static</span> <span class="dt">void</span> Foo(<span class="dt">int</span> input)
-  {
-    GetInstance().Execute&lt;<span class="dv">0</span>, <span class="dt">void</span>&gt;();
-  }
-
-  <span class="dt">static</span> <span class="dt">int</span> GetBar()
-  {
-    <span class="kw">return</span> *GetInstance().GetVar&lt;<span class="dv">1</span>, <span class="kw">decltype</span>(bar)&gt;();
-  }
-
-  TestModule() : RePlexModule(g_exports) {}
-
-  <span class="co">// Rest of class identical except GetSymbolNames was removed</span>
-};</code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="bu">std::</span>array&lt;<span class="bu">std::</span>pair&lt;<span class="at">const</span> <span class="dt">char</span>*, <span class="dt">void</span>*&gt;, <span class="dv">2</span>&gt; <span class="va">g_exports</span> = {</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">  <span class="bu">std::</span>make_pair(<span class="st">&quot;foo&quot;</span>, <span class="kw">nullptr</span>),</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">  <span class="bu">std::</span>make_pair(<span class="st">&quot;bar&quot;</span>, <span class="kw">nullptr</span>)</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">};</a>
+<a class="sourceLine" id="cb30-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="kw">class</span> TestModule : <span class="kw">public</span> RePlexModule&lt;TestModule, <span class="va">g_exports</span>.size()&gt;</a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">{</a>
+<a class="sourceLine" id="cb30-9" data-line-number="9"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">  <span class="at">static</span> <span class="dt">void</span> Foo(<span class="dt">int</span> input)</a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">  {</a>
+<a class="sourceLine" id="cb30-12" data-line-number="12">    GetInstance().Execute&lt;<span class="dv">0</span>, <span class="dt">void</span>&gt;();</a>
+<a class="sourceLine" id="cb30-13" data-line-number="13">  }</a>
+<a class="sourceLine" id="cb30-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb30-15" data-line-number="15">  <span class="at">static</span> <span class="dt">int</span> GetBar()</a>
+<a class="sourceLine" id="cb30-16" data-line-number="16">  {</a>
+<a class="sourceLine" id="cb30-17" data-line-number="17">    <span class="cf">return</span> *GetInstance().GetVar&lt;<span class="dv">1</span>, <span class="kw">decltype</span>(bar)&gt;();</a>
+<a class="sourceLine" id="cb30-18" data-line-number="18">  }</a>
+<a class="sourceLine" id="cb30-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb30-20" data-line-number="20">  TestModule() : RePlexModule(<span class="va">g_exports</span>) {}</a>
+<a class="sourceLine" id="cb30-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb30-22" data-line-number="22">  <span class="co">// Rest of class identical except GetSymbolNames was removed</span></a>
+<a class="sourceLine" id="cb30-23" data-line-number="23">};</a></code></pre></div>
 <p>Now, we can expect that <code>Foo</code> and <code>GetBar</code> will be very fast since they no longer require the string based map lookup. At most, they will need an offset from the array address, but it’s likely that the optimizer will even elide that instruction.</p>
 <p>This library is far from complete. It’s not thread-safe. It doesn’t protect you from reloading if you’re in the middle of executing a function that might do a symbol lookup shortly after the previous library is unloaded. It requires the programmer to repeat himself or herself with regard to function return types and arguments when binding <code>Execute</code>. It doesn’t handle errors well (library not found, symbol missing, etc). It’s also missing a number of nice features, like automatic reload if the file changes. The goal of this article wasn’t to provide a perfect implementation, but hopefully convey a since of how software like this might be written and structured.</p>
 <p>One thing that’s important to understand, is that the template programming we are doing here should not define one’s programming style. In this case, we are using generics simply because we are defining a generic interface, which is where the template really shines. In particular, templates coupled with static assertions can go a long way in enforcing the type safety and correctness of an application. It’s worth noting that all the templating is not exposed to the main runtime executable, who has the luxury of an easy-to-use interface. Indeed, abstracting away common generic behavior can be a good tool to reduce complexity and code duplication if done correctly.</p>
 <h1 id="testing-and-publishing">Testing and publishing</h1>
 <p>Making manual changes to the library and recompiling it, followed by a keystroke to see if things worked visually is a pretty terrible workflow as far as detecting regressions goes. In this section, we’ll make things a little neater and repeatable. We’ll also discuss the mechanics of publishing our code so others can use it.</p>
 <p>For the purposes of this article, we will use <a href="https://github.com/google/googletest">googletest</a> which is a batteries-included test suite which contains the necessities (assertions, test framework) and other amenities like test report generation and an optional <a href="https://github.com/ospector/gtest-gbar">frontend</a>. To make our repository self-contained, let’s add <code>googletest</code> as a git submodule, and also add a Premake project for it.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> submodule add git@github.com:google/googletest.git</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode lua"><code class="sourceCode lua"><span class="ot">//</span> premake5<span class="ot">.</span>lua
-
-<span class="ot">#</span> <span class="ot">...</span>
-
-  project <span class="st">&quot;GoogleTest&quot;</span>
-    kind <span class="st">&quot;StaticLib&quot;</span>
-    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;googletest/googletest/src/gtest-all.cc&quot;</span> <span class="ot">}</span>
-    includedirs <span class="ot">{</span> <span class="st">&quot;googletest/googletest/include&quot;</span><span class="ot">,</span> <span class="st">&quot;googletest/googletest&quot;</span> <span class="ot">}</span>
-
-  project <span class="st">&quot;RePlexRuntime&quot;</span>
-    kind <span class="st">&quot;ConsoleApp&quot;</span>
-    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;runtime/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;runtime/**.cpp&quot;</span> <span class="ot">}</span>
-    includedirs <span class="ot">{</span> <span class="st">&quot;lib/pub&quot;</span><span class="ot">,</span> <span class="st">&quot;test/pub&quot;</span><span class="ot">,</span> <span class="st">&quot;googletest/googletest/include&quot;</span> <span class="ot">}</span>
-    links <span class="ot">{</span> <span class="st">&quot;GoogleTest&quot;</span> <span class="ot">}</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="fu">git</span> submodule add git@github.com:google/googletest.git</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode lua"><code class="sourceCode lua"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="ot">//</span> premake5<span class="ot">.</span>lua</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="ot">#</span> <span class="ot">...</span></a>
+<a class="sourceLine" id="cb32-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb32-5" data-line-number="5">  project <span class="st">&quot;GoogleTest&quot;</span></a>
+<a class="sourceLine" id="cb32-6" data-line-number="6">    kind <span class="st">&quot;StaticLib&quot;</span></a>
+<a class="sourceLine" id="cb32-7" data-line-number="7">    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;googletest/googletest/src/gtest-all.cc&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb32-8" data-line-number="8">    includedirs <span class="ot">{</span> <span class="st">&quot;googletest/googletest/include&quot;</span><span class="ot">,</span> <span class="st">&quot;googletest/googletest&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb32-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb32-10" data-line-number="10">  project <span class="st">&quot;RePlexRuntime&quot;</span></a>
+<a class="sourceLine" id="cb32-11" data-line-number="11">    kind <span class="st">&quot;ConsoleApp&quot;</span></a>
+<a class="sourceLine" id="cb32-12" data-line-number="12">    <span class="fu">files</span> <span class="ot">{</span> <span class="st">&quot;runtime/**.h&quot;</span><span class="ot">,</span> <span class="st">&quot;runtime/**.cpp&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb32-13" data-line-number="13">    includedirs <span class="ot">{</span> <span class="st">&quot;lib/pub&quot;</span><span class="ot">,</span> <span class="st">&quot;test/pub&quot;</span><span class="ot">,</span> <span class="st">&quot;googletest/googletest/include&quot;</span> <span class="ot">}</span></a>
+<a class="sourceLine" id="cb32-14" data-line-number="14">    links <span class="ot">{</span> <span class="st">&quot;GoogleTest&quot;</span> <span class="ot">}</span></a></code></pre></div>
 <p>Now, the Google test framework is bundled in the repository and invoking <code>premake5 gmake</code> will compile it and link it to <code>RePlexRuntime</code>. Now to actually author the tests themselves. Let’s first do a simple test to see how this all works.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// runtime/Main.cpp</span>
-
-<span class="ot">#include &lt;gtest/gtest.h&gt;</span>
-
-TEST(SillyTest, IsFourPositive)
-{
-  EXPECT_GT(<span class="dv">4</span>, <span class="dv">0</span>);
-}
-
-TEST(SillyTest, IsFourTimesFourSixteen)
-{
-  <span class="dt">int</span> x = <span class="dv">4</span>;
-  EXPECT_EQ(x * x, <span class="dv">16</span>);
-}
-
-<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv)
-{
-  <span class="co">// This allows us to call this executable with various command line arguments</span>
-  <span class="co">// which get parsed in InitGoogleTest</span>
-  ::testing::InitGoogleTest(&amp;argc, argv);
-  <span class="kw">return</span> RUN_ALL_TESTS();
-}</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co">// runtime/Main.cpp</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="pp">#include </span><span class="im">&lt;gtest/gtest.h&gt;</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">TEST(SillyTest, IsFourPositive)</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6">{</a>
+<a class="sourceLine" id="cb33-7" data-line-number="7">  EXPECT_GT(<span class="dv">4</span>, <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb33-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb33-10" data-line-number="10">TEST(SillyTest, IsFourTimesFourSixteen)</a>
+<a class="sourceLine" id="cb33-11" data-line-number="11">{</a>
+<a class="sourceLine" id="cb33-12" data-line-number="12">  <span class="dt">int</span> x = <span class="dv">4</span>;</a>
+<a class="sourceLine" id="cb33-13" data-line-number="13">  EXPECT_EQ(x * x, <span class="dv">16</span>);</a>
+<a class="sourceLine" id="cb33-14" data-line-number="14">}</a>
+<a class="sourceLine" id="cb33-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb33-16" data-line-number="16"><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv)</a>
+<a class="sourceLine" id="cb33-17" data-line-number="17">{</a>
+<a class="sourceLine" id="cb33-18" data-line-number="18">  <span class="co">// This allows us to call this executable with various command line arguments</span></a>
+<a class="sourceLine" id="cb33-19" data-line-number="19">  <span class="co">// which get parsed in InitGoogleTest</span></a>
+<a class="sourceLine" id="cb33-20" data-line-number="20">  ::testing::InitGoogleTest(&amp;argc, argv);</a>
+<a class="sourceLine" id="cb33-21" data-line-number="21">  <span class="cf">return</span> RUN_ALL_TESTS();</a>
+<a class="sourceLine" id="cb33-22" data-line-number="22">}</a></code></pre></div>
 <p>Compiling and invoking <code>RePlexRuntime</code> generates the following output:</p>
 <pre><code>./bin/Debug/RePlexRuntime
 [==========] Running 2 tests from 1 test case.
@@ -682,102 +682,102 @@ TEST(SillyTest, IsFourTimesFourSixteen)
 [==========] 2 tests from 1 test case ran. (0 ms total)
 [  PASSED  ] 2 tests.</code></pre>
 <p>Great! To learn the feature set of the Google test framework more completely, I recommend reading it’s documentation, starting with the <a href="https://github.com/google/googletest/blob/master/googletest/docs/Primer.md">primer</a>. As an exercise, I recommend recompiling the above with a failing test to see what happens before continuing. What we need is to provide a way for the tests to emit code as text, recompile, and continue at runtime. To do this, we’ll author a fixture class.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// runtime/Main.cpp</span>
-
-<span class="ot">#include &lt;RePlex.h&gt;</span>
-<span class="ot">#include &lt;Test.h&gt;</span>
-<span class="ot">#include &lt;cstdlib&gt;</span>
-<span class="ot">#include &lt;fstream&gt;</span>
-<span class="ot">#include &lt;gtest/gtest.h&gt;</span>
-
-<span class="dt">const</span> <span class="dt">char</span>* g_Test_v1 =
-  <span class="st">&quot;#include </span><span class="ch">\&quot;</span><span class="st">pub/Test.h</span><span class="ch">\&quot;\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;int bar = 3;</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;int foo(int x)</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;{</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;  return x + 5;</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;}&quot;</span>;
-
-<span class="dt">const</span> <span class="dt">char</span>* g_Test_v2 =
-  <span class="st">&quot;#include </span><span class="ch">\&quot;</span><span class="st">pub/Test.h</span><span class="ch">\&quot;\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;int bar = -2;</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;int foo(int x)</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;{</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;  return x - 5;</span><span class="ch">\n</span><span class="st">&quot;</span>
-  <span class="st">&quot;}&quot;</span>;
-
-<span class="kw">class</span> RePlexTest : <span class="kw">public</span> ::testing::Test
-{
-<span class="kw">public</span>:
-  <span class="co">// Called automatically at the start of each test case.</span>
-  <span class="kw">virtual</span> <span class="dt">void</span> SetUp()
-  {
-    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, g_Test_v1);
-    Compile(<span class="dv">1</span>);
-    TestModule::LoadLibrary();
-  }
-
-  <span class="co">// We'll invoke this function manually in the middle of each test case</span>
-  <span class="dt">void</span> ChangeAndReload()
-  {
-    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, g_Test_v2);
-    Compile(<span class="dv">2</span>);
-    TestModule::ReloadLibrary();
-  }
-
-  <span class="co">// Called automatically at the end of each test case.</span>
-  <span class="kw">virtual</span> <span class="dt">void</span> TearDown()
-  {
-    TestModule::UnloadLibrary();
-    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, g_Test_v1);
-    Compile(<span class="dv">1</span>);
-  }
-
-<span class="kw">private</span>:
-  <span class="dt">void</span> WriteFile(<span class="dt">const</span> <span class="dt">char</span>* path, <span class="dt">const</span> <span class="dt">char</span>* text)
-  {
-    <span class="co">// Open an output filetream, deleting existing contents</span>
-    std::ofstream out(path, std::ios_base::trunc | std::ios_base::out);
-    out &lt;&lt; text;
-  }
-
-  <span class="dt">void</span> Compile(<span class="dt">int</span> version)
-  {
-    <span class="kw">if</span> (version == m_version)
-    {
-      <span class="kw">return</span>;
-    }
-
-    m_version = version;
-    EXPECT_EQ(std::system(<span class="st">&quot;make&quot;</span>), <span class="dv">0</span>);
-
-    <span class="co">// Super unfortunate sleep due to the result of make not being fully flushed</span>
-    <span class="co">// by the time the command returns (there are more elegant ways to solve this)</span>
-    sleep(<span class="dv">1</span>);
-  }
-
-  <span class="dt">int</span> m_version = <span class="dv">1</span>;
-};</code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co">// runtime/Main.cpp</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="pp">#include </span><span class="im">&lt;RePlex.h&gt;</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="pp">#include </span><span class="im">&lt;Test.h&gt;</span></a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="pp">#include </span><span class="im">&lt;cstdlib&gt;</span></a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="pp">#include </span><span class="im">&lt;fstream&gt;</span></a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="pp">#include </span><span class="im">&lt;gtest/gtest.h&gt;</span></a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb35-9" data-line-number="9"><span class="at">const</span> <span class="dt">char</span>* <span class="va">g_Test_v1</span> =</a>
+<a class="sourceLine" id="cb35-10" data-line-number="10">  <span class="st">&quot;#include </span><span class="sc">\&quot;</span><span class="st">pub/Test.h</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-11" data-line-number="11">  <span class="st">&quot;int bar = 3;</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-12" data-line-number="12">  <span class="st">&quot;int foo(int x)</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-13" data-line-number="13">  <span class="st">&quot;{</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-14" data-line-number="14">  <span class="st">&quot;  return x + 5;</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-15" data-line-number="15">  <span class="st">&quot;}&quot;</span>;</a>
+<a class="sourceLine" id="cb35-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb35-17" data-line-number="17"><span class="at">const</span> <span class="dt">char</span>* <span class="va">g_Test_v2</span> =</a>
+<a class="sourceLine" id="cb35-18" data-line-number="18">  <span class="st">&quot;#include </span><span class="sc">\&quot;</span><span class="st">pub/Test.h</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-19" data-line-number="19">  <span class="st">&quot;int bar = -2;</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-20" data-line-number="20">  <span class="st">&quot;int foo(int x)</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-21" data-line-number="21">  <span class="st">&quot;{</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-22" data-line-number="22">  <span class="st">&quot;  return x - 5;</span><span class="sc">\n</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb35-23" data-line-number="23">  <span class="st">&quot;}&quot;</span>;</a>
+<a class="sourceLine" id="cb35-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb35-25" data-line-number="25"><span class="kw">class</span> RePlexTest : <span class="kw">public</span> ::testing::Test</a>
+<a class="sourceLine" id="cb35-26" data-line-number="26">{</a>
+<a class="sourceLine" id="cb35-27" data-line-number="27"><span class="kw">public</span>:</a>
+<a class="sourceLine" id="cb35-28" data-line-number="28">  <span class="co">// Called automatically at the start of each test case.</span></a>
+<a class="sourceLine" id="cb35-29" data-line-number="29">  <span class="kw">virtual</span> <span class="dt">void</span> SetUp()</a>
+<a class="sourceLine" id="cb35-30" data-line-number="30">  {</a>
+<a class="sourceLine" id="cb35-31" data-line-number="31">    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, <span class="va">g_Test_v1</span>);</a>
+<a class="sourceLine" id="cb35-32" data-line-number="32">    Compile(<span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb35-33" data-line-number="33">    TestModule::LoadLibrary();</a>
+<a class="sourceLine" id="cb35-34" data-line-number="34">  }</a>
+<a class="sourceLine" id="cb35-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb35-36" data-line-number="36">  <span class="co">// We'll invoke this function manually in the middle of each test case</span></a>
+<a class="sourceLine" id="cb35-37" data-line-number="37">  <span class="dt">void</span> ChangeAndReload()</a>
+<a class="sourceLine" id="cb35-38" data-line-number="38">  {</a>
+<a class="sourceLine" id="cb35-39" data-line-number="39">    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, <span class="va">g_Test_v2</span>);</a>
+<a class="sourceLine" id="cb35-40" data-line-number="40">    Compile(<span class="dv">2</span>);</a>
+<a class="sourceLine" id="cb35-41" data-line-number="41">    TestModule::ReloadLibrary();</a>
+<a class="sourceLine" id="cb35-42" data-line-number="42">  }</a>
+<a class="sourceLine" id="cb35-43" data-line-number="43"></a>
+<a class="sourceLine" id="cb35-44" data-line-number="44">  <span class="co">// Called automatically at the end of each test case.</span></a>
+<a class="sourceLine" id="cb35-45" data-line-number="45">  <span class="kw">virtual</span> <span class="dt">void</span> TearDown()</a>
+<a class="sourceLine" id="cb35-46" data-line-number="46">  {</a>
+<a class="sourceLine" id="cb35-47" data-line-number="47">    TestModule::UnloadLibrary();</a>
+<a class="sourceLine" id="cb35-48" data-line-number="48">    WriteFile(<span class="st">&quot;test/Test.cpp&quot;</span>, <span class="va">g_Test_v1</span>);</a>
+<a class="sourceLine" id="cb35-49" data-line-number="49">    Compile(<span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb35-50" data-line-number="50">  }</a>
+<a class="sourceLine" id="cb35-51" data-line-number="51"></a>
+<a class="sourceLine" id="cb35-52" data-line-number="52"><span class="kw">private</span>:</a>
+<a class="sourceLine" id="cb35-53" data-line-number="53">  <span class="dt">void</span> WriteFile(<span class="at">const</span> <span class="dt">char</span>* path, <span class="at">const</span> <span class="dt">char</span>* text)</a>
+<a class="sourceLine" id="cb35-54" data-line-number="54">  {</a>
+<a class="sourceLine" id="cb35-55" data-line-number="55">    <span class="co">// Open an output filetream, deleting existing contents</span></a>
+<a class="sourceLine" id="cb35-56" data-line-number="56">    <span class="bu">std::</span>ofstream out(path, <span class="bu">std::</span>ios_base<span class="bu">::</span>trunc | <span class="bu">std::</span>ios_base<span class="bu">::</span>out);</a>
+<a class="sourceLine" id="cb35-57" data-line-number="57">    out &lt;&lt; text;</a>
+<a class="sourceLine" id="cb35-58" data-line-number="58">  }</a>
+<a class="sourceLine" id="cb35-59" data-line-number="59"></a>
+<a class="sourceLine" id="cb35-60" data-line-number="60">  <span class="dt">void</span> Compile(<span class="dt">int</span> version)</a>
+<a class="sourceLine" id="cb35-61" data-line-number="61">  {</a>
+<a class="sourceLine" id="cb35-62" data-line-number="62">    <span class="cf">if</span> (version == <span class="va">m_version</span>)</a>
+<a class="sourceLine" id="cb35-63" data-line-number="63">    {</a>
+<a class="sourceLine" id="cb35-64" data-line-number="64">      <span class="cf">return</span>;</a>
+<a class="sourceLine" id="cb35-65" data-line-number="65">    }</a>
+<a class="sourceLine" id="cb35-66" data-line-number="66"></a>
+<a class="sourceLine" id="cb35-67" data-line-number="67">    <span class="va">m_version</span> = version;</a>
+<a class="sourceLine" id="cb35-68" data-line-number="68">    EXPECT_EQ(<span class="bu">std::</span>system(<span class="st">&quot;make&quot;</span>), <span class="dv">0</span>);</a>
+<a class="sourceLine" id="cb35-69" data-line-number="69"></a>
+<a class="sourceLine" id="cb35-70" data-line-number="70">    <span class="co">// Super unfortunate sleep due to the result of make not being fully flushed</span></a>
+<a class="sourceLine" id="cb35-71" data-line-number="71">    <span class="co">// by the time the command returns (there are more elegant ways to solve this)</span></a>
+<a class="sourceLine" id="cb35-72" data-line-number="72">    sleep(<span class="dv">1</span>);</a>
+<a class="sourceLine" id="cb35-73" data-line-number="73">  }</a>
+<a class="sourceLine" id="cb35-74" data-line-number="74"></a>
+<a class="sourceLine" id="cb35-75" data-line-number="75">  <span class="dt">int</span> <span class="va">m_version</span> = <span class="dv">1</span>;</a>
+<a class="sourceLine" id="cb35-76" data-line-number="76">};</a></code></pre></div>
 <p>The fixture class should be fairly self explanatory. There are three primary methods for setup, teardown, and reloading the library. We keep track of the currently loaded library in a member variable <code>m_version</code> so we avoid recompiling the library if the one we want is already loaded (note that <code>m_version</code> defaults to 1 at the beginning). We also have two versions of <code>Test.cpp</code> that we will write out and compile at runtime. You’ll have to change the function signatures of <code>Foo</code> in <code>Test.h</code> so things compile properly. To use the fixture, we use the <code>TEST_F</code> macro instead of the <code>TEST</code> macro like so:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">TEST_F(RePlexTest, VariableReload)
-{
-  EXPECT_EQ(TestModule::GetBar(), <span class="dv">3</span>);
-  ChangeAndReload();
-  EXPECT_EQ(TestModule::GetBar(), <span class="dv">-2</span>);
-}
-
-TEST_F(RePlexTest, FunctionReload)
-{
-  EXPECT_EQ(TestModule::Foo(<span class="dv">4</span>), <span class="dv">9</span>);
-  ChangeAndReload();
-  EXPECT_EQ(TestModule::Foo(<span class="dv">4</span>), <span class="dv">-1</span>);
-}
-
-<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv)
-{
-  ::testing::InitGoogleTest(&amp;argc, argv);
-  <span class="kw">return</span> RUN_ALL_TESTS();
-}</code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb36-1" data-line-number="1">TEST_F(RePlexTest, VariableReload)</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">{</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">  EXPECT_EQ(TestModule::GetBar(), <span class="dv">3</span>);</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">  ChangeAndReload();</a>
+<a class="sourceLine" id="cb36-5" data-line-number="5">  EXPECT_EQ(TestModule::GetBar(), <span class="dv">-2</span>);</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb36-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb36-8" data-line-number="8">TEST_F(RePlexTest, FunctionReload)</a>
+<a class="sourceLine" id="cb36-9" data-line-number="9">{</a>
+<a class="sourceLine" id="cb36-10" data-line-number="10">  EXPECT_EQ(TestModule::Foo(<span class="dv">4</span>), <span class="dv">9</span>);</a>
+<a class="sourceLine" id="cb36-11" data-line-number="11">  ChangeAndReload();</a>
+<a class="sourceLine" id="cb36-12" data-line-number="12">  EXPECT_EQ(TestModule::Foo(<span class="dv">4</span>), <span class="dv">-1</span>);</a>
+<a class="sourceLine" id="cb36-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb36-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb36-15" data-line-number="15"><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv)</a>
+<a class="sourceLine" id="cb36-16" data-line-number="16">{</a>
+<a class="sourceLine" id="cb36-17" data-line-number="17">  ::testing::InitGoogleTest(&amp;argc, argv);</a>
+<a class="sourceLine" id="cb36-18" data-line-number="18">  <span class="cf">return</span> RUN_ALL_TESTS();</a>
+<a class="sourceLine" id="cb36-19" data-line-number="19">}</a></code></pre></div>
 <p>Running this will generate a fair bit of output due to the runtime compilation but we should have all our tests passing. A <em>bad</em> thing we did in order to make this work was the sleep in our <code>Compile</code> function. Even though the <code>system</code> call is synchronous, there is a race condition when reading the file from the disk which is being flushed by the <code>make</code> command. The sleep here is unfortunate because it makes the tests slower, and also makes the test non-deterministic. The proper way to implement these tests is to install a handler for a file change notification. The implementation of this will vary based on the platform, and is left as an exercise to the reader.</p>
 <p>At this point, we might decide that the library is good enough for others to use. The only file a 3rd-party user would need to leverage our library is <code>RePlex.h</code> (in other words, this is a “header-only” library). Thus, distribution is just a matter of copying <code>RePlex.h</code> into the include path of the target project. If we had needed to export compiled code in the form of a static or shared library, we have two options. First, we may opt to compile the library for all the various combinations of OS and architecture (x86/x64/etc) we might support. This library would then be distributable as a binary file. Alternatively, we can simply publish the code with the Premake script we authored and let the end user compile the code themselves and link the result to their own library or executable. These are the two primary options at the moment, and sadly, no unified “package manager” has been authored in the C++ community (although the author of this article is very interested in efforts to do so).</p>
 <h1 id="notes-on-writing-code">Notes on writing code</h1>

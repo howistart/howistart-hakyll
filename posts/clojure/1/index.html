@@ -82,10 +82,7 @@
 <p>Since this walk through is geared to explain how I work in particular, we will start my essential ingredient to any coding project … <em>tea</em>. I brew myself a cup of <em>PG Tips</em> tea with a splash of milk, then I sit down and fire up my trusty editor <em>Emacs</em>.</p>
 <h2 id="emacs-is-a-lifestyle">Emacs is a lifestyle</h2>
 <p>Emacs is more than an editor, it is a lifestyle. I also admit that the learning curve is steep. I actually only know about 4% of Emacs. This is completely normal given that the learning curve for the editor looks like a squiggly curlicue.</p>
-<div class="figure">
-<img src="http://c4.staticflickr.com/8/7598/16914999852_995b77a811_z.jpg" />
-
-</div>
+<p><img src="http://c4.staticflickr.com/8/7598/16914999852_995b77a811_z.jpg" /></p>
 <p>Nevertheless, once I started using Emacs for Clojure and experienced the interactive nature of the code and the REPL, (Read Eval Print Loop), I was hooked. I use a customized version of <a href="https://github.com/technomancy/emacs-starter-kit">Emacs Starter Kit</a>. I also find the <a href="https://github.com/sellout/emacs-color-theme-solarized">Solarized Color-scheme</a> a must for my eyes. For Clojure code, I use <a href="https://github.com/clojure-emacs/cider">Cider for Emacs</a>, which gives me the incredible interactive code experience that I was mentioning. If you are looking to try out Emacs I would recommend getting the starter kit and grabbing a good tutorial like this <a href="http://www.jesshamrick.com/2012/09/10/absolute-beginners-guide-to-emacs/">one</a>.</p>
 <p>Now that we have our tea and Emacs editor open, It is time to actually get our Clojure project created. For this I use <a href="http://leiningen.org/">Leiningen</a>.</p>
 <h2 id="getting-the-basic-project-setup">Getting the basic project setup</h2>
@@ -99,30 +96,30 @@
 <p>There is also a skeleton test file that is created in <em>test/markov_elear/core_test.clj</em>. We will want to do the same thing to it as well.</p>
 <pre><code>mv test/markov_elear/core_test.clj test/markov_elear/generator_test.clj</code></pre>
 <p>Next, open up the <em>generator.clj</em> file in Emacs. It has been created with the Leiningen template, so there is code already there that looks like:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.core)
-
-(<span class="kw">defn</span><span class="fu"> foo</span>
-  <span class="st">&quot;I don't do a whole lot.&quot;</span>
-  [x]
-  (<span class="kw">println</span> x <span class="st">&quot;Hello, World!&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb5-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.core)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">(<span class="bu">defn</span><span class="fu"> foo</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="st">&quot;I don't do a whole lot.&quot;</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  [x]</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  (<span class="kw">println</span> x <span class="st">&quot;Hello, World!&quot;</span>))</a></code></pre></div>
 <p>Since we changed our file to be named <em>generator.clj</em>, we also need to change the namespace to match it. Let’s also get rid of the <code>foo</code> function. It should now look like:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb6-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator)</a></code></pre></div>
 <p>Go ahead and open up the test file as well <em>test/markov_elear/generator_test.clj</em>. It also has some sample code in it from the Leiningen template. It looks like:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.core-test
-  (<span class="kw">:require</span> [clojure.<span class="kw">test</span> <span class="kw">:refer</span> <span class="kw">:all</span>]
-            [markov-elear.core <span class="kw">:refer</span> <span class="kw">:all</span>]))
-
-(<span class="kw">deftest</span><span class="fu"> a-test</span>
-  (<span class="kw">testing</span> <span class="st">&quot;FIXME, I fail.&quot;</span>
-    (<span class="kw">is</span> (<span class="kw">=</span> <span class="dv">0</span> <span class="dv">1</span>))))</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb7-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.core-test</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  (<span class="at">:require</span> [clojure.<span class="kw">test</span> <span class="at">:refer</span> <span class="at">:all</span>]</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">            [markov-elear.core <span class="at">:refer</span> <span class="at">:all</span>]))</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">(<span class="bu">deftest</span><span class="fu"> a-test</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">  (<span class="kw">testing</span> <span class="st">&quot;FIXME, I fail.&quot;</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">    (<span class="kw">is</span> (<span class="kw">=</span> <span class="dv">0</span> <span class="dv">1</span>))))</a></code></pre></div>
 <p>Change the namespace in the test to match the filename as well as the require to be that of <code>markov-elear-generator</code>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator-test
-  (<span class="kw">:require</span> [clojure.<span class="kw">test</span> <span class="kw">:refer</span> <span class="kw">:all</span>]
-            [markov-elear.generator <span class="kw">:refer</span> <span class="kw">:all</span>]))
-
-(<span class="kw">deftest</span><span class="fu"> a-test</span>
-  (<span class="kw">testing</span> <span class="st">&quot;FIXME, I fail.&quot;</span>
-    (<span class="kw">is</span> (<span class="kw">=</span> <span class="dv">0</span> <span class="dv">1</span>))))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb8-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator-test</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  (<span class="at">:require</span> [clojure.<span class="kw">test</span> <span class="at">:refer</span> <span class="at">:all</span>]</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">            [markov-elear.generator <span class="at">:refer</span> <span class="at">:all</span>]))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">(<span class="bu">deftest</span><span class="fu"> a-test</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">  (<span class="kw">testing</span> <span class="st">&quot;FIXME, I fail.&quot;</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    (<span class="kw">is</span> (<span class="kw">=</span> <span class="dv">0</span> <span class="dv">1</span>))))</a></code></pre></div>
 <p>At this point, we should now be able to run <code>lein test</code> from the command prompt and see our sample test fail.</p>
 <pre><code>lein test markov-elear.generator-test
 
@@ -140,10 +137,10 @@ Tests failed.
 <p>Fantastic. Our project is all set up. We are ready to <em>jack-in</em> with Emacs and Cider and start coding.</p>
 <h2 id="cider-jack-in-and-experiment">Cider Jack In and Experiment</h2>
 <p>Here is where we start to use the interactive nature of Clojure and Emacs in earnest. With the <em>generator.clj</em> file open in Emacs, type <code>M-x cider-jack-in</code>. This will start a nREPL server for our project, so we can actively start to experiment with our code. This early stage is a bit like playing with putty before sculpting. It allows us to quickly try out different approaches and get a feel for data constructs to use. For example, first put your cursor after the namespace form and hit <code>C-x C-e</code> to evaluate the form.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb10-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator)</a></code></pre></div>
 <p>You are now all set to the generator namespace for your evaluation.</p>
 <p>Next, type into <code>generator.clj</code> the line:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">+</span> <span class="dv">1</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb11-1" data-line-number="1">(<span class="kw">+</span> <span class="dv">1</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>At this point, you can put your cursor at the end of the form and again hit <code>C-x C-e</code> you will see the result <code>2</code> appear in the mini-buffer at the bottom of the screen.</p>
 <p>Now, we are ready to experiment with Markov Chains. The first thing we need is some small example to play with. Consider the following text.</p>
 <pre><code>&quot;And the Golden Grouse And the Pobble who&quot;</code></pre>
@@ -157,14 +154,14 @@ Tests failed.
 | the Pobble   | who
 | Pobble who   | nil</code></pre>
 <p>This table becomes a guide for us in walking the chain to generate new text. If we start at a random place in the table, we can generate some text by following some simple rules.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Choose a prefix to start. Your result string starts as this prefix.</li>
 <li>Take the suffix that goes with the prefix. Add the suffix to your result string. Also, add the last word of the prefix to the suffix, this is your new prefix.</li>
 <li>Look up your new prefix in the table and continue until there is no suffix.</li>
 <li>The result string is your generated text.</li>
 </ol>
 <p>From our table, let’s start with the prefix <em>the Pobble</em>.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Our starting prefix is <em>the Pobble</em>. Our result string will be initialized to it.</li>
 <li>Look up the prefix in the table. The suffix that goes with it is <em>who</em>. Add the suffix to the result string. The new prefix is the last word from the prefix and the suffix. So the new prefix is <em>Pobble who</em>.</li>
 <li>Look up up the prefix in the table, the suffix is nil. This means we have reached the end of the chain. Our resulting text is <em>the Pobble who</em>.</li>
@@ -181,206 +178,206 @@ Tests failed.
 <p>Now that we know the general idea of what we want to do, let’s start small and start experimenting.</p>
 <h3 id="baby-steps">Baby steps</h3>
 <p>First, let’s take our example text and put it into code to play with in the REPL.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> example </span><span class="st">&quot;And the Golden Grouse And the Pobble who&quot;</span>)
-<span class="co">;; -&gt; #'markov-elear.core/example</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb14-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> example </span><span class="st">&quot;And the Golden Grouse And the Pobble who&quot;</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">;; -&gt; #'markov-elear.core/example</span></a></code></pre></div>
 <p>Now, we are going to want to split up this text by spaces. This is a job for <code>clojure.string/split</code>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> words </span>(clojure.string/split example <span class="st">#&quot; &quot;</span>))
-words
-<span class="co">;; -&gt; [&quot;And&quot; &quot;the&quot; &quot;Golden&quot; &quot;Grouse&quot; &quot;And&quot; &quot;the&quot; &quot;Pobble&quot; &quot;who&quot;]</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb15-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> words </span>(clojure.string/split example <span class="ss">#&quot; &quot;</span>))</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">words</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">;; -&gt; [&quot;And&quot; &quot;the&quot; &quot;Golden&quot; &quot;Grouse&quot; &quot;And&quot; &quot;the&quot; &quot;Pobble&quot; &quot;who&quot;]</span></a></code></pre></div>
 <p>We also need to divide up these words in chunks of 3. Clojure’s <code>partition-all</code> will be perfect for this. We are going to partition the word list in chunks of three.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> word-transitions </span>(partition-all <span class="dv">3</span> <span class="dv">1</span> words))
-word-transitions
-<span class="co">;; -&gt; ((&quot;And&quot; &quot;the&quot; &quot;Golden&quot;)</span>
-<span class="co">;;     (&quot;the&quot; &quot;Golden&quot; &quot;Grouse&quot;)</span>
-<span class="co">;;     (&quot;Golden&quot; &quot;Grouse&quot; &quot;And&quot;)</span>
-<span class="co">;;     (&quot;Grouse&quot; &quot;And&quot; &quot;the&quot;)</span>
-<span class="co">;;     (&quot;And&quot; &quot;the&quot; &quot;Pobble&quot;)</span>
-<span class="co">;;     (&quot;the&quot; &quot;Pobble&quot; &quot;who&quot;)</span>
-<span class="co">;;     (&quot;Pobble&quot; &quot;who&quot;)</span>
-<span class="co">;;     (&quot;who&quot;))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb16-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> word-transitions </span>(partition-all <span class="dv">3</span> <span class="dv">1</span> words))</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">word-transitions</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">;; -&gt; ((&quot;And&quot; &quot;the&quot; &quot;Golden&quot;)</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">;;     (&quot;the&quot; &quot;Golden&quot; &quot;Grouse&quot;)</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">;;     (&quot;Golden&quot; &quot;Grouse&quot; &quot;And&quot;)</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">;;     (&quot;Grouse&quot; &quot;And&quot; &quot;the&quot;)</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">;;     (&quot;And&quot; &quot;the&quot; &quot;Pobble&quot;)</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">;;     (&quot;the&quot; &quot;Pobble&quot; &quot;who&quot;)</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">;;     (&quot;Pobble&quot; &quot;who&quot;)</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">;;     (&quot;who&quot;))</span></a></code></pre></div>
 <p>This is nice, but we really need to get it into a word-chain format. Ideally it would a map with the prefixes as the key and then have a set of suffixes to choose from. So that the prefix of <em>And the</em> would look like</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">{[<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]} #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb17-1" data-line-number="1">{[<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]} #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}</a></code></pre></div>
 <p>A map with the key being the vector of prefix words and the value being the set of suffixes.</p>
 <p>We need to map through the list of word-transitions and build this up somehow. Perhaps <code>merge-with</code> will help us out.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">merge-with</span> <span class="kw">concat</span> {<span class="kw">:a</span> [<span class="dv">1</span>]} {<span class="kw">:a</span> [<span class="dv">3</span>]})
-<span class="co">;; -&gt; {:a (1 3)}</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb18-1" data-line-number="1">(<span class="kw">merge-with</span> <span class="kw">concat</span> {<span class="at">:a</span> [<span class="dv">1</span>]} {<span class="at">:a</span> [<span class="dv">3</span>]})</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">;; -&gt; {:a (1 3)}</span></a></code></pre></div>
 <p><code>merge-with</code> will allow us to combine the prefixes with multiple suffixes in a map form, but we really want it in a set. Time to experiment some more.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">merge-with</span> clojure.set/union {<span class="kw">:a</span> #{<span class="dv">1</span>}} {<span class="kw">:a</span> #{<span class="dv">2</span>}})
-<span class="co">;; -&gt; {:a #{1 2}}</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb19-1" data-line-number="1">(<span class="kw">merge-with</span> clojure.set/union {<span class="at">:a</span> #{<span class="dv">1</span>}} {<span class="at">:a</span> #{<span class="dv">2</span>}})</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">;; -&gt; {:a #{1 2}}</span></a></code></pre></div>
 <p>Yes, that will do nicely. Let’s try this out in a <code>reduce</code> over the <code>word-transitions</code>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">reduce</span> (<span class="kw">fn</span> [r t] (<span class="kw">merge-with</span> clojure.set/union r
-                               (<span class="kw">let</span> [[a b c] t]
-                                 {[a b] (<span class="kw">if</span> c #{c} #{})})))
-          {}
-          word-transitions)
-<span class="co">;; {[&quot;who&quot; nil] #{},</span>
-<span class="co">;;  [&quot;Pobble&quot; &quot;who&quot;] #{},</span>
-<span class="co">;;  [&quot;the&quot; &quot;Pobble&quot;] #{&quot;who&quot;},</span>
-<span class="co">;;  [&quot;Grouse&quot; &quot;And&quot;] #{&quot;the&quot;},</span>
-<span class="co">;;  [&quot;Golden&quot; &quot;Grouse&quot;] #{&quot;And&quot;},</span>
-<span class="co">;;  [&quot;the&quot; &quot;Golden&quot;] #{&quot;Grouse&quot;},</span>
-<span class="co">;;  [&quot;And&quot; &quot;the&quot;] #{&quot;Pobble&quot; &quot;Golden&quot;}}</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb20-1" data-line-number="1">(<span class="kw">reduce</span> (<span class="kw">fn</span> [r t] (<span class="kw">merge-with</span> clojure.set/union r</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">                               (<span class="kw">let</span> [[a b c] t]</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">                                 {[a b] (<span class="kw">if</span> c #{c} #{})})))</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">          {}</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">          word-transitions)</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="co">;; {[&quot;who&quot; nil] #{},</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">;;  [&quot;Pobble&quot; &quot;who&quot;] #{},</span></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="co">;;  [&quot;the&quot; &quot;Pobble&quot;] #{&quot;who&quot;},</span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="co">;;  [&quot;Grouse&quot; &quot;And&quot;] #{&quot;the&quot;},</span></a>
+<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="co">;;  [&quot;Golden&quot; &quot;Grouse&quot;] #{&quot;And&quot;},</span></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="co">;;  [&quot;the&quot; &quot;Golden&quot;] #{&quot;Grouse&quot;},</span></a>
+<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="co">;;  [&quot;And&quot; &quot;the&quot;] #{&quot;Pobble&quot; &quot;Golden&quot;}}</span></a></code></pre></div>
 <h2 id="tangible-turn-to-tests">Tangible turn to tests</h2>
 <p>We have been experimenting in the REPL, but now that we have a feel for where we are going it is time to write some tests. I really like to use the <a href="https://github.com/jakemcc/lein-test-refresh">lein-test-refesh plugin</a>. It will continually rerun the tests whenever we change something in our files. I find the feedback loop is much faster then running <code>lein test</code> alone. It also takes care of reloading all the namespaces for you, so I don’t run into problems where my REPL environment gets out of sync with my code. To add it to your project, simply add the following to your <em>project.clj</em> file.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure"><span class="kw">:profiles</span> {<span class="kw">:dev</span> {<span class="kw">:plugins</span> [[com.jakemccrary/lein-test-refresh <span class="st">&quot;0.7.0&quot;</span>]]}}</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="at">:profiles</span> {<span class="at">:dev</span> {<span class="at">:plugins</span> [[com.jakemccrary/lein-test-refresh <span class="st">&quot;0.7.0&quot;</span>]]}}</a></code></pre></div>
 <p>Now, you can start it up from your prompt by running</p>
 <pre><code>lein test-refresh</code></pre>
 <p>First, let’s get rid of the sample test and replace it with a real one. We want this test to be about the word chain that we were experimenting with.</p>
 <h3 id="building-the-word-chain">Building the Word Chain</h3>
 <p>Add this to your <em>generator_test.clj</em> file.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator-test
-  (<span class="kw">:require</span> [clojure.<span class="kw">test</span> <span class="kw">:refer</span> <span class="kw">:all</span>]
-            [markov-elear.generator <span class="kw">:refer</span> <span class="kw">:all</span>]))
-
-(<span class="kw">deftest</span><span class="fu"> test-word-chain</span>
-  (<span class="kw">testing</span> <span class="st">&quot;it produces a chain of the possible two step transitions between suffixes and prefixes&quot;</span>
-    (<span class="kw">let</span> [example '((<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>)
-                    (<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>)
-                    (<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>)
-                    (<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>))]
-      (<span class="kw">is</span> (<span class="kw">=</span> {[<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}
-              [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}
-              [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}
-             (word-chain example))))))</code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb23-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator-test</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">  (<span class="at">:require</span> [clojure.<span class="kw">test</span> <span class="at">:refer</span> <span class="at">:all</span>]</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">            [markov-elear.generator <span class="at">:refer</span> <span class="at">:all</span>]))</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">(<span class="bu">deftest</span><span class="fu"> test-word-chain</span></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">  (<span class="kw">testing</span> <span class="st">&quot;it produces a chain of the possible two step transitions between suffixes and prefixes&quot;</span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">    (<span class="kw">let</span> [example '((<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>)</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">                    (<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>)</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">                    (<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">                    (<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>))]</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11">      (<span class="kw">is</span> (<span class="kw">=</span> {[<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12">              [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}</a>
+<a class="sourceLine" id="cb23-13" data-line-number="13">              [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}</a>
+<a class="sourceLine" id="cb23-14" data-line-number="14">             (word-chain example))))))</a></code></pre></div>
 <p>As you save the file, you will notice the test failing in your <code>lein test-refresh</code> window. This is because we haven’t written the <em>word-chain</em> function yet. After all of our experimentation, we know exactly what we need to do. Add the following function to your <em>generator.clj</em> file.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> word-chain </span>[word-transitions]
-  (<span class="kw">reduce</span> (<span class="kw">fn</span> [r t] (<span class="kw">merge-with</span> clojure.set/union r
-                               (<span class="kw">let</span> [[a b c] t]
-                                 {[a b] (<span class="kw">if</span> c #{c} #{})})))
-          {}
-          word-transitions))</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb24-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> word-chain </span>[word-transitions]</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">  (<span class="kw">reduce</span> (<span class="kw">fn</span> [r t] (<span class="kw">merge-with</span> clojure.set/union r</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">                               (<span class="kw">let</span> [[a b c] t]</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">                                 {[a b] (<span class="kw">if</span> c #{c} #{})})))</a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">          {}</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">          word-transitions))</a></code></pre></div>
 <p>Your test should now pass.</p>
 <p>What about generating the word chain from an string of text? When we were experimenting in the REPL, we saw that using <code>parition-all</code> was going to be useful. Let’s add a test for that now in <em>generator_test.clj</em>. We want to parse an input string that has spaces or new lines.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-text-&gt;word-chain</span>
-  (<span class="kw">testing</span> <span class="st">&quot;string with spaces and newlines&quot;</span>
-    (<span class="kw">let</span> [example <span class="st">&quot;And the Golden Grouse</span>\n<span class="st">And the Pobble who&quot;</span>]
-     (<span class="kw">is</span> (<span class="kw">=</span> {[<span class="st">&quot;who&quot;</span> nil] #{}
-             [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{}
-             [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}
-             [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>}
-             [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>}
-             [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}
-             [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}
-            (text-&gt;word-chain example))))))</code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb25-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-text-&gt;word-chain</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">  (<span class="kw">testing</span> <span class="st">&quot;string with spaces and newlines&quot;</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">    (<span class="kw">let</span> [example <span class="st">&quot;And the Golden Grouse</span><span class="sc">\n</span><span class="st">And the Pobble who&quot;</span>]</a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">     (<span class="kw">is</span> (<span class="kw">=</span> {[<span class="st">&quot;who&quot;</span> <span class="va">nil</span>] #{}</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5">             [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{}</a>
+<a class="sourceLine" id="cb25-6" data-line-number="6">             [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}</a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">             [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>}</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">             [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>}</a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">             [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10">             [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}</a>
+<a class="sourceLine" id="cb25-11" data-line-number="11">            (text-&gt;word-chain example))))))</a></code></pre></div>
 <p>To make it pass, add the <code>text-&gt;word-chain</code> function in the <em>generator_test.clj</em>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> text-&gt;word-chain </span>[s]
-  (<span class="kw">let</span> [words (clojure.string/split s <span class="st">#&quot;[\s|</span>\n<span class="st">]&quot;</span>)
-        word-transitions (partition-all <span class="dv">3</span> <span class="dv">1</span> words)]
-    (word-chain word-transitions)))</code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb26-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> text-&gt;word-chain </span>[s]</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">  (<span class="kw">let</span> [words (clojure.string/split s <span class="ss">#&quot;[\s|</span><span class="sc">\n</span><span class="ss">]&quot;</span>)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">        word-transitions (partition-all <span class="dv">3</span> <span class="dv">1</span> words)]</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4">    (word-chain word-transitions)))</a></code></pre></div>
 <p>Now that we have our word-chain, we are going to need a way to walk the chain, given a beginning prefix, and come up with our resulting text.</p>
 <h3 id="random-walking-the-chain">Random Walking the Chain</h3>
 <p>Going back to our test file <em>generator_test.clj</em>, add a new test for a <code>walk-chain</code> function that we want:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-walk-chain</span>
-  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> nil] #{},
-               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},
-               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},
-               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},
-               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]
-    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span>
-      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]
-        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]
-               (walk-chain prefix chain prefix)))))))</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb27-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-walk-chain</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> <span class="va">nil</span>] #{},</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]</a>
+<a class="sourceLine" id="cb27-9" data-line-number="9">    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span></a>
+<a class="sourceLine" id="cb27-10" data-line-number="10">      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]</a>
+<a class="sourceLine" id="cb27-11" data-line-number="11">        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]</a>
+<a class="sourceLine" id="cb27-12" data-line-number="12">               (walk-chain prefix chain prefix)))))))</a></code></pre></div>
 <p>Given a the starting prefix of <code>[&quot;the&quot; &quot;Pobble&quot;]</code>, it will walk our chain until it reaches the a dead end of there being no more suffixes. The result should be <code>[&quot;the&quot; &quot;Pobble&quot; &quot;who&quot;]</code>.</p>
 <p>Going back to our <em>generator.clj</em> file, we can start constructing a function to do this</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> walk-chain </span>[prefix chain result]
-  (<span class="kw">let</span> [suffixes (<span class="kw">get</span> chain prefix)]
-    (<span class="kw">if</span> (<span class="kw">empty?</span> suffixes)
-      result
-      (<span class="kw">let</span> [suffix (<span class="kw">first</span> (shuffle suffixes))
-            new-prefix [(<span class="kw">last</span> prefix) suffix]]
-        (<span class="kw">recur</span> new-prefix chain (<span class="kw">conj</span> result suffix))))))</code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb28-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> walk-chain </span>[prefix chain result]</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">  (<span class="kw">let</span> [suffixes (<span class="kw">get</span> chain prefix)]</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">    (<span class="kw">if</span> (<span class="kw">empty?</span> suffixes)</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">      result</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">      (<span class="kw">let</span> [suffix (<span class="kw">first</span> (shuffle suffixes))</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">            new-prefix [(<span class="kw">last</span> prefix) suffix]]</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">        (<span class="kw">recur</span> new-prefix chain (<span class="kw">conj</span> result suffix))))))</a></code></pre></div>
 <p>It takes the prefix and get the suffixes associated with it. If there are no suffixes, it terminates and returns the result. Otherwise, it uses <code>shuffle</code> to pick a random suffix. Then it constructs the new prefix from the last part of the current prefix and the suffix. Finally, it recurs into the function using the <code>new-prefix</code> and adding the suffix to the result.</p>
 <p>We have another passing test, but we still need to consider the other walking of the chain where it has a choice. Go ahead and add a test for that now too.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-walk-chain</span>
-  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> nil] #{},
-               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},
-               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},
-               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},
-               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]
-    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span>
-      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]
-        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]
-               (walk-chain prefix chain prefix)))))
-    (<span class="kw">testing</span> <span class="st">&quot;multiple choices&quot;</span>
-      (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]
-        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]
-          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]
-                 (walk-chain prefix chain prefix))))))))</code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb29-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-walk-chain</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> <span class="va">nil</span>] #{},</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5">               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8">               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]</a>
+<a class="sourceLine" id="cb29-9" data-line-number="9">    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span></a>
+<a class="sourceLine" id="cb29-10" data-line-number="10">      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]</a>
+<a class="sourceLine" id="cb29-11" data-line-number="11">        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]</a>
+<a class="sourceLine" id="cb29-12" data-line-number="12">               (walk-chain prefix chain prefix)))))</a>
+<a class="sourceLine" id="cb29-13" data-line-number="13">    (<span class="kw">testing</span> <span class="st">&quot;multiple choices&quot;</span></a>
+<a class="sourceLine" id="cb29-14" data-line-number="14">      (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]</a>
+<a class="sourceLine" id="cb29-15" data-line-number="15">        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]</a>
+<a class="sourceLine" id="cb29-16" data-line-number="16">          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]</a>
+<a class="sourceLine" id="cb29-17" data-line-number="17">                 (walk-chain prefix chain prefix))))))))</a></code></pre></div>
 <p>Because we have randomness to deal with, we can use <code>with-redefs</code> to redefine <code>shuffle</code> to always return the original collection for us. We also need to deal with repeating chains. We will have to give it another termination condition, like a word or character length for termination. Since our bot is destined for twitter, a 140 char limit seems reasonable.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-walk-chain</span>
-  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> nil] #{},
-               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},
-               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},
-               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},
-               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},
-               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]
-    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span>
-      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]
-        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]
-               (walk-chain prefix chain prefix)))))
-    (<span class="kw">testing</span> <span class="st">&quot;multiple choices&quot;</span>
-      (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]
-        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]
-          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]
-                 (walk-chain prefix chain prefix))))))
-    (<span class="kw">testing</span> <span class="st">&quot;repeating chains&quot;</span>
-      (with-redefs [shuffle (<span class="kw">fn</span> [c] (<span class="kw">reverse</span> c))]
-        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]
-          (<span class="kw">is</span> (<span class="kw">&gt;</span> <span class="dv">140</span>
-                 (<span class="kw">count</span> (<span class="kw">apply</span> <span class="kw">str</span> (walk-chain prefix chain prefix)))))
-          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>]
-                 (<span class="kw">take</span> <span class="dv">8</span> (walk-chain prefix chain prefix)))))))))</code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb30-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-walk-chain</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">  (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> <span class="va">nil</span>] #{},</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">               [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{},</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>},</a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">               [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>},</a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">               [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>},</a>
+<a class="sourceLine" id="cb30-7" data-line-number="7">               [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>},</a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">               [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]</a>
+<a class="sourceLine" id="cb30-9" data-line-number="9">    (<span class="kw">testing</span> <span class="st">&quot;dead end&quot;</span></a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">      (<span class="kw">let</span> [prefix [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>]]</a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">        (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]</a>
+<a class="sourceLine" id="cb30-12" data-line-number="12">               (walk-chain prefix chain prefix)))))</a>
+<a class="sourceLine" id="cb30-13" data-line-number="13">    (<span class="kw">testing</span> <span class="st">&quot;multiple choices&quot;</span></a>
+<a class="sourceLine" id="cb30-14" data-line-number="14">      (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]</a>
+<a class="sourceLine" id="cb30-15" data-line-number="15">        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]</a>
+<a class="sourceLine" id="cb30-16" data-line-number="16">          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>]</a>
+<a class="sourceLine" id="cb30-17" data-line-number="17">                 (walk-chain prefix chain prefix))))))</a>
+<a class="sourceLine" id="cb30-18" data-line-number="18">    (<span class="kw">testing</span> <span class="st">&quot;repeating chains&quot;</span></a>
+<a class="sourceLine" id="cb30-19" data-line-number="19">      (with-redefs [shuffle (<span class="kw">fn</span> [c] (<span class="kw">reverse</span> c))]</a>
+<a class="sourceLine" id="cb30-20" data-line-number="20">        (<span class="kw">let</span> [prefix [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>]]</a>
+<a class="sourceLine" id="cb30-21" data-line-number="21">          (<span class="kw">is</span> (<span class="kw">&gt;</span> <span class="dv">140</span></a>
+<a class="sourceLine" id="cb30-22" data-line-number="22">                 (<span class="kw">count</span> (<span class="kw">apply</span> <span class="kw">str</span> (walk-chain prefix chain prefix)))))</a>
+<a class="sourceLine" id="cb30-23" data-line-number="23">          (<span class="kw">is</span> (<span class="kw">=</span> [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>]</a>
+<a class="sourceLine" id="cb30-24" data-line-number="24">                 (<span class="kw">take</span> <span class="dv">8</span> (walk-chain prefix chain prefix)))))))))</a></code></pre></div>
 <p><em>Note: The test will actually run forever since it is stuck in an endless loop. You will have to restart your test-refresh session after you implement the solution.</em></p>
 <p>Adjusting our <em>generator.clj</em>, we first need a helper function that will turn our result chain into a string with spaces, so that we can count the chars and make sure that they are under the limit. We will call it <code>chain-&gt;text</code>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> chain-&gt;text </span>[chain]
-  (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">interpose</span> <span class="st">&quot; &quot;</span> chain)))</code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb31-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> chain-&gt;text </span>[chain]</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">  (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">interpose</span> <span class="st">&quot; &quot;</span> chain)))</a></code></pre></div>
 <p>It takes a chain like <code>[&quot;And&quot; &quot;the&quot; &quot;Pobble&quot; &quot;who&quot;]</code> and gives us back the display text.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(chain-&gt;text [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>])
-<span class="co">;; -&gt; &quot;And the Pobble who&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb32-1" data-line-number="1">(chain-&gt;text [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>])</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="co">;; -&gt; &quot;And the Pobble who&quot;</span></a></code></pre></div>
 <p>Now we can add the char limit counting to our <code>walk-chain</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> chain-&gt;text </span>[chain]
-  (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">interpose</span> <span class="st">&quot; &quot;</span> chain)))
-
-(<span class="kw">defn</span><span class="fu"> walk-chain </span>[prefix chain result]
-  (<span class="kw">let</span> [suffixes (<span class="kw">get</span> chain prefix)]
-    (<span class="kw">if</span> (<span class="kw">empty?</span> suffixes)
-      result
-      (<span class="kw">let</span> [suffix (<span class="kw">first</span> (shuffle suffixes))
-            new-prefix [(<span class="kw">last</span> prefix) suffix]
-            result-with-spaces (chain-&gt;text result)
-            result-char-count (<span class="kw">count</span> result-with-spaces)
-            suffix-char-count (<span class="kw">inc</span> (<span class="kw">count</span> suffix))
-            new-result-char-count (<span class="kw">+</span> result-char-count suffix-char-count)]
-        (<span class="kw">if</span> (<span class="kw">&gt;=</span> new-result-char-count <span class="dv">140</span>)
-          result
-          (<span class="kw">recur</span> new-prefix chain (<span class="kw">conj</span> result suffix)))))))</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb33-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> chain-&gt;text </span>[chain]</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">  (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">interpose</span> <span class="st">&quot; &quot;</span> chain)))</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">(<span class="bu">defn</span><span class="fu"> walk-chain </span>[prefix chain result]</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">  (<span class="kw">let</span> [suffixes (<span class="kw">get</span> chain prefix)]</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6">    (<span class="kw">if</span> (<span class="kw">empty?</span> suffixes)</a>
+<a class="sourceLine" id="cb33-7" data-line-number="7">      result</a>
+<a class="sourceLine" id="cb33-8" data-line-number="8">      (<span class="kw">let</span> [suffix (<span class="kw">first</span> (shuffle suffixes))</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9">            new-prefix [(<span class="kw">last</span> prefix) suffix]</a>
+<a class="sourceLine" id="cb33-10" data-line-number="10">            result-with-spaces (chain-&gt;text result)</a>
+<a class="sourceLine" id="cb33-11" data-line-number="11">            result-char-count (<span class="kw">count</span> result-with-spaces)</a>
+<a class="sourceLine" id="cb33-12" data-line-number="12">            suffix-char-count (<span class="kw">inc</span> (<span class="kw">count</span> suffix))</a>
+<a class="sourceLine" id="cb33-13" data-line-number="13">            new-result-char-count (<span class="kw">+</span> result-char-count suffix-char-count)]</a>
+<a class="sourceLine" id="cb33-14" data-line-number="14">        (<span class="kw">if</span> (<span class="kw">&gt;=</span> new-result-char-count <span class="dv">140</span>)</a>
+<a class="sourceLine" id="cb33-15" data-line-number="15">          result</a>
+<a class="sourceLine" id="cb33-16" data-line-number="16">          (<span class="kw">recur</span> new-prefix chain (<span class="kw">conj</span> result suffix)))))))</a></code></pre></div>
 <p>We check the <code>result-char-count</code> and the chosen <code>suffix-char-count</code> before we recur, so that we can ensure that it doesn’t go over 140 chars. If it is going to go over the limit, we return the result and do not <code>recur</code>.</p>
 <p>What we need now is another higher level function that, when given a prefix and a word chain, will return the resulting text.</p>
 <h3 id="taking-a-start-text-phrase-walking-the-chain-and-returning-text.">Taking A Start Text Phrase, Walking the Chain, and Returning Text.</h3>
 <p>Going back to the <em>generator_test.clj</em> file, let’s go ahead and write the test. We will use <code>with-redefs</code> again to control our randomness.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-generate-text</span>
-  (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]
-    (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> nil] #{}
-                 [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{}
-                 [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}
-                 [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>}
-                 [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>}
-                 [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}
-                 [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]
-      (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;the Pobble who&quot;</span> (generate-text <span class="st">&quot;the Pobble&quot;</span> chain)))
-      (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;And the Pobble who&quot;</span> (generate-text <span class="st">&quot;And the&quot;</span> chain))))))</code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb34-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-generate-text</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">  (with-redefs [shuffle (<span class="kw">fn</span> [c] c)]</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">    (<span class="kw">let</span> [chain {[<span class="st">&quot;who&quot;</span> <span class="va">nil</span>] #{}</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4">                 [<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;who&quot;</span>] #{}</a>
+<a class="sourceLine" id="cb34-5" data-line-number="5">                 [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Pobble&quot;</span>] #{<span class="st">&quot;who&quot;</span>}</a>
+<a class="sourceLine" id="cb34-6" data-line-number="6">                 [<span class="st">&quot;Grouse&quot;</span> <span class="st">&quot;And&quot;</span>] #{<span class="st">&quot;the&quot;</span>}</a>
+<a class="sourceLine" id="cb34-7" data-line-number="7">                 [<span class="st">&quot;Golden&quot;</span> <span class="st">&quot;Grouse&quot;</span>] #{<span class="st">&quot;And&quot;</span>}</a>
+<a class="sourceLine" id="cb34-8" data-line-number="8">                 [<span class="st">&quot;the&quot;</span> <span class="st">&quot;Golden&quot;</span>] #{<span class="st">&quot;Grouse&quot;</span>}</a>
+<a class="sourceLine" id="cb34-9" data-line-number="9">                 [<span class="st">&quot;And&quot;</span> <span class="st">&quot;the&quot;</span>] #{<span class="st">&quot;Pobble&quot;</span> <span class="st">&quot;Golden&quot;</span>}}]</a>
+<a class="sourceLine" id="cb34-10" data-line-number="10">      (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;the Pobble who&quot;</span> (generate-text <span class="st">&quot;the Pobble&quot;</span> chain)))</a>
+<a class="sourceLine" id="cb34-11" data-line-number="11">      (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;And the Pobble who&quot;</span> (generate-text <span class="st">&quot;And the&quot;</span> chain))))))</a></code></pre></div>
 <p>To make the test pass in our <em>generator.clj</em> file, we create the function that will take a start-phrase as a prefix and a word chain. Then it will split the start-phrase by spaces, so that it will match up to our prefix keys. Next, it will use <code>walk-chain</code> to get the resulting text chain. Finally, it will turn the result text chain into plain text with <code>chain-&gt;text</code>.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> generate-text</span>
-  [start-phrase word-chain]
-  (<span class="kw">let</span> [prefix (clojure.string/split start-phrase <span class="st">#&quot; &quot;</span>)
-        result-chain (walk-chain prefix word-chain prefix)
-        result-text (chain-&gt;text result-chain)]
-    result-text))</code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb35-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> generate-text</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">  [start-phrase word-chain]</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">  (<span class="kw">let</span> [prefix (clojure.string/split start-phrase <span class="ss">#&quot; &quot;</span>)</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">        result-chain (walk-chain prefix word-chain prefix)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5">        result-text (chain-&gt;text result-chain)]</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6">    result-text))</a></code></pre></div>
 <p>Taking a moment to recap, this is what we have so far:</p>
 <ul>
 <li>We can take string, parse it and turn it into a word chain.</li>
@@ -445,15 +442,15 @@ On the broad green leaves of the Crumpetty Tree,
 And all were as happy as happy could be,
 With the Quangle Wangle Quee.</code></pre>
 <p>We can now use <code>clojure.java.io/resource</code> to open the file and <code>slurp</code> to turn it into a string. From there, we can simply use our <code>text-&gt;word-chain</code> function to transform it into the word chain that we need. Add the <code>process-file</code> function to the <em>generator.clj</em> file and give it a try in the REPL.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> process-file </span>[fname]
-  (text-&gt;word-chain
-   (<span class="kw">slurp</span> (clojure.java.io/resource fname))))
-
-(generate-text <span class="st">&quot;And the&quot;</span> (process-file <span class="st">&quot;quangle-wangle.txt&quot;</span>))
-<span class="co">;; -&gt; &quot;And the Attery Squash, and the Bumble-Bee,</span>
-<span class="co">;;     The Frog and the Bisky Bat,-- All came and built on the</span>
-<span class="co">;;     Crumpetty Tree</span>
-<span class="co">;;     The plainer than ever it&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb37-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> process-file </span>[fname]</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">  (text-&gt;word-chain</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">   (<span class="kw">slurp</span> (clojure.java.io/resource fname))))</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb37-5" data-line-number="5">(generate-text <span class="st">&quot;And the&quot;</span> (process-file <span class="st">&quot;quangle-wangle.txt&quot;</span>))</a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="co">;; -&gt; &quot;And the Attery Squash, and the Bumble-Bee,</span></a>
+<a class="sourceLine" id="cb37-7" data-line-number="7"><span class="co">;;     The Frog and the Bisky Bat,-- All came and built on the</span></a>
+<a class="sourceLine" id="cb37-8" data-line-number="8"><span class="co">;;     Crumpetty Tree</span></a>
+<a class="sourceLine" id="cb37-9" data-line-number="9"><span class="co">;;     The plainer than ever it&quot;</span></a></code></pre></div>
 <p>Great! We just need to add some more text files. We will add some more Edward Lear Poems, As well as some text from wikipedia on Functional Programming.</p>
 <ul>
 <li><a href="http://www.gutenberg.org/files/13650/13650-h/13650-h.htm">The Project Gutenberg eBook, Nonsense Books, by Edward Lear</a></li>
@@ -462,61 +459,61 @@ With the Quangle Wangle Quee.</code></pre>
 <li><a href="http://en.wikipedia.org/wiki/Clojure" class="uri">http://en.wikipedia.org/wiki/Clojure</a></li>
 </ul>
 <p>After we have chosen our text selections, we define a list of input files and the final chain that is the result of all the processed text.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> files </span>[<span class="st">&quot;quangle-wangle.txt&quot;</span> <span class="st">&quot;monad.txt&quot;</span> <span class="st">&quot;clojure.txt&quot;</span> <span class="st">&quot;functional.txt&quot;</span>
-            <span class="st">&quot;jumblies.txt&quot;</span> <span class="st">&quot;pelican.txt&quot;</span> <span class="st">&quot;pobble.txt&quot;</span>])
-(<span class="kw">def</span><span class="fu"> functional-leary </span>(<span class="kw">apply</span> <span class="kw">merge-with</span> clojure.set/union (<span class="kw">map</span> process-file files)))</code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb38-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> files </span>[<span class="st">&quot;quangle-wangle.txt&quot;</span> <span class="st">&quot;monad.txt&quot;</span> <span class="st">&quot;clojure.txt&quot;</span> <span class="st">&quot;functional.txt&quot;</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">            <span class="st">&quot;jumblies.txt&quot;</span> <span class="st">&quot;pelican.txt&quot;</span> <span class="st">&quot;pobble.txt&quot;</span>])</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">(<span class="bu">def</span><span class="fu"> functional-leary </span>(<span class="kw">apply</span> <span class="kw">merge-with</span> clojure.set/union (<span class="kw">map</span> process-file files)))</a></code></pre></div>
 <p>Giving it a try in the REPL.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(generate-text <span class="st">&quot;On the&quot;</span> functional-leary)
-<span class="co">;; -&gt; &quot;On the broad green leaves of the list. Under lazy evaluation,</span>
-<span class="co">;;    the length function will return a new monadic value.</span>
-<span class="co">;;    The bind operation takes&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb39-1" data-line-number="1">(generate-text <span class="st">&quot;On the&quot;</span> functional-leary)</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="co">;; -&gt; &quot;On the broad green leaves of the list. Under lazy evaluation,</span></a>
+<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="co">;;    the length function will return a new monadic value.</span></a>
+<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="co">;;    The bind operation takes&quot;</span></a></code></pre></div>
 <p>Now we are having fun :)</p>
 <h2 id="artistic-tweaking">Artistic tweaking</h2>
 <p>Here is when it turns to artistic tweaking. I want to hand select a few entry prefixes, so that the text generated will tend to start out sounding like Edward Lear and have functional text mixed in.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> prefix-list </span>[<span class="st">&quot;On the&quot;</span> <span class="st">&quot;They went&quot;</span> <span class="st">&quot;And all&quot;</span> <span class="st">&quot;We think&quot;</span>
-                  <span class="st">&quot;For every&quot;</span> <span class="st">&quot;No other&quot;</span> <span class="st">&quot;To a&quot;</span> <span class="st">&quot;And every&quot;</span>
-                  <span class="st">&quot;We, too,&quot;</span> <span class="st">&quot;For his&quot;</span> <span class="st">&quot;And the&quot;</span> <span class="st">&quot;But the&quot;</span>
-                  <span class="st">&quot;Are the&quot;</span> <span class="st">&quot;The Pobble&quot;</span> <span class="st">&quot;For the&quot;</span> <span class="st">&quot;When we&quot;</span>
-                  <span class="st">&quot;In the&quot;</span> <span class="st">&quot;Yet we&quot;</span> <span class="st">&quot;With only&quot;</span> <span class="st">&quot;Are the&quot;</span>
-                  <span class="st">&quot;Though the&quot;</span>  <span class="st">&quot;And when&quot;</span>
-                  <span class="st">&quot;We sit&quot;</span> <span class="st">&quot;And this&quot;</span> <span class="st">&quot;No other&quot;</span> <span class="st">&quot;With a&quot;</span>
-                  <span class="st">&quot;And at&quot;</span> <span class="st">&quot;What a&quot;</span> <span class="st">&quot;Of the&quot;</span>
-                  <span class="st">&quot;O please&quot;</span> <span class="st">&quot;So that&quot;</span> <span class="st">&quot;And all&quot;</span> <span class="st">&quot;When they&quot;</span>
-                  <span class="st">&quot;But before&quot;</span> <span class="st">&quot;Whoso had&quot;</span> <span class="st">&quot;And nobody&quot;</span> <span class="st">&quot;And it's&quot;</span>
-                  <span class="st">&quot;For any&quot;</span> <span class="st">&quot;For example,&quot;</span> <span class="st">&quot;Also in&quot;</span> <span class="st">&quot;In contrast&quot;</span>])</code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb40-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> prefix-list </span>[<span class="st">&quot;On the&quot;</span> <span class="st">&quot;They went&quot;</span> <span class="st">&quot;And all&quot;</span> <span class="st">&quot;We think&quot;</span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">                  <span class="st">&quot;For every&quot;</span> <span class="st">&quot;No other&quot;</span> <span class="st">&quot;To a&quot;</span> <span class="st">&quot;And every&quot;</span></a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">                  <span class="st">&quot;We, too,&quot;</span> <span class="st">&quot;For his&quot;</span> <span class="st">&quot;And the&quot;</span> <span class="st">&quot;But the&quot;</span></a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">                  <span class="st">&quot;Are the&quot;</span> <span class="st">&quot;The Pobble&quot;</span> <span class="st">&quot;For the&quot;</span> <span class="st">&quot;When we&quot;</span></a>
+<a class="sourceLine" id="cb40-5" data-line-number="5">                  <span class="st">&quot;In the&quot;</span> <span class="st">&quot;Yet we&quot;</span> <span class="st">&quot;With only&quot;</span> <span class="st">&quot;Are the&quot;</span></a>
+<a class="sourceLine" id="cb40-6" data-line-number="6">                  <span class="st">&quot;Though the&quot;</span>  <span class="st">&quot;And when&quot;</span></a>
+<a class="sourceLine" id="cb40-7" data-line-number="7">                  <span class="st">&quot;We sit&quot;</span> <span class="st">&quot;And this&quot;</span> <span class="st">&quot;No other&quot;</span> <span class="st">&quot;With a&quot;</span></a>
+<a class="sourceLine" id="cb40-8" data-line-number="8">                  <span class="st">&quot;And at&quot;</span> <span class="st">&quot;What a&quot;</span> <span class="st">&quot;Of the&quot;</span></a>
+<a class="sourceLine" id="cb40-9" data-line-number="9">                  <span class="st">&quot;O please&quot;</span> <span class="st">&quot;So that&quot;</span> <span class="st">&quot;And all&quot;</span> <span class="st">&quot;When they&quot;</span></a>
+<a class="sourceLine" id="cb40-10" data-line-number="10">                  <span class="st">&quot;But before&quot;</span> <span class="st">&quot;Whoso had&quot;</span> <span class="st">&quot;And nobody&quot;</span> <span class="st">&quot;And it's&quot;</span></a>
+<a class="sourceLine" id="cb40-11" data-line-number="11">                  <span class="st">&quot;For any&quot;</span> <span class="st">&quot;For example,&quot;</span> <span class="st">&quot;Also in&quot;</span> <span class="st">&quot;In contrast&quot;</span>])</a></code></pre></div>
 <p>Also, I want to fix a bit of the punctuation of the generated text. In particular, I want to trim the text to the last punctuation in the text. Then, if it ends in a comma, I want to replace it with a period. If there is no punctuation, I want to drop the last word and add a period. I also want to clean up an quotes that get escaped in the text.</p>
 <p>Adding a test for that in our <em>generator_test.clj</em> file:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">deftest</span><span class="fu"> test-end-at-last-puntcuation</span>
-  (<span class="kw">testing</span> <span class="st">&quot;Ends at the last puncuation&quot;</span>
-    (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;In a tree so happy are we.&quot;</span>
-           (end-at-last-punctuation <span class="st">&quot;In a tree so happy are we. So that&quot;</span>)))
-    (<span class="kw">testing</span> <span class="st">&quot;Replaces ending comma with a period&quot;</span>
-    (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;In a tree so happy are we.&quot;</span>
-           (end-at-last-punctuation <span class="st">&quot;In a tree so happy are we, So that&quot;</span>))))
-    (<span class="kw">testing</span> <span class="st">&quot;If there are no previous puncations, just leave it alone and add one at the end&quot;</span>
-      (<span class="kw">is</span> ( <span class="kw">=</span> <span class="st">&quot;In the light of the blue moon.&quot;</span>
-              (end-at-last-punctuation  <span class="st">&quot;In the light of the blue moon there&quot;</span>))))
-    (<span class="kw">testing</span> <span class="st">&quot;works with multiple punctuation&quot;</span>
-      (<span class="kw">is</span> ( <span class="kw">=</span> <span class="st">&quot;In the light of the blue moon.  We danced merrily.&quot;</span>
-              (end-at-last-punctuation  <span class="st">&quot;In the light of the blue moon.  We danced merrily.  Be&quot;</span>))))))</code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb41-1" data-line-number="1">(<span class="bu">deftest</span><span class="fu"> test-end-at-last-puntcuation</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">  (<span class="kw">testing</span> <span class="st">&quot;Ends at the last puncuation&quot;</span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">    (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;In a tree so happy are we.&quot;</span></a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">           (end-at-last-punctuation <span class="st">&quot;In a tree so happy are we. So that&quot;</span>)))</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">    (<span class="kw">testing</span> <span class="st">&quot;Replaces ending comma with a period&quot;</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">    (<span class="kw">is</span> (<span class="kw">=</span> <span class="st">&quot;In a tree so happy are we.&quot;</span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7">           (end-at-last-punctuation <span class="st">&quot;In a tree so happy are we, So that&quot;</span>))))</a>
+<a class="sourceLine" id="cb41-8" data-line-number="8">    (<span class="kw">testing</span> <span class="st">&quot;If there are no previous puncations, just leave it alone and add one at the end&quot;</span></a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">      (<span class="kw">is</span> ( <span class="kw">=</span> <span class="st">&quot;In the light of the blue moon.&quot;</span></a>
+<a class="sourceLine" id="cb41-10" data-line-number="10">              (end-at-last-punctuation  <span class="st">&quot;In the light of the blue moon there&quot;</span>))))</a>
+<a class="sourceLine" id="cb41-11" data-line-number="11">    (<span class="kw">testing</span> <span class="st">&quot;works with multiple punctuation&quot;</span></a>
+<a class="sourceLine" id="cb41-12" data-line-number="12">      (<span class="kw">is</span> ( <span class="kw">=</span> <span class="st">&quot;In the light of the blue moon.  We danced merrily.&quot;</span></a>
+<a class="sourceLine" id="cb41-13" data-line-number="13">              (end-at-last-punctuation  <span class="st">&quot;In the light of the blue moon.  We danced merrily.  Be&quot;</span>))))))</a></code></pre></div>
 <p>We can make this test pass in our <em>generator.clj</em> file, by using some string and regex functions.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> end-at-last-punctuation </span>[text]
-  (<span class="kw">let</span> [trimmed-to-last-punct (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">re-seq</span> <span class="st">#&quot;[\s\w]+[^.!?,]*[.!?,]&quot;</span> text))
-        trimmed-to-last-word (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">re-seq</span> <span class="st">#&quot;.*[^a-zA-Z]+&quot;</span> text))
-        result-text (<span class="kw">if</span> (<span class="kw">empty?</span> trimmed-to-last-punct)
-                      trimmed-to-last-word
-                      trimmed-to-last-punct)
-        cleaned-text (clojure.string/replace result-text <span class="st">#&quot;[,| ]$&quot;</span> <span class="st">&quot;.&quot;</span>)]
-    (clojure.string/replace cleaned-text <span class="st">#&quot;</span>\&quot;<span class="st">&quot;</span> <span class="st">&quot;'&quot;</span>)))</code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb42-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> end-at-last-punctuation </span>[text]</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">  (<span class="kw">let</span> [trimmed-to-last-punct (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">re-seq</span> <span class="ss">#&quot;[\s\w]+[^.!?,]*[.!?,]&quot;</span> text))</a>
+<a class="sourceLine" id="cb42-3" data-line-number="3">        trimmed-to-last-word (<span class="kw">apply</span> <span class="kw">str</span> (<span class="kw">re-seq</span> <span class="ss">#&quot;.*[^a-zA-Z]+&quot;</span> text))</a>
+<a class="sourceLine" id="cb42-4" data-line-number="4">        result-text (<span class="kw">if</span> (<span class="kw">empty?</span> trimmed-to-last-punct)</a>
+<a class="sourceLine" id="cb42-5" data-line-number="5">                      trimmed-to-last-word</a>
+<a class="sourceLine" id="cb42-6" data-line-number="6">                      trimmed-to-last-punct)</a>
+<a class="sourceLine" id="cb42-7" data-line-number="7">        cleaned-text (clojure.string/replace result-text <span class="ss">#&quot;[,| ]$&quot;</span> <span class="st">&quot;.&quot;</span>)]</a>
+<a class="sourceLine" id="cb42-8" data-line-number="8">    (clojure.string/replace cleaned-text <span class="ss">#&quot;</span><span class="sc">\&quot;</span><span class="ss">&quot;</span> <span class="st">&quot;'&quot;</span>)))</a></code></pre></div>
 <p>Using this, we can now make a <code>tweet-text</code> function that will randomly choose a prefix from our prefix list and generate our mashup text.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> tweet-text </span>[]
-  (<span class="kw">let</span> [text (generate-text (<span class="kw">-&gt;</span> prefix-list shuffle <span class="kw">first</span>) functional-leary)]
-    (end-at-last-punctuation text)))
-
-(tweet-text)
-<span class="co">;; -&gt; &quot;With a wreath of shrimps in her short white hair.</span>
-<span class="co">;;     And before the end of this period Hickey sent an email</span>
-<span class="co">;;     announcing the language Hope.&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb43-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> tweet-text </span>[]</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">  (<span class="kw">let</span> [text (generate-text (<span class="kw">-&gt;</span> prefix-list shuffle <span class="kw">first</span>) functional-leary)]</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">    (end-at-last-punctuation text)))</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">(tweet-text)</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"><span class="co">;; -&gt; &quot;With a wreath of shrimps in her short white hair.</span></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="co">;;     And before the end of this period Hickey sent an email</span></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="co">;;     announcing the language Hope.&quot;</span></a></code></pre></div>
 <p>Alright, that last one made me smile.</p>
 <p>We now have a function that will generate tweets for us. The next step is to hook it up to a Twitter account so that we can share our smiles with the world.</p>
 <h2 id="hooking-the-bot-up-to-twitter">Hooking the bot up to Twitter</h2>
@@ -527,71 +524,68 @@ With the Quangle Wangle Quee.</code></pre>
 </ul>
 <p>Please note that these setting are sensitive and should not be checked into github or shared publicly. To help make our twitter account access, we are going to need the help of two libraries. The first is <a href="https://github.com/adamwynne/twitter-api">twitter-api</a> that will help us make our api calls. The second is <a href="https://github.com/weavejester/environ">environ</a> that will help us keep our login information safe.</p>
 <p>Add both libraries to your <em>project.clj</em></p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure"> [twitter-api <span class="st">&quot;0.7.8&quot;</span>]
- [environ <span class="st">&quot;1.0.0&quot;</span>]</code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb44-1" data-line-number="1"> [twitter-api <span class="st">&quot;0.7.8&quot;</span>]</a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"> [environ <span class="st">&quot;1.0.0&quot;</span>]</a></code></pre></div>
 <p>Also add the <code>lein-environ</code> plugin to your <em>project.clj</em> as well.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure"><span class="kw">:plugins</span> [[lein-environ <span class="st">&quot;1.0.0&quot;</span>]]</code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="at">:plugins</span> [[lein-environ <span class="st">&quot;1.0.0&quot;</span>]]</a></code></pre></div>
 <p>The environ plugin allows us to pass configuration information from environment settings or a <em>profiles.clj</em> file that can be ignored and <strong>not checked</strong> in. Let’s go ahead and add a <em>profiles.clj</em> file to the root of our project and put in all our twitter account info.</p>
 <p><em>Danger: Do not check in your twitter keys and push to a public repo!</em></p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">{<span class="kw">:dev</span>  {<span class="kw">:env</span> {<span class="kw">:app-consumer-key</span> <span class="st">&quot;foo&quot;</span>
-              <span class="kw">:app-consumer-secret</span> <span class="st">&quot;bar&quot;</span>
-              <span class="kw">:user-access-token</span> <span class="st">&quot;foo2&quot;</span>
-              <span class="kw">:user-access-secret</span> <span class="st">&quot;bar2&quot;</span>}}}</code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb46-1" data-line-number="1">{<span class="at">:dev</span>  {<span class="at">:env</span> {<span class="at">:app-consumer-key</span> <span class="st">&quot;foo&quot;</span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2">              <span class="at">:app-consumer-secret</span> <span class="st">&quot;bar&quot;</span></a>
+<a class="sourceLine" id="cb46-3" data-line-number="3">              <span class="at">:user-access-token</span> <span class="st">&quot;foo2&quot;</span></a>
+<a class="sourceLine" id="cb46-4" data-line-number="4">              <span class="at">:user-access-secret</span> <span class="st">&quot;bar2&quot;</span>}}}</a></code></pre></div>
 <p>Also add both the twitter-api and the environ library to the project namespace in the <em>generator.clj</em> file.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator
-  (<span class="kw">:require</span> [twitter.api.restful <span class="kw">:as</span> twitter]
-            [twitter.oauth <span class="kw">:as</span> twitter-oauth]
-            [environ.core <span class="kw">:refer</span> [env]]))</code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb47-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">  (<span class="at">:require</span> [twitter.api.restful <span class="at">:as</span> twitter]</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3">            [twitter.oauth <span class="at">:as</span> twitter-oauth]</a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">            [environ.core <span class="at">:refer</span> [env]]))</a></code></pre></div>
 <p>This will allow us to define <code>my-creds</code> that will make our creditionals for our twitter app.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">def</span><span class="fu"> my-creds </span>(twitter-oauth/make-oauth-creds (env <span class="kw">:app-consumer-key</span>)
-                                              (env <span class="kw">:app-consumer-secret</span>)
-                                              (env <span class="kw">:user-access-token</span>)
-                                              (env <span class="kw">:user-access-secret</span>)))</code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb48-1" data-line-number="1">(<span class="bu">def</span><span class="fu"> my-creds </span>(twitter-oauth/make-oauth-creds (env <span class="at">:app-consumer-key</span>)</a>
+<a class="sourceLine" id="cb48-2" data-line-number="2">                                              (env <span class="at">:app-consumer-secret</span>)</a>
+<a class="sourceLine" id="cb48-3" data-line-number="3">                                              (env <span class="at">:user-access-token</span>)</a>
+<a class="sourceLine" id="cb48-4" data-line-number="4">                                              (env <span class="at">:user-access-secret</span>)))</a></code></pre></div>
 <p>Now that we can talk to our twitter account. We can finally write a <code>status-update</code> function that will post our markov chain generated text.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">defn</span><span class="fu"> status-update </span>[]
-  (<span class="kw">let</span> [tweet (tweet-text)]
-    (<span class="kw">println</span> <span class="st">&quot;generated tweet is :&quot;</span> tweet)
-    (<span class="kw">println</span> <span class="st">&quot;char count is:&quot;</span> (<span class="kw">count</span> tweet))
-    (<span class="kw">when</span> (<span class="kw">not-empty</span> tweet)
-      (<span class="kw">try</span> (twitter/statuses-update <span class="kw">:oauth-creds</span> my-creds
-                                    <span class="kw">:params</span> {<span class="kw">:status</span> tweet})
-           (<span class="kw">catch</span> Exception <span class="kw">e</span> (<span class="kw">println</span> <span class="st">&quot;Oh no! &quot;</span> (.getMessage <span class="kw">e</span>)))))))</code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb49-1" data-line-number="1">(<span class="bu">defn</span><span class="fu"> status-update </span>[]</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2">  (<span class="kw">let</span> [tweet (tweet-text)]</a>
+<a class="sourceLine" id="cb49-3" data-line-number="3">    (<span class="kw">println</span> <span class="st">&quot;generated tweet is :&quot;</span> tweet)</a>
+<a class="sourceLine" id="cb49-4" data-line-number="4">    (<span class="kw">println</span> <span class="st">&quot;char count is:&quot;</span> (<span class="kw">count</span> tweet))</a>
+<a class="sourceLine" id="cb49-5" data-line-number="5">    (<span class="kw">when</span> (<span class="kw">not-empty</span> tweet)</a>
+<a class="sourceLine" id="cb49-6" data-line-number="6">      (<span class="kw">try</span> (twitter/statuses-update <span class="at">:oauth-creds</span> my-creds</a>
+<a class="sourceLine" id="cb49-7" data-line-number="7">                                    <span class="at">:params</span> {<span class="at">:status</span> tweet})</a>
+<a class="sourceLine" id="cb49-8" data-line-number="8">           (<span class="kw">catch</span> Exception <span class="kw">e</span> (<span class="kw">println</span> <span class="st">&quot;Oh no! &quot;</span> (.getMessage <span class="kw">e</span>)))))))</a></code></pre></div>
 <p>Giving it a try:</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(status-update)
-<span class="co">;; -&gt; {.... :text &quot;For example, the functions doesFileExist and</span>
-<span class="co">;;                 removeFile in the 1980s</span>
-<span class="co">;;                 in the nights of June.&quot;}}</span></code></pre></div>
-<div class="figure">
-<img src="http://c4.staticflickr.com/8/7617/16905225975_07da52ac87_b.jpg" />
-
-</div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb50-1" data-line-number="1">(status-update)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="co">;; -&gt; {.... :text &quot;For example, the functions doesFileExist and</span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="co">;;                 removeFile in the 1980s</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="co">;;                 in the nights of June.&quot;}}</span></a></code></pre></div>
+<p><img src="http://c4.staticflickr.com/8/7617/16905225975_07da52ac87_b.jpg" /></p>
 <p>Hooray! We are almost there. We next need a way to run this status update on a periodic basis, having it post automatically for us.</p>
 <h2 id="automating-our-tweets">Automating our tweets</h2>
 <p>To have this run from the command line in an automated fashion, we are going to do two things. The first is to use the <a href="https://github.com/overtone/at-at">Overtone at-at library</a> for scheduling. And the other thing that we need to do is to add a main function to the <em>generator.clj</em> file and to setup up the project so that it can run with <code>lein trampoline run</code>.</p>
 <p>So first, modify the <em>project.clj</em> file to have the <em>at-at</em> library, as well as the main function for the namespace.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure"> <span class="kw">:dependencies</span> [[org.clojure/clojure <span class="st">&quot;1.6.0&quot;</span>]
-                 [overtone/at-at <span class="st">&quot;1.2.0&quot;</span>]
-                 [twitter-api <span class="st">&quot;0.7.8&quot;</span>]
-                 [environ <span class="st">&quot;1.0.0&quot;</span>]]
-  <span class="kw">:main</span> markov-elear.generator
-  <span class="kw">:min-lein-version</span> <span class="st">&quot;2.0.0&quot;</span>
-  <span class="kw">:plugins</span> [[lein-environ <span class="st">&quot;1.0.0&quot;</span>]]
-  <span class="kw">:profiles</span> {<span class="kw">:dev</span> {<span class="kw">:plugins</span> [[com.jakemccrary/lein-test-refresh <span class="st">&quot;0.7.0&quot;</span>]]}})</code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb51-1" data-line-number="1"> <span class="at">:dependencies</span> [[org.clojure/clojure <span class="st">&quot;1.6.0&quot;</span>]</a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">                 [overtone/at-at <span class="st">&quot;1.2.0&quot;</span>]</a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">                 [twitter-api <span class="st">&quot;0.7.8&quot;</span>]</a>
+<a class="sourceLine" id="cb51-4" data-line-number="4">                 [environ <span class="st">&quot;1.0.0&quot;</span>]]</a>
+<a class="sourceLine" id="cb51-5" data-line-number="5">  <span class="at">:main</span> markov-elear.generator</a>
+<a class="sourceLine" id="cb51-6" data-line-number="6">  <span class="at">:min-lein-version</span> <span class="st">&quot;2.0.0&quot;</span></a>
+<a class="sourceLine" id="cb51-7" data-line-number="7">  <span class="at">:plugins</span> [[lein-environ <span class="st">&quot;1.0.0&quot;</span>]]</a>
+<a class="sourceLine" id="cb51-8" data-line-number="8">  <span class="at">:profiles</span> {<span class="at">:dev</span> {<span class="at">:plugins</span> [[com.jakemccrary/lein-test-refresh <span class="st">&quot;0.7.0&quot;</span>]]}})</a></code></pre></div>
 <p>Then, going back to the <em>generator.clj</em> file, first add the <em>overtone/at-at</em> library to the namespace. Then, define a pool for the scheduling process, and add in a <code>-main</code> function to tweet for us every 8 hours.</p>
-<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> markov-elear.generator
-  (<span class="kw">:require</span> [overtone.at-at <span class="kw">:as</span> overtone]
-            [twitter.api.restful <span class="kw">:as</span> twitter]
-            [twitter.oauth <span class="kw">:as</span> twitter-oauth]
-            [environ.core <span class="kw">:refer</span> [env]]))
-
-
-(<span class="kw">def</span><span class="fu"> my-pool </span>(overtone/mk-pool))
-
-(<span class="kw">defn</span><span class="fu"> -main </span>[&amp; args]
-  <span class="co">;; every 8 hours</span>
-  (<span class="kw">println</span> <span class="st">&quot;Started up&quot;</span>)
-  (<span class="kw">println</span> (tweet-text))
-  (overtone/every (<span class="kw">*</span> <span class="dv">1000</span> <span class="dv">60</span> <span class="dv">60</span> <span class="dv">8</span>) #(<span class="kw">println</span> (status-update)) my-pool))</code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode clojure"><code class="sourceCode clojure"><a class="sourceLine" id="cb52-1" data-line-number="1">(<span class="kw">ns</span> markov-elear.generator</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">  (<span class="at">:require</span> [overtone.at-at <span class="at">:as</span> overtone]</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3">            [twitter.api.restful <span class="at">:as</span> twitter]</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4">            [twitter.oauth <span class="at">:as</span> twitter-oauth]</a>
+<a class="sourceLine" id="cb52-5" data-line-number="5">            [environ.core <span class="at">:refer</span> [env]]))</a>
+<a class="sourceLine" id="cb52-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb52-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb52-8" data-line-number="8">(<span class="bu">def</span><span class="fu"> my-pool </span>(overtone/mk-pool))</a>
+<a class="sourceLine" id="cb52-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb52-10" data-line-number="10">(<span class="bu">defn</span><span class="fu"> -main </span>[&amp; args]</a>
+<a class="sourceLine" id="cb52-11" data-line-number="11">  <span class="co">;; every 8 hours</span></a>
+<a class="sourceLine" id="cb52-12" data-line-number="12">  (<span class="kw">println</span> <span class="st">&quot;Started up&quot;</span>)</a>
+<a class="sourceLine" id="cb52-13" data-line-number="13">  (<span class="kw">println</span> (tweet-text))</a>
+<a class="sourceLine" id="cb52-14" data-line-number="14">  (overtone/every (<span class="kw">*</span> <span class="dv">1000</span> <span class="dv">60</span> <span class="dv">60</span> <span class="dv">8</span>) #(<span class="kw">println</span> (status-update)) my-pool))</a></code></pre></div>
 <p>Now we should be able to try this from the command line.</p>
 <pre><code>lein trampoline run</code></pre>
 <p>and see something like the following</p>
