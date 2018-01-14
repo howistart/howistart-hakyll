@@ -17,9 +17,10 @@
     <updated>2015-10-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      C++ <small>with Jeremy Ong</small>
-    </h1>
+    <header class="page-header">
+      <h1>C++ <small>with Jeremy Ong</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: October 8, 2015</small></p>
+    </header>
   </div>
 </div>
 
@@ -783,9 +784,10 @@ bar == 314159</code></pre>
     <updated>2015-06-22T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Erlang <small>with Fred Hebert</small>
-    </h1>
+    <header class="page-header">
+      <h1>Erlang <small>with Fred Hebert</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: Janurary 1, 2017</small></p>
+    </header>
   </div>
 </div>
 
@@ -1451,9 +1453,10 @@ All 1 tests passed.</code></pre>
     <updated>2015-04-07T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Clojure <small>with Carin Meier</small>
-    </h1>
+    <header class="page-header">
+      <h1>Clojure <small>with Carin Meier</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: Aprile 7, 2015</small></p>
+    </header>
   </div>
 </div>
 
@@ -2060,9 +2063,10 @@ heroku config:set USER_ACCESS_SECRET=bar2</code></pre>
     <updated>2015-02-09T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Nim <small>with Dennis Felsing</small>
-    </h1>
+    <header class="page-header">
+      <h1>Nim <small>with Dennis Felsing</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: Janurary 14, 2018</small></p>
+    </header>
   </div>
 </div>
 
@@ -2826,9 +2830,10 @@ $ nimble install brainfuck</code></pre>
     <updated>2014-11-16T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Haskell <small>with Chris Allen</small>
-    </h1>
+    <header class="page-header">
+      <h1>Haskell <small>with Chris Allen</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: November 16, 2014</small></p>
+    </header>
   </div>
 </div>
 
@@ -3464,9 +3469,10 @@ Ok, modules loaded: Main.
     <updated>2014-09-01T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Go <small>with Peter Bourgon</small>
-    </h1>
+    <header class="page-header">
+      <h1>Go <small>with Peter Bourgon</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: September 01, 2014</small></p>
+    </header>
   </div>
 </div>
 
@@ -3878,9 +3884,10 @@ $ ./hello</code></pre>
     <updated>2014-07-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Ruby <small>with Steve Klabnik</small>
-    </h1>
+    <header class="page-header">
+      <h1>Ruby <small>with Steve Klabnik</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: July 10, 2014</small></p>
+    </header>
   </div>
 </div>
 
@@ -4300,9 +4307,10 @@ $ gem install how_i_start
     <updated>2014-07-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header">
-      Elixir <small>with José Valim</small>
-    </h1>
+    <header class="page-header">
+      <h1>Elixir <small>with José Valim</small></h1>
+      <p><small style="color: #b3b3b3;">Updated: March 13, 2017</small></p>
+    </header>
   </div>
 </div>
 
