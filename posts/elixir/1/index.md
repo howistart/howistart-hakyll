@@ -2,7 +2,7 @@
 title: Elixir
 author: José Valim
 subheading: Creator of Elixir
-bio: <a href='https://twitter.com/josevalim'>José Valim</a> is creator of <a href='http://elixir-lang.org'>Elixir</a>. He is also co-founder of <a href='http://plataformatec.com.br'>Plataformatec</a>, a consultancy based in Brazil, a book author, and an active conference speaker.
+bio: José Valim is the creator of <a href='http://elixir-lang.org'>Elixir</a>. He is also co-founder of <a href='http://plataformatec.com.br'>Plataformatec</a>, a consultancy based in Brazil, a book author, and an active conference speaker.
 date: 2019-07-01
 ---
 
