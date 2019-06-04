@@ -110,7 +110,6 @@ Let's explore the generated project using a text editor. I personally don't pay 
 With your editor open, explore the following directories:
 
   * `_build` - where Mix stores compilation artifacts
-  * `config` - where we configure our project and its dependencies
   * `lib` - where we put our code
   * `mix.exs` - where we define our project name, version and dependencies
   * `test` - where we define our tests
