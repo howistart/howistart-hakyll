@@ -661,7 +661,7 @@ We challenge you to continue learning and exploring more of Elixir by taking you
 
   * Generate HTML documentation for your project with [ExDoc](https://github.com/elixir-lang/ex_doc).
 
-  * Push your project to an external source, like [GitHub](httpss://github.com), and publish a package using the [Hex package manager](https://hex.pm).
+  * Push your project to an external source, like [GitHub](https://github.com), and publish a package using the [Hex package manager](https://hex.pm).
 
 We welcome you to explore our [website](http://elixir-lang.org) and read our Getting Started guide or many of the available resources to learn more about Elixir and our vibrant community.
 
