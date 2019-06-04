@@ -2,8 +2,8 @@
 title: Elixir
 author: José Valim
 subheading: Creator of Elixir
-bio: <a href='https://twitter.com/josevalim'>José Valim</a> is creator of <a href='http://elixir-lang.org'>Elixir</a> and member of the <a href='http://rubyonrails.org'>Rails Core Team</a>. He is also co-founder of <a href='http://plataformatec.com.br'>Plataformatec</a>, a consultancy based in Brazil, and an active conference speaker.
-date: 2014-07-10
+bio: <a href='https://twitter.com/josevalim'>José Valim</a> is creator of <a href='http://elixir-lang.org'>Elixir</a>. He is also co-founder of <a href='http://plataformatec.com.br'>Plataformatec</a>, a consultancy based in Brazil, a book author, and an active conference speaker.
+date: 2019-07-01
 ---
 
 Portal
@@ -34,9 +34,12 @@ Let's get started!
 
 ## Installation
 
-Elixir's website explains how to get Elixir up and running. Just [follow the steps described in the Installing Elixir page](http://elixir-lang.org/install.html).
+Elixir's website explains how to get Elixir up and running. Just [follow the steps described in the Installing Elixir page](http://elixir-lang.org/install.html). Make sure you have version 1.9 or later:
 
-Elixir developers spend a lot of time in their Operating System terminals; once installation is complete, you will have some new executables available. One of them is `iex`. Just type `iex` in your terminal (or `iex.bat` if you are on Windows) to get it up and running:
+    $ elixir -v
+    Elixir 1.9.0 (compiled with Erlang/OTP 20)
+
+Elixir developers spend quite some time in their Operating System terminals; once installation is complete, you will have some new executables available. One of them is `iex`. Just type `iex` in your terminal (or `iex.bat` if you are on Windows) to get it up and running:
 
     $ iex
     Interactive Elixir - press Ctrl+C to exit (type h() ENTER for help)
@@ -55,7 +58,7 @@ nil
 Besides numbers and strings above, we also frequently use the following data types:
 
 ```iex
-iex> :atom           # An identifier (known as Symbols in other languages)
+iex> :atom           # An atom (known as Identifier/Symbols in other languages)
 :atom
 iex> [1, 2, "three"] # Lists (typically hold a dynamic amount of items)
 [1, 2, "three"]
@@ -87,7 +90,7 @@ iex(4)> Portal.push_right(portal)
 >
 ```
 
-It looks sweet, doesn't it?
+Intrigued? Let's get started.
 
 ## Our first project
 
@@ -144,7 +147,7 @@ iex> 2 = x
 Now the sides did not match, so we got an error. We use pattern matching in Elixir to match data structures too. For example, we can use `[head|tail]` to extract the head (the first element) and tail (the remaining ones) from a list:
 
 ```iex
-iex> [head|tail] = [1, 2, 3]
+iex> [head | tail] = [1, 2, 3]
 [1, 2, 3]
 iex> head
 1
@@ -152,14 +155,14 @@ iex> tail
 [2, 3]
 ```
 
-Matching an empty list against `[head|tail]` causes a match error:
+Matching an empty list against `[head | tail]` causes a match error:
 
 ```iex
 iex> [head|tail] = []
 ** (MatchError) no match of right hand side value: []
 ```
 
-Finally, we can also use the `[head|tail]` expression to add elements to the head of a list:
+Finally, we can also use the `[head | tail]` expression to add elements to the head of a list:
 
 ```iex
 iex> list = [1, 2, 3]
@@ -208,6 +211,8 @@ We will use agents to implement our portal doors. Create a new file named `lib/p
 
 ```elixir
 defmodule Portal.Door do
+  use Agent
+
   @doc """
   Starts a door with the given `color`.
 
@@ -229,7 +234,7 @@ defmodule Portal.Door do
   Pushes `value` into the door.
   """
   def push(door, value) do
-    Agent.update(door, fn list -> [value|list] end)
+    Agent.update(door, fn list -> [value | list] end)
   end
 
   @doc """
@@ -240,14 +245,14 @@ defmodule Portal.Door do
   """
   def pop(door) do
     Agent.get_and_update(door, fn
-      []    -> {:error, []}
-      [h|t] -> {{:ok, h}, t}
+      [] -> {:error, []}
+      [h | t] -> {{:ok, h}, t}
     end)
   end
 end
 ```
 
-In Elixir we define code inside modules, which are basically a group of functions. We have defined four functions above, all properly documented.
+In Elixir we define code inside modules, which are basically a group of functions. We have defined four functions above, all properly documented, to work with the agent process. Note we also called `use Agent` at the top of the module, this will annotate the module so we can start supervised agents in the future. You can learn more about agents [in the `Agent` module documentation](https://hexdocs.pm/elixir/Agent.html).
 
 Let's give our implementation a try. Start a new shell with `iex -S mix`. When starting the shell, our new file will be automatically compiled, so we can use it directly:
 
@@ -275,6 +280,14 @@ One interesting aspect of Elixir is that documentation is treated as a first-cla
 ```iex
 iex> h Portal.Door.start_link
 ```
+
+Also, regardless if you are writing all of the code snippets in this tutorial by hand or simply copy-and-pasting the code, keep in mind that Elixir ships with a code formatter. So if you want to make sure the code is properly formatted, you can run `mix format` at the project root at any time:
+
+    $ mix format
+
+Depending on the text editor you are using, it will likely have a shortcut to format the code instantly. The formatter is a great tool for compentent teams and those learning Elixir alike, as it gives you immediate feedback on the code you are writing and it ensures consistency within the community.
+
+Let's move forward.
 
 ## Portal transfers
 
@@ -330,9 +343,12 @@ def push_right(portal) do
 end
 ```
 
-We have defined our `Portal` struct and a `Portal.transfer/3` function (the `/3` indicates the function expects three arguments). Let's give this transfer a try. Start another shell with `iex -S mix` so our changes are compiled and type:
+We have defined a `Portal` struct and a `Portal.transfer/3` function (the `/3` indicates the function expects three arguments). Let's give this transfer a try. If IEx is still runinng, type `recompile()` to recompile the project (or run `iex -S mix` again):
 
 ```iex
+# Recompile the project
+iex> recompile()
+
 # Start doors
 iex> Portal.Door.start_link(:orange)
 {:ok, #PID<0.59.0>}
@@ -358,9 +374,9 @@ iex> Portal.Door.get(:blue)
 [3]
 ```
 
-Our portal transfer seems to work as expected. Note that the data is in reverse order in the left/orange door in the example above. That is expected because we want the end of the list (in this case the number 3) to be the first data pushed into the right/blue door.
+Our portal transfer seems to work as expected. Note that the data is in reverse order in the left/orange door in the example above. That is expected because we want the end of the list (in this case the number `3`) to be the first data pushed into the right/blue door.
 
-One difference in the snippet above, compared to the one we saw at the beginning of this tutorial, is that our portal is currently being printed as a struct: `%Portal{left: :orange, right: :blue}`. It would be nice if we actually had a printed representation of the portal transfer, allowing us to see the portal process as we push data.
+We have made some good progress in our implementation, so now let's work a bit on the presentation. Currently the Portal being printed as a struct: `%Portal{left: :orange, right: :blue}`. It would be nice if we actually had a printed representation of the portal transfer, allowing us to see the portal processes as we push data.
 
 That's what we will do next.
 
@@ -393,11 +409,11 @@ defimpl Inspect, for: Portal do
 end
 ```
 
-In the snippet above, we have implemented the `Inspect` protocol for the `Portal` struct. The protocol expects just one function named `inspect` to be implemented. The function expects two arguments, the first is the `Portal` struct itself and the second is a set of options, which we don't care about for now.
+In the snippet above, we have implemented the `Inspect` protocol for the `Portal` struct. The protocol expects one function named `inspect` to be implemented. The function expects two arguments, the first is the `Portal` struct itself and the second is a set of options, which we don't care about for now.
 
 Then we call `inspect` multiple times, to get a text representation of both `left` and `right` doors, as well as to get a representation of the data inside the doors. Finally, we return a string containing the portal presentation properly aligned.
 
-Start another `iex` session with `iex -S mix` to see our new representation being used:
+Type `recompile()` in IEx again (or start a new IEx session) to see the new Portal representation in action:
 
 ```iex
 iex> Portal.Door.start_link(:orange)
@@ -411,9 +427,11 @@ iex> portal = Portal.transfer(:orange, :blue, [1, 2, 3])
 >
 ```
 
+Now feel free `push_right` and see what happens!
+
 ## Shooting supervised doors
 
-We often hear that the Erlang VM, the virtual machine Elixir runs on, alongside the Erlang ecosystem are great for building fault-tolerant applications. One of the reasons for such are the so-called supervision trees.
+We often hear that the Erlang VM, the Virtual Machine Elixir runs on, alongside the Erlang ecosystem are great for building fault-tolerant applications. One of the reasons for such are the so-called supervision trees.
 
 Our code so far is not supervised. Let's see what happens when we explicitly shutdown one of the door agents:
 
@@ -434,33 +452,31 @@ true
 
 # Try to move data
 iex> Portal.push_right(portal)
-** (exit) exited in: :gen_server.call(:blue, ..., 5000)
-    ** (EXIT) no process
-    (stdlib) gen_server.erl:190: :gen_server.call/3
+** (exit) exited in: GenServer.call(:blue, {:update, #Function<2.9997214/1 in Portal.Door.push/2>}, 5000)
+    ** (EXIT) no process: the process is not alive or there's no process currently associated with the given name, possibly because its application isn't started
+    (elixir) lib/gen_server.ex:1000: GenServer.call/3
     (portal) lib/portal.ex:25: Portal.push_right/1
 ```
 
-We got an exit error because there is no `:blue` door. You can see there is an `** (EXIT) no process` message following our function call. To fix the situation we are going to setup a supervisor that will be responsible for restarting a portal door whenever it crashes.
+We got an exit error because there is no `:blue` door. You can see there is an `** (EXIT) no process` message following our function call with more detail. To fix this issue, let's setup a supervisor that will be responsible for restarting a portal door whenever it crashes.
 
-Remember when we passed the `--sup` flag when creating our `portal` project? We passed that flag because supervisors typically run inside supervision trees and supervision trees are usually started as part of application. All the `--sup` flag does is to create a supervised structure by default which we can see in our `Portal.Application` module in `lib/portal/application.ex:
+Remember when we passed the `--sup` flag when creating our `portal` project? The `--sup` option instructs `Mix` to create an application with a supervision tree. Let's see the `Portal.Application` module in `lib/portal/application.ex:
 
 ```elixir
 defmodule Portal.Application do
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
+  # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
-  
-  use Application
-  
-  def start(_type, _args) do
-    import Supervisor.Spec, warn: false
 
+  use Application
+
+  def start(_type, _args) do
     children = [
-      # Define workers and child supervisors to be supervised
-      # worker(Portal.Worker, [arg1, arg2, arg3])
+      # Starts a worker by calling: Portal.Worker.start_link(arg)
+      # {Portal.Worker, arg}
     ]
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
+    # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Portal.Supervisor]
     Supervisor.start_link(children, opts)
@@ -468,45 +484,42 @@ defmodule Portal.Application do
 end
 ```
 
-The code above makes the `Portal` module an application callback. The application callback must provide a function named `start/2`, which we see above, and this function must start a supervisor representing the root of our supervision tree. Currently our supervisor has no children and that is exactly what we will change next.
+The code above outlines an application callback. Every time the application is started, the application callback is invoked, which is then responsible for starting a supervisor with a list of children. Currently the supervisor has no children and that is exactly what we will change next.
 
 Replace the `start/2` function above by:
 
 ```elixir
 def start(_type, _args) do
-  import Supervisor.Spec, warn: false
-
   children = [
-    worker(Portal.Door, [])
+    {DynamicSupervisor, strategy: :one_for_one, name: Portal.DoorSupervisor}
   ]
 
-  opts = [strategy: :simple_one_for_one, name: Portal.Supervisor]
-  Supervisor.start_link(children, opts)
+  Supervisor.start_link(children, strategy: :one_for_one, name: Portal.Supervisor)
 end
 ```
 
-We have done two changes:
+Our supervisor has a single child, which is another supervisor! As we can see, supervisors themselves may be supervised, which is what leads to the so-called supervision trees!
 
-  * We have added a child specification to the supervisor, of type `worker`, and the child is represented by the module `Portal.Door`. We pass no arguments to the worker, just an empty list `[]`, as the door color will be specified later on.
+Looking at the code above, we can also see there are two types of supervisor. A `Supervisor` and a `DynamicSupervisor`. We use the regular `Supervisor` when its children are known before hand, for example, to start services that must be running when the application starts. For example, if you are writing a web application, you may start the database workers here. If you are writing an embedded device, you may want connect to the wi-fi and so on.
 
-  * We have changed the strategy from `:one_for_one` to `:simple_one_for_one`. Supervisors provide different strategies and `:simple_one_for_one` is useful when we want to dynamically create children, often with different arguments. This is exactly the case for our portal doors, where we want to spawn multiple doors with different colors.
+We use the `DynamicSupervisor` for processes that may be started at any moment, dynamically. For example, we can shoot a new portal door at any time. These doors and their colors are not known before-hand, so we need a `DynamicSupervisor` to supervise them.
 
-The last step is to add a function named `shoot/1` to the `Portal` module that receives a color and spawns a new door as part of the supervision tree:
+Both supervisors are started with two options: a `:strategy`, that controls what happens in case of failures, and a `:name`. The `:one_for_one` strategy says that if a door crashes, any other door being supervised will continue running. There are strategies like `:one_for_all`, which means that if one child terminates, all others will be terminated too. The `:name` option gives a name to that process, so we can refer to it from anywhere else in our code. We gave the name `Portal.DoorSupervisor` to the `DynamicSupervisor`.
+
+The last step is to add a function named `shoot/1` to the `Portal` module that receives a color and starts a new door:
 
 ```elixir
 @doc """
 Shoots a new door with the given `color`.
 """
 def shoot(color) do
-  Supervisor.start_child(Portal.Supervisor, [color])
+  DynamicSupervisor.start_child(Portal.DoorSupervisor, {Portal.Door, color})
 end
 ```
 
-The function above reaches the supervisor named `Portal.Supervisor` and asks for a new child to be started. `Portal.Supervisor` is the name of the supervisor we have defined in `start/2` and the child is going to be a `Portal.Door` which was specified as a worker of that supervisor.
+The function above uses the `DynamicSupervisor` API to reach out to the `Portal.DoorSupervisor` and start a new child. The second argument given to `start_child` is known as the "child specification" which tells the supervisor how to start the door, how to shut it down, and so on. We won't go into details for now. What matters is that the supervisor will start a door by calling  `Portal.Door.start_link(color)`, which is exactly the API we have built at the beginning of our journey. This is not a coincidence: the `start_link/1` function is the convention used for starting new processes in the Elixir community.
 
-Internally, to start the child, the supervisor will invoke `Portal.Door.start_link(color)`, where color is the value passed on the `start_child/2` call above. If we had invoked `Supervisor.start_child(Portal.Supervisor, [foo, bar, baz])`, the supervisor would have attempted to start a child with `Portal.Door.start_link(foo, bar, baz)`.
-
-Let's give our shooting function a try. Start a new `iex -S mix` session and:
+Let's give our shooting function a try. `recompile()` the project or start a new `iex -S mix` session and then:
 
 ```iex
 iex> Portal.shoot(:orange)
@@ -529,8 +542,6 @@ iex> Portal.push_right(portal)
 And what happens if we stop the `:blue` process now?
 
 ```iex
-iex> Process.unlink(Process.whereis(:blue))
-true
 iex> Process.exit(Process.whereis(:blue), :shutdown)
 true
 iex> Portal.push_right(portal)
@@ -542,13 +553,13 @@ iex> Portal.push_right(portal)
 
 Notice this time the following `push_right/1` operation worked because the supervisor automatically started another `:blue` portal. Unfortunately the data that was in the blue door before the crash was lost but our system did recover from the crash.
 
-In practice there are different supervision strategies to choose from as well as mechanisms to persist data in case something goes wrong, allowing you to choose the best option for your applications.
+In practice there are different supervision strategies to choose from as well as mechanisms to persist data in case something goes wrong, allowing you to choose the best option for your applications. You can learn more about supervisors [in the `Supervisor` module documentation](https://hexdocs.pm/elixir/Supervisor.html).
 
 Outstanding!
 
 ## Distributed transfers
 
-With our portals working, we are ready to give distributed transfers a try. This can be extra awesome if you launch the code on two different machines on the same network. However, if you don't have another machine handy, it will work just fine.
+With our portals working, we are ready to give distributed transfers a try. This can be extra awesome if you launch the code on two different machines on the same network. However, if you don't have another machine handy, one machine will work just fine.
 
 We can start an `iex` session as node inside of a network by passing the `--sname` option. Let's give it a try:
 
@@ -617,19 +628,41 @@ iex(room1@COMPUTER-NAME)> Portal.Door.get(blue)
 
 Our distributed portal transfer works because the doors are just processes and accessing/pushing the data through doors is done by sending messages to those processes via the Agent API. We say sending a message in Elixir is location transparent: we can send messages to any PID regardless if it is in the same node as the sender or in different nodes of the same network.
 
+## Packaging it all up
+
+Elixir also ships with a feature called releases. A release is a self-contained directory that consists of your application code, all of its dependencies, plus the whole Erlang Virtual Machine (VM) and runtime. Once a release is assembled, it can be packaged and deployed to a target as long as the target runs on the same operating system (OS) distribution and version as the machine assembling the release.
+
+You can assemble the release by running `mix release`. Let's also pass the `MIX_ENV=prod` environment variable, as we want to assemble a release optimized for production:
+
+    $ MIX_ENV=prod mix release
+    * assembling portal-0.1.0 on MIX_ENV=prod
+
+    Release created at _build/prod/rel/portal!
+
+    # To start your system
+    _build/prod/rel/portal/bin/portal start
+
+A release was created inside `_build/prod/rel/portal`. You can package everything in this directory into a zip file and ship it to production. Typically teams assemble their release at the end of their continuous integration pipeline. Feel free to explore this directory in your editor.
+
+Inside the `_build/prod/rel/portal` directory, you will find a `bin/portal` script, which is the entry-point to the system. From here you can start the system, run RPC commands, connect to a remotely running node and so on. Give it a try:
+
+    $ _build/prod/rel/portal/bin/portal start
+
+There is a lot more to releases and [the Elixir documentation](http://hexdocs.pm/mix/Mix.Tasks.Release.html) does a good job of outlining their ins and outs and all possible configurations.
+
 ## Wrapping up
 
-So we have reached the end of this guide on how to get started with Elixir! It was a fun ride and we quickly went from manually starting doors processes to shooting fault-tolerant doors for distributed portal transfers!
+So we have reached the end of this guide on how to get started with Elixir! It was a fun ride and we quickly went from manually starting doors processes to shooting fault-tolerant doors for distributed portal transfers, which we can package and ship to production.
 
 We challenge you to continue learning and exploring more of Elixir by taking your portal application to the next level:
 
   * Add a `Portal.push_left/1` function that transfers the data in the other direction. How can you avoid the code duplication existing between the `push_left/1` and `push_right/1` functions?
 
-  * Learn more about [ExUnit](http://elixir-lang.org/docs/stable/ex_unit/ExUnit.html), Elixir's testing framework, and write tests for the functionality we have built so far. Remember we already have a default structure laid out in the `test` directory.
+  * Learn more about [ExUnit](http://hexdocs.pm/ex_unit/ExUnit.html), Elixir's testing framework, and write tests for the functionality we have built so far. Remember we already have a default structure laid out in the `test` directory.
 
-  * Generate HTML documentation for your project with [ExDoc](http://github.com/elixir-lang/ex_doc).
+  * Generate HTML documentation for your project with [ExDoc](https://github.com/elixir-lang/ex_doc).
 
-  * Push your project to an external source, like [Github](https://github.com), and publish a package using the [Hex package manager](https://hex.pm).
+  * Push your project to an external source, like [GitHub](httpss://github.com), and publish a package using the [Hex package manager](https://hex.pm).
 
 We welcome you to explore our [website](http://elixir-lang.org) and read our Getting Started guide or many of the available resources to learn more about Elixir and our vibrant community.
 
