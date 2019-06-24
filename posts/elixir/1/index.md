@@ -342,7 +342,7 @@ def push_right(portal) do
 end
 ```
 
-We have defined a `Portal` struct and a `Portal.transfer/3` function (the `/3` indicates the function expects three arguments). Let's give this transfer a try. If IEx is still runinng, type `recompile()` to recompile the project (or run `iex -S mix` again):
+We have defined a `Portal` struct and a `Portal.transfer/3` function (the `/3` indicates the function expects three arguments). Let's give this transfer a try. If IEx is still running, type `recompile()` to recompile the project (or run `iex -S mix` again):
 
 ```iex
 # Recompile the project
