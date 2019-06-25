@@ -1,3 +1,5 @@
+**Content and site are now at [https://github.com/howistart/howistart.org](https://github.com/howistart/howistart.org)**
+
 # How I Start
 
 Posts are under `posts`. Site is built with [hakyll](https://jaspervdj.be/hakyll/).
